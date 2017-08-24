@@ -8,6 +8,7 @@
 
 from PyQt4 import QtCore, QtGui
 from ProjectViewer import *
+from MenuBar import *
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -27,8 +28,10 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName(_fromUtf8("MainWindow"))
         MainWindow.resize(1055, 538)
+
         self.centralwidget = QtGui.QWidget(MainWindow)
         self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
+
         self.gridLayoutWidget = QtGui.QWidget(self.centralwidget)
         self.gridLayoutWidget.setGeometry(QtCore.QRect(0, 0, 201, 491))
         self.gridLayoutWidget.setObjectName(_fromUtf8("gridLayoutWidget"))
@@ -37,12 +40,16 @@ class Ui_MainWindow(object):
 
 
         self.projectViewer = ProjectViewer(self.gridLayoutWidget)
-        #self.treeView = QtGui.QTreeView(self.gridLayoutWidget)
-        #self.treeView.setObjectName(_fromUtf8("treeView"))
 
         self.gridLayout.addWidget(self.projectViewer.get_widget(), 0, 0, 1, 1)
+
         MainWindow.setCentralWidget(self.centralwidget)
+
+        self.menuBar = MenuBar(MainWindow)
+
+        '''
         self.menubar = QtGui.QMenuBar(MainWindow)
+        self.menubar.setNativeMenuBar(False)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 1055, 25))
         self.menubar.setObjectName(_fromUtf8("menubar"))
         self.menuFile = QtGui.QMenu(self.menubar)
@@ -55,10 +62,14 @@ class Ui_MainWindow(object):
         self.menuTools.setObjectName(_fromUtf8("menuTools"))
         self.menuHelp = QtGui.QMenu(self.menubar)
         self.menuHelp.setObjectName(_fromUtf8("menuHelp"))
-        MainWindow.setMenuBar(self.menubar)
+        '''
+        MainWindow.setMenuBar(self.menuBar.get_widget())
+
         self.statusbar = QtGui.QStatusBar(MainWindow)
         self.statusbar.setObjectName(_fromUtf8("statusbar"))
+
         MainWindow.setStatusBar(self.statusbar)
+        '''
         self.actionOpen = QtGui.QAction(MainWindow)
         self.actionOpen.setObjectName(_fromUtf8("actionOpen"))
         self.actionSave = QtGui.QAction(MainWindow)
@@ -76,12 +87,13 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuView.menuAction())
         self.menubar.addAction(self.menuTools.menuAction())
         self.menubar.addAction(self.menuHelp.menuAction())
-
+        '''
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(_translate("MainWindow", "Mo Cap pie - Team Ep0ch", None))
+        '''
         self.menuFile.setTitle(_translate("MainWindow", "File", None))
         self.menuEdit.setTitle(_translate("MainWindow", "Edit", None))
         self.menuView.setTitle(_translate("MainWindow", "View", None))
@@ -91,6 +103,7 @@ class Ui_MainWindow(object):
         self.actionSave.setText(_translate("MainWindow", "Save", None))
         self.actionSave_As.setText(_translate("MainWindow", "Save As", None))
         self.actionQuit.setText(_translate("MainWindow", "Quit", None))
+        '''
 
 
 if __name__ == "__main__":
