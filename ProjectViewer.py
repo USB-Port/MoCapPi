@@ -16,7 +16,7 @@ class ProjectViewer(QtGui.QWidget):
 
         self.model = QtGui.QFileSystemModel(self)
         self.model.setRootPath(self.pathRoot)
-       
+
 
         self.indexRoot = self.model.index(self.model.rootPath())
 
@@ -36,7 +36,7 @@ class ProjectViewer(QtGui.QWidget):
 
         #fileName = self.model.fileName(indexItem)
         #filePath = self.model.filePath(indexItem)
-    
+
     @QtCore.pyqtSlot(QtCore.QModelIndex)
     def on_treeView_double_clicked(self, index):
         indexItem = self.model.index(index.row(), 0, index.parent())

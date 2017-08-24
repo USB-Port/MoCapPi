@@ -42,6 +42,9 @@ class MenuBar(QtGui.QMainWindow):
 
     self.actionOpen = QtGui.QAction(self)
     self.actionOpen.setObjectName(_fromUtf8("actionOpen"))
+    self.actionOpen.setShortcut("Ctrl+O")
+    self.actionOpen.setStatusTip("Open a file")
+    self.actionOpen.triggered.connect(self.open_file)
 
     self.actionSave = QtGui.QAction(self)
     self.actionSave.setObjectName(_fromUtf8("actionSave"))
@@ -75,12 +78,18 @@ class MenuBar(QtGui.QMainWindow):
     self.actionSave_As.setText(_translate("MainWindow", "Save As", None))
     self.actionQuit.setText(_translate("MainWindow", "Quit", None))
 
-
-
-
-
   def get_widget(self):
     return self.menuBar
+
+  def open_file(self):
+      self.dlg = QtGui.QFileDialog()
+      self.dlg.setFileMode(QtGui.QFileDialog.AnyFile)
+      self.dlg.setFilter("Text files (*.txt)")
+      self.fileName = QtCore.QString()
+
+      self.fileName = QtGui.QFileDialog.getOpenFileName(self, 'Open File', '/')
+
+      print(str(self.fileName))
 
   def close_application(self):
     choice = QtGui.QMessageBox.question(self,'Extract!',

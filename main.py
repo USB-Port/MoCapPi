@@ -47,63 +47,18 @@ class Ui_MainWindow(object):
 
         self.menuBar = MenuBar(MainWindow)
 
-        '''
-        self.menubar = QtGui.QMenuBar(MainWindow)
-        self.menubar.setNativeMenuBar(False)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 1055, 25))
-        self.menubar.setObjectName(_fromUtf8("menubar"))
-        self.menuFile = QtGui.QMenu(self.menubar)
-        self.menuFile.setObjectName(_fromUtf8("menuFile"))
-        self.menuEdit = QtGui.QMenu(self.menubar)
-        self.menuEdit.setObjectName(_fromUtf8("menuEdit"))
-        self.menuView = QtGui.QMenu(self.menubar)
-        self.menuView.setObjectName(_fromUtf8("menuView"))
-        self.menuTools = QtGui.QMenu(self.menubar)
-        self.menuTools.setObjectName(_fromUtf8("menuTools"))
-        self.menuHelp = QtGui.QMenu(self.menubar)
-        self.menuHelp.setObjectName(_fromUtf8("menuHelp"))
-        '''
         MainWindow.setMenuBar(self.menuBar.get_widget())
 
         self.statusbar = QtGui.QStatusBar(MainWindow)
         self.statusbar.setObjectName(_fromUtf8("statusbar"))
 
         MainWindow.setStatusBar(self.statusbar)
-        '''
-        self.actionOpen = QtGui.QAction(MainWindow)
-        self.actionOpen.setObjectName(_fromUtf8("actionOpen"))
-        self.actionSave = QtGui.QAction(MainWindow)
-        self.actionSave.setObjectName(_fromUtf8("actionSave"))
-        self.actionSave_As = QtGui.QAction(MainWindow)
-        self.actionSave_As.setObjectName(_fromUtf8("actionSave_As"))
-        self.actionQuit = QtGui.QAction(MainWindow)
-        self.actionQuit.setObjectName(_fromUtf8("actionQuit"))
-        self.menuFile.addAction(self.actionOpen)
-        self.menuFile.addAction(self.actionSave)
-        self.menuFile.addAction(self.actionSave_As)
-        self.menuFile.addAction(self.actionQuit)
-        self.menubar.addAction(self.menuFile.menuAction())
-        self.menubar.addAction(self.menuEdit.menuAction())
-        self.menubar.addAction(self.menuView.menuAction())
-        self.menubar.addAction(self.menuTools.menuAction())
-        self.menubar.addAction(self.menuHelp.menuAction())
-        '''
+
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(_translate("MainWindow", "Mo Cap pie - Team Ep0ch", None))
-        '''
-        self.menuFile.setTitle(_translate("MainWindow", "File", None))
-        self.menuEdit.setTitle(_translate("MainWindow", "Edit", None))
-        self.menuView.setTitle(_translate("MainWindow", "View", None))
-        self.menuTools.setTitle(_translate("MainWindow", "Tools", None))
-        self.menuHelp.setTitle(_translate("MainWindow", "Help", None))
-        self.actionOpen.setText(_translate("MainWindow", "Open", None))
-        self.actionSave.setText(_translate("MainWindow", "Save", None))
-        self.actionSave_As.setText(_translate("MainWindow", "Save As", None))
-        self.actionQuit.setText(_translate("MainWindow", "Quit", None))
-        '''
 
 
 if __name__ == "__main__":
