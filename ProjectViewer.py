@@ -36,9 +36,7 @@ class ProjectViewer(QtGui.QWidget):
         print(str(self.pathRoot))
         print(str(self.indexRoot))
         self.treeView.setRootIndex(self.model.index(self.directory))
-        #view.setRootIndex(model.index("C:\Myfolder")
-        #self.model.setRootPath(self.directory)
-        #self.indexRoot = self.model.index(self.model.rootPath()) 
+
 
     @QtCore.pyqtSlot(QtCore.QModelIndex)
     def on_treeView_clicked(self, index):
