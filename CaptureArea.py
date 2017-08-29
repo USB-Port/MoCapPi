@@ -1,4 +1,5 @@
 from PyQt4 import QtCore, QtGui
+from PyQt4.QtCore import pyqtSlot
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -16,6 +17,8 @@ class CaptureArea(QtGui.QWidget):
         self.gridLayout_2.setObjectName(_fromUtf8("gridLayout_2"))
         self.captureArea = QtGui.QTabWidget(QWidget)
         self.captureArea.setObjectName(_fromUtf8("captureArea"))
+        self.captureArea.setTabsClosable(False)
+        #self.captureArea.tabCloseRequested(lambda: self.closeTab(self.captureArea.currentIndex()))
 
         self.tabs = [0]
         self.gridLayouts = [0]
@@ -57,3 +60,10 @@ class CaptureArea(QtGui.QWidget):
         self.gridLayouts[len(self.gridLayouts) - 1].addWidget(self.widgets[len(self.widgets) - 1], 0, 0, 1, 1)
         self.captureArea.addTab(self.tabs[len(self.tabs) - 1], _fromUtf8(""))
 
+        self.captureArea.setCurrentWidget(self.tabs[(len(self.tabs) - 1)])
+
+    def removeTab(self, index):
+        widget = self.captureArea.widget(index)
+        if widget is not None:
+            widget.deleteLater()
+        self.captureArea.removeTab(index)

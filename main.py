@@ -78,6 +78,7 @@ class Ui_MainWindow(object):
         #This will be used to support multiple languages
 
         MainWindow.setWindowTitle(_translate("MainWindow", "Mo Cap pie - Team Ep0ch", None))
+        MainWindow.setWindowIcon(QtGui.QIcon("./imgs/icon.ico"))
         #self.captureArea.setTabText(self.captureArea.indexOf(self.tab), _translate("MainWindow", "Tab 1", None))
         #self.captureArea.setTabText(self.captureArea.indexOf(self.tab_2), _translate("MainWindow", "Tab 2", None))
 
