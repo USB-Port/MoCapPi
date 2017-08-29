@@ -37,6 +37,10 @@ class Ui_MainWindow(object):
         self.centralwidget = QtGui.QWidget(MainWindow)
         self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
 
+
+        self.init_tool_bar(MainWindow)
+
+
         #initialize the Capture Area
         self.captureArea = CaptureArea(self.centralwidget)
 
@@ -81,6 +85,38 @@ class Ui_MainWindow(object):
         MainWindow.setWindowIcon(QtGui.QIcon("./imgs/icon.ico"))
         #self.captureArea.setTabText(self.captureArea.indexOf(self.tab), _translate("MainWindow", "Tab 1", None))
         #self.captureArea.setTabText(self.captureArea.indexOf(self.tab_2), _translate("MainWindow", "Tab 2", None))
+
+    def init_tool_bar(self, MainWindow):
+        self.playMotionAction = QtGui.QAction(QtGui.QIcon("./imgs/PlayGreenButton.ico"), "Play Motion", MainWindow)
+        self.playMotionAction.triggered.connect(self.play_motion)
+
+        self.pauseMotionAction = QtGui.QAction(QtGui.QIcon("./imgs/Pause.ico"), "Pause Motion Capture", MainWindow)
+        self.pauseMotionAction.triggered.connect(self.pause_motion)
+
+        self.stopMotionAction = QtGui.QAction(QtGui.QIcon("./imgs/StopRedButton.ico"), "Stop Motion Capture", MainWindow)
+        self.stopMotionAction.triggered.connect(self.stop_motion)
+
+        self.recordMotionAction = QtGui.QAction(QtGui.QIcon("./imgs/RecordButton.ico"), "Record New Motion Capture", MainWindow)
+        self.recordMotionAction.triggered.connect(self.record_Motion)
+
+        # Let me tell you all a story about a mouse named glory
+        self.toolBar = MainWindow.addToolBar("Test test")
+        self.toolBar.addAction(self.playMotionAction)
+        self.toolBar.addAction(self.pauseMotionAction)
+        self.toolBar.addAction(self.stopMotionAction)
+        self.toolBar.addAction(self.recordMotionAction)
+
+    def record_Motion(self):
+        self.consoleOutput.outputText("Recording motion...")
+
+    def play_motion(self):
+        self.consoleOutput.outputText("playing motion...")
+
+    def pause_motion(self):
+        self.consoleOutput.outputText("Motion Capture paused")
+
+    def stop_motion(self):
+        self.consoleOutput.outputText("Motion Captured stopped")
 
     def init_menu_bar(self, MainWindow):
         self.menuBar = QtGui.QMenuBar(MainWindow)
