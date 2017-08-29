@@ -1,4 +1,4 @@
-import sys
+
 from PyQt4 import QtCore, QtGui
 
 try:
@@ -11,6 +11,18 @@ class ProjectViewer(QtGui.QWidget):
 
     def __init__(self, QWidget):
         super(ProjectViewer, self).__init__()
+
+        self.dockWidgetProjectViewer = QtGui.QDockWidget(QWidget)
+        self.dockWidgetProjectViewer.setMinimumSize(QtCore.QSize(89, 111))
+        self.dockWidgetProjectViewer.setAllowedAreas(QtCore.Qt.LeftDockWidgetArea | QtCore.Qt.RightDockWidgetArea)
+        self.dockWidgetProjectViewer.setObjectName(_fromUtf8("dockWidgetProjectViewer"))
+
+        self.projectViewerDocker = QtGui.QWidget()
+        self.projectViewerDocker.setObjectName(_fromUtf8("projectViewerDocker"))
+        self.gridLayout = QtGui.QGridLayout(self.projectViewerDocker)
+        self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
+
+
 
         self.pathRoot = QtCore.QDir.currentPath()
 
@@ -28,6 +40,11 @@ class ProjectViewer(QtGui.QWidget):
         self.treeView.hideColumn(1)
         self.treeView.hideColumn(2)
         self.treeView.hideColumn(3)
+
+        self.gridLayout.addWidget(self.get_widget(), 0, 0, 1, 1)
+        self.dockWidgetProjectViewer.setWidget(self.projectViewerDocker)
+
+        QWidget.addDockWidget(QtCore.Qt.DockWidgetArea(1), self.dockWidgetProjectViewer)
 
     @QtCore.pyqtSlot(QtCore.QModelIndex)
     def open_project_directory(self):

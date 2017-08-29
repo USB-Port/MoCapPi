@@ -8,6 +8,8 @@
 
 from PyQt4 import QtCore, QtGui
 from ProjectViewer import *
+from CaptureArea import *
+from ConsoleOutput import *
 
 
 try:
@@ -29,47 +31,22 @@ class Ui_MainWindow(object):
 
         MainWindow.setObjectName(_fromUtf8("MainWindow"))
         MainWindow.resize(1016, 818)
+
+        #Central Widget is the main area to put Widgets on the program
+        #Itis not a container.
         self.centralwidget = QtGui.QWidget(MainWindow)
         self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
-        self.gridLayout_2 = QtGui.QGridLayout(self.centralwidget)
-        self.gridLayout_2.setObjectName(_fromUtf8("gridLayout_2"))
-        self.tabWidget = QtGui.QTabWidget(self.centralwidget)
-        self.tabWidget.setObjectName(_fromUtf8("tabWidget"))
-        self.tab = QtGui.QWidget()
-        self.tab.setObjectName(_fromUtf8("tab"))
-        self.tabWidget.addTab(self.tab, _fromUtf8(""))
-        self.tab_2 = QtGui.QWidget()
-        self.tab_2.setObjectName(_fromUtf8("tab_2"))
-        self.tabWidget.addTab(self.tab_2, _fromUtf8(""))
-        self.gridLayout_2.addWidget(self.tabWidget, 0, 0, 1, 1)
+
+        #initialize the Capture Area
+        self.captureArea = CaptureArea(self.centralwidget)
+
         MainWindow.setCentralWidget(self.centralwidget)
 
-        self.statusbar = QtGui.QStatusBar(MainWindow)
-        self.statusbar.setObjectName(_fromUtf8("statusbar"))
-        MainWindow.setStatusBar(self.statusbar)
-        self.dockWidgetProjectViewer = QtGui.QDockWidget(MainWindow)
-        self.dockWidgetProjectViewer.setMinimumSize(QtCore.QSize(89, 111))
-        self.dockWidgetProjectViewer.setAllowedAreas(QtCore.Qt.LeftDockWidgetArea|QtCore.Qt.RightDockWidgetArea)
-        self.dockWidgetProjectViewer.setObjectName(_fromUtf8("dockWidgetProjectViewer"))
+        #Initialize the ProjectViewer
+        self.projectViewer = ProjectViewer(MainWindow)
 
 
-
-        self.dockWidgetContents_2 = QtGui.QWidget()
-        self.dockWidgetContents_2.setObjectName(_fromUtf8("dockWidgetContents_2"))
-        self.gridLayout = QtGui.QGridLayout(self.dockWidgetContents_2)
-        self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
-
-        self.projectViewer = ProjectViewer(self.dockWidgetContents_2)
-
-        self.gridLayout.addWidget(self.projectViewer.get_widget(), 0, 0, 1, 1)
-
-
-        #self.treeView = QtGui.QTreeView(self.dockWidgetContents_2)
-        #self.treeView.setObjectName(_fromUtf8("treeView"))
-
-        #self.gridLayout.addWidget(self.treeView, 0, 0, 1, 1)
-        self.dockWidgetProjectViewer.setWidget(self.dockWidgetContents_2)
-        MainWindow.addDockWidget(QtCore.Qt.DockWidgetArea(1), self.dockWidgetProjectViewer)
+        #This may be the buttons but might remove in an update
         self.dockWidgetControls = QtGui.QDockWidget(MainWindow)
         self.dockWidgetControls.setObjectName(_fromUtf8("dockWidgetControls"))
         self.dockWidgetContents_8 = QtGui.QWidget()
@@ -79,21 +56,13 @@ class Ui_MainWindow(object):
         self.pushButton.setObjectName(_fromUtf8("pushButton"))
         self.dockWidgetControls.setWidget(self.dockWidgetContents_8)
         MainWindow.addDockWidget(QtCore.Qt.DockWidgetArea(2), self.dockWidgetControls)
-        self.dockWidgetConsoleOutput = QtGui.QDockWidget(MainWindow)
-        self.dockWidgetConsoleOutput.setMinimumSize(QtCore.QSize(89, 40))
-        self.dockWidgetConsoleOutput.setObjectName(_fromUtf8("dockWidgetConsoleOutput"))
-        self.dockWidgetContents_9 = QtGui.QWidget()
-        self.dockWidgetContents_9.setObjectName(_fromUtf8("dockWidgetContents_9"))
-        self.horizontalLayout = QtGui.QHBoxLayout(self.dockWidgetContents_9)
-        self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
-        self.outputConsoleText = QtGui.QTextBrowser(self.dockWidgetContents_9)
-        self.outputConsoleText.setObjectName(_fromUtf8("outputConsoleText"))
-        self.horizontalLayout.addWidget(self.outputConsoleText)
-        self.dockWidgetConsoleOutput.setWidget(self.dockWidgetContents_9)
-        MainWindow.addDockWidget(QtCore.Qt.DockWidgetArea(8), self.dockWidgetConsoleOutput)
+
+        #initialize the Console Output
+        self.consoleOutput = ConsoleOutput(MainWindow)
 
         MainWindow.setCentralWidget(self.centralwidget)
 
+        #Set up the Menu Bar
         self.init_menu_bar(MainWindow)
 
         self.statusbar = QtGui.QStatusBar(MainWindow)
@@ -104,41 +73,13 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
-        '''
-        MainWindow.setObjectName(_fromUtf8("MainWindow"))
-        MainWindow.resize(1055, 538)
-
-        self.centralwidget = QtGui.QWidget(MainWindow)
-        self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
-
-        self.gridLayoutWidget = QtGui.QWidget(self.centralwidget)
-        self.gridLayoutWidget.setGeometry(QtCore.QRect(0, 0, 201, 491))
-        self.gridLayoutWidget.setObjectName(_fromUtf8("gridLayoutWidget"))
-        self.gridLayout = QtGui.QGridLayout(self.gridLayoutWidget)
-        self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
-
-
-        self.projectViewer = ProjectViewer(self.gridLayoutWidget)
-
-        self.gridLayout.addWidget(self.projectViewer.get_widget(), 0, 0, 1, 1)
-
-        MainWindow.setCentralWidget(self.centralwidget)
-
-
-        self.init_menu_bar(MainWindow)
-
-        self.statusbar = QtGui.QStatusBar(MainWindow)
-        self.statusbar.setObjectName(_fromUtf8("statusbar"))
-
-        MainWindow.setStatusBar(self.statusbar)
-
-        self.retranslateUi(MainWindow)
-        QtCore.QMetaObject.connectSlotsByName(MainWindow)
-
-    '''
 
     def retranslateUi(self, MainWindow):
+        #This will be used to support multiple languages
+
         MainWindow.setWindowTitle(_translate("MainWindow", "Mo Cap pie - Team Ep0ch", None))
+        #self.captureArea.setTabText(self.captureArea.indexOf(self.tab), _translate("MainWindow", "Tab 1", None))
+        #self.captureArea.setTabText(self.captureArea.indexOf(self.tab_2), _translate("MainWindow", "Tab 2", None))
 
     def init_menu_bar(self, MainWindow):
         self.menuBar = QtGui.QMenuBar(MainWindow)
