@@ -22,8 +22,6 @@ class ProjectViewer(QtGui.QWidget):
         self.gridLayout = QtGui.QGridLayout(self.projectViewerDocker)
         self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
 
-
-
         self.pathRoot = QtCore.QDir.currentPath()
 
         self.model = QtGui.QFileSystemModel(self)

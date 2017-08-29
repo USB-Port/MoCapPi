@@ -108,6 +108,13 @@ class Ui_MainWindow(object):
         self.actionOpen.setStatusTip("Open a file")
         self.actionOpen.triggered.connect(lambda: self.open_file(MainWindow))
 
+        # New File Action
+        self.actionNewFile = QtGui.QAction(MainWindow)
+        self.actionNewFile.setObjectName(_fromUtf8("actionOpen"))
+        self.actionNewFile.setShortcut("Ctrl+N")
+        self.actionNewFile.setStatusTip("New File")
+        self.actionNewFile.triggered.connect(self.new_file)
+
         #Save the Project Action
         self.actionSave = QtGui.QAction(MainWindow)
         self.actionSave.setObjectName(_fromUtf8("actionSave"))
@@ -134,6 +141,7 @@ class Ui_MainWindow(object):
         self.actionQuit.triggered.connect(lambda: self.close_application(MainWindow))
 
         #Add Action to the "File" submenu
+        self.menuFile.addAction(self.actionNewFile)
         self.menuFile.addAction(self.actionOpen)
         self.menuFile.addAction(self.actionSave)
         self.menuFile.addAction(self.actionSave_As)
@@ -158,6 +166,7 @@ class Ui_MainWindow(object):
         self.menuView.setTitle(_translate("MainWindow", "View", None))
         self.menuTools.setTitle(_translate("MainWindow", "Tools", None))
         self.menuHelp.setTitle(_translate("MainWindow", "Help", None))
+        self.actionNewFile.setText(_translate("MainWindow", "New File", None))
         self.actionOpen.setText(_translate("MainWindow", "Open", None))
         self.actionSave.setText(_translate("MainWindow", "Save", None))
         self.actionSave_As.setText(_translate("MainWindow", "Save As", None))
@@ -169,6 +178,9 @@ class Ui_MainWindow(object):
     def open_project_directory(self):
       self.projectViewer.open_project_directory()
       #self.gridLayout.update()
+
+    def new_file(self):
+        self.captureArea.newTab()
 
     def open_file(self, MainWindow):
         self.dlg = QtGui.QFileDialog(MainWindow)
