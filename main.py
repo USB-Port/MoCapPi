@@ -177,6 +177,18 @@ class Ui_MainWindow(object):
         self.actionQuit.setStatusTip("Quit the application")
         self.actionQuit.triggered.connect(lambda: self.close_application(MainWindow))
 
+        self.actionOpenProjectViewerWindow = QtGui.QAction(MainWindow)
+        self.actionOpenProjectViewerWindow.setObjectName(_fromUtf8("actionOpenProjectViewerWindow"))
+        self.actionOpenProjectViewerWindow.setShortcut("Ctrl+P")
+        self.actionOpenProjectViewerWindow.setStatusTip("Open Project Viewer Window")
+        self.actionOpenProjectViewerWindow.triggered.connect(self.openProjectViewerWindow)
+
+        self.actionOpenConsoleOutputWindow = QtGui.QAction(MainWindow)
+        self.actionOpenConsoleOutputWindow.setObjectName(_fromUtf8("actionOpenConsoleOutputWindow"))
+        self.actionOpenConsoleOutputWindow.setShortcut("Ctrl+L")
+        self.actionOpenConsoleOutputWindow.setStatusTip("Open Console Window")
+        self.actionOpenConsoleOutputWindow.triggered.connect(self.openConsoleOutputWindow)
+
         #Add Action to the "File" submenu
         self.menuFile.addAction(self.actionNewFile)
         self.menuFile.addAction(self.actionOpen)
@@ -186,6 +198,10 @@ class Ui_MainWindow(object):
 
         #Add Action to the "Project" submenu
         self.menuProject.addAction(self.actionOpenProjectDirectory)
+
+        #Add Actions to the "View" Submenu
+        self.menuView.addAction(self.actionOpenProjectViewerWindow)
+        self.menuView.addAction(self.actionOpenConsoleOutputWindow)
 
         #Add Menu Items to the Menu Bar
         self.menuBar.addAction(self.menuFile.menuAction())
@@ -209,6 +225,8 @@ class Ui_MainWindow(object):
         self.actionSave_As.setText(_translate("MainWindow", "Save As", None))
         self.actionQuit.setText(_translate("MainWindow", "Quit", None))
         self.actionOpenProjectDirectory.setText(_translate("MainWindow", "Open Project Directory", None))
+        self.actionOpenProjectViewerWindow.setText(_translate("MainWindow", "Open Project Viewer Window", None))
+        self.actionOpenConsoleOutputWindow.setText(_translate("MainWindow", "Open Console Output Window", None))
 
         MainWindow.setMenuBar(self.menuBar)
 
@@ -236,6 +254,13 @@ class Ui_MainWindow(object):
             sys.exit()
         else:
             pass
+
+    #The following function will deal with opening Docked Windows
+    def openProjectViewerWindow(self):
+        self.projectViewer.open_docker()
+
+    def openConsoleOutputWindow(self):
+        self.consoleOutput.open_docker()
 
 if __name__ == "__main__":
     import sys

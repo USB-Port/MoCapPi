@@ -44,3 +44,6 @@ class ConsoleOutput(QtGui.QWidget):
         self.outputConsoleText.insertPlainText("\n")
 
         self.scrollBar.setValue(self.scrollBar.maximum())
+
+    def open_docker(self):
+        self.dockWidgetConsoleOutput.setVisible(True)

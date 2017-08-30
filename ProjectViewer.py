@@ -74,7 +74,8 @@ class ProjectViewer(QtGui.QWidget):
         except:
             print("could not open the file")
 
-
+    def open_docker(self):
+        self.dockWidgetProjectViewer.setVisible(True)
 
     def get_widget(self):
         return self.treeView
