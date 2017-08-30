@@ -28,11 +28,8 @@ class ConsoleOutput(QtGui.QWidget):
         self.horizontalLayout.addWidget(self.outputConsoleText)
         self.dockWidgetConsoleOutput.setWidget(self.dockWidgetContents_9)
 
-        QWidget.addDockWidget(QtCore.Qt.DockWidgetArea(8), self.dockWidgetConsoleOutput)
 
-        x = 1
-        for x in range(1, 100):
-            self.outputText("test")
+        QWidget.addDockWidget(QtCore.Qt.DockWidgetArea(8), self.dockWidgetConsoleOutput)
 
 
     def outputText(self, text):

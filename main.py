@@ -111,9 +111,11 @@ class Ui_MainWindow(object):
 
     def play_motion(self):
         self.consoleOutput.outputText("playing motion...")
+        self.captureArea.start_clicked()
 
     def pause_motion(self):
         self.consoleOutput.outputText("Motion Capture paused")
+        #self.playMotionAction.setEnabled(False)
 
     def stop_motion(self):
         self.consoleOutput.outputText("Motion Captured stopped")
