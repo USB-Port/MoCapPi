@@ -6,6 +6,8 @@ import numpy as np
 import threading
 import time
 from multiprocessing import Queue
+#from CVHandler import *
+
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -22,6 +24,7 @@ class CaptureArea(QtGui.QWidget):
 
     def __init__(self, QWidget):
         super(CaptureArea, self).__init__()
+
         self.gridLayout_2 = QtGui.QGridLayout(QWidget)
         self.gridLayout_2.setObjectName(_fromUtf8("gridLayout_2"))
         self.captureArea = QtGui.QTabWidget(QWidget)
@@ -55,6 +58,7 @@ class CaptureArea(QtGui.QWidget):
 
 
         self.capture_thread = threading.Thread(target=self.grab, args=(0, q, 1920, 1080, 60))
+
         #self.setupUi(self)
 
         #self.startButton.clicked.connect(self.start_clicked)
@@ -62,6 +66,7 @@ class CaptureArea(QtGui.QWidget):
         #self.window_width = self.ImgWidget.frameSize().width()
         self.window_width = self.widget.frameSize().width()
         self.window_height = self.widget.frameSize().height()
+
         self.ImgWidget = OwnImageWidget(self.widget)
 
         self.timer = QtCore.QTimer(self)
@@ -96,8 +101,12 @@ class CaptureArea(QtGui.QWidget):
 
     def start_clicked(self):
         global running
+        #self.cvHandler = CVHandler(self.widget)
+        #self.cvHandler.start_clicked()
         running = True
         self.capture_thread.start()
+
+
 
     def update_frame(self):
         if not q.empty():
@@ -119,9 +128,11 @@ class CaptureArea(QtGui.QWidget):
             image = QtGui.QImage(img.data, width, height, bpl, QtGui.QImage.Format_RGB888)
             self.ImgWidget.setImage(image)
 
-    def closeEvent(self, event):
+    def stop_playback(self):
         global running
         running = False
+        self.isRunning = True
+
 
     def grab(self, cam, queue, width, height, fps):
         global running
@@ -141,6 +152,19 @@ class CaptureArea(QtGui.QWidget):
             else:
                 print(queue.qsize())
 
+    def openVideoFile(self, fileName):
+        #self.capture_thread = threading.Thread(target=self.grab, args=(fileName, q, 1920, 1080, 60))
+        global running
+        running = True
+        self.capture_thread.start()
+
+
+
+    def stream_setup(self):
+        pass
+        #connectToIPWindow = Ui_connectToIPBox(QtGui.QDialog)
+        #print(connectToIPWindow)
+
 
 class OwnImageWidget(QtGui.QWidget):
     def __init__(self, parent=None):
@@ -159,3 +183,4 @@ class OwnImageWidget(QtGui.QWidget):
         if self.image:
             qp.drawImage(QtCore.QPoint(0, 0), self.image)
         qp.end()
+

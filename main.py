@@ -10,7 +10,7 @@ from PyQt4 import QtCore, QtGui
 from ProjectViewer import *
 from CaptureArea import *
 from ConsoleOutput import *
-
+from SetUpWizard import *
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -117,8 +117,16 @@ class Ui_MainWindow(object):
         self.consoleOutput.outputText("Motion Capture paused")
         #self.playMotionAction.setEnabled(False)
 
+        #self.setUpWizard.setGeometry(QtCore.QRect(1000,500,100,30))
+        #self.setUpWizard.show()
+
     def stop_motion(self):
         self.consoleOutput.outputText("Motion Captured stopped")
+        self.captureArea.stop_playback()
+
+    def setUpWizardAction(self):
+        self.setUpWizard = SetUpWizard()
+
 
     def init_menu_bar(self, MainWindow):
         self.menuBar = QtGui.QMenuBar(MainWindow)
@@ -185,11 +193,23 @@ class Ui_MainWindow(object):
         self.actionOpenProjectViewerWindow.setStatusTip("Open Project Viewer Window")
         self.actionOpenProjectViewerWindow.triggered.connect(self.openProjectViewerWindow)
 
+        self.setUpWizardActionButton = QtGui.QAction(MainWindow)
+        self.setUpWizardActionButton.setObjectName(_fromUtf8("setUpWizardAction"))
+        self.setUpWizardActionButton.setShortcut("Ctrl+K")
+        self.setUpWizardActionButton.setStatusTip("Set up the Cameras")
+        self.setUpWizardActionButton.triggered.connect(self.setUpWizardAction)
+
         self.actionOpenConsoleOutputWindow = QtGui.QAction(MainWindow)
         self.actionOpenConsoleOutputWindow.setObjectName(_fromUtf8("actionOpenConsoleOutputWindow"))
         self.actionOpenConsoleOutputWindow.setShortcut("Ctrl+L")
         self.actionOpenConsoleOutputWindow.setStatusTip("Open Console Window")
         self.actionOpenConsoleOutputWindow.triggered.connect(self.openConsoleOutputWindow)
+
+        self.actionConnectToStream = QtGui.QAction(MainWindow)
+        self.actionConnectToStream.setObjectName(_fromUtf8("actionConnectToStream"))
+        self.actionConnectToStream.setShortcut("Ctrl+M")
+        self.actionConnectToStream.setStatusTip("Connect to  a stream")
+        self.actionConnectToStream.triggered.connect(self.connectToStream)
 
         #Add Action to the "File" submenu
         self.menuFile.addAction(self.actionNewFile)
@@ -200,6 +220,7 @@ class Ui_MainWindow(object):
 
         #Add Action to the "Project" submenu
         self.menuProject.addAction(self.actionOpenProjectDirectory)
+        self.menuProject.addAction(self.actionConnectToStream)
 
         #Add Actions to the "View" Submenu
         self.menuView.addAction(self.actionOpenProjectViewerWindow)
@@ -212,6 +233,11 @@ class Ui_MainWindow(object):
         self.menuBar.addAction(self.menuView.menuAction())
         self.menuBar.addAction(self.menuTools.menuAction())
         self.menuBar.addAction(self.menuHelp.menuAction())
+
+
+        #Add Menu Items to the Menu Bar
+        self.menuTools.addAction(self.setUpWizardActionButton)
+
 
        
         #Name the Menu Items
@@ -228,7 +254,10 @@ class Ui_MainWindow(object):
         self.actionQuit.setText(_translate("MainWindow", "Quit", None))
         self.actionOpenProjectDirectory.setText(_translate("MainWindow", "Open Project Directory", None))
         self.actionOpenProjectViewerWindow.setText(_translate("MainWindow", "Open Project Viewer Window", None))
+        self.actionConnectToStream.setText(_translate("MainWindow", "Connect to a Stream", None))
         self.actionOpenConsoleOutputWindow.setText(_translate("MainWindow", "Open Console Output Window", None))
+        self.setUpWizardActionButton.setText(_translate("MainWindow", "Set up Cameras Wizard", None))
+
 
         MainWindow.setMenuBar(self.menuBar)
 
@@ -242,10 +271,13 @@ class Ui_MainWindow(object):
     def open_file(self, MainWindow):
         self.dlg = QtGui.QFileDialog(MainWindow)
         self.dlg.setFileMode(QtGui.QFileDialog.AnyFile)
-        self.dlg.setFilter("Text files (*.txt)")
+        self.dlg.setFilter("Text files (*.mp4)")
         #self.fileName = QtCore.QString()
 
         self.fileName = QtGui.QFileDialog.getOpenFileName(MainWindow, 'Open File', '/')
+
+        self.consoleOutput.outputText("Opening file")
+        self.captureArea.openVideoFile(self.fileName)
 
         print(str(self.fileName))
 
@@ -256,6 +288,9 @@ class Ui_MainWindow(object):
             sys.exit()
         else:
             pass
+
+    def connectToStream(self):
+        self.captureArea.stream_setup()
 
     #The following function will deal with opening Docked Windows
     def openProjectViewerWindow(self):
