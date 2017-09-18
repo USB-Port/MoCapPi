@@ -14,14 +14,14 @@ except AttributeError:
 
 
 class CVHandler(QtGui.QWidget):
-    def __init__(self, QWidget):
+    def __init__(self, QWidget, cam):
         super(CVHandler, self).__init__()
         self.image = None
         self.running = False
         self.capture_thread = None
         self.widget = QWidget
         self.queue = Queue()
-        self.capture_thread = threading.Thread(target=self.grab, args=(0, 1920, 1080, 60))
+        self.capture_thread = threading.Thread(target=self.grab, args=(cam, 1920, 1080, 60))
 
         self.window_width = QWidget.frameSize().width()
         self.window_height = QWidget.frameSize().height()
@@ -36,6 +36,9 @@ class CVHandler(QtGui.QWidget):
     def start_clicked(self):
         self.running = True
         self.capture_thread.start()
+
+    def stop_playback(self):
+        self.running = False
 
 
     def update_frame(self):
@@ -57,11 +60,6 @@ class CVHandler(QtGui.QWidget):
             bpl = bpc * width
             image = QtGui.QImage(img.data, width, height, bpl, QtGui.QImage.Format_RGB888)
             self.ImgWidget.setImage(image)
-
-    def stop_playback(self):
-        global running
-        running = False
-        self.isRunning = True
 
 
     def grab(self, cam, width, height, fps):
