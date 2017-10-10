@@ -11,6 +11,7 @@ from ProjectViewer import *
 from CaptureArea import *
 from ConsoleOutput import *
 from SetUpWizard import *
+from ConnectToStreamBox import *
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -26,7 +27,11 @@ except AttributeError:
     def _translate(context, text, disambig):
         return QtGui.QApplication.translate(context, text, disambig)
 
-class Ui_MainWindow(object):
+class Ui_MainWindow(QtGui.QMainWindow):
+    def __init__(self, MainWindow, *args, **kwargs):
+        super(Ui_MainWindow, self).__init__(*args, **kwargs)
+        self.setupUi(MainWindow)
+
     def setupUi(self, MainWindow):
 
         MainWindow.setObjectName(_fromUtf8("MainWindow"))
@@ -290,7 +295,11 @@ class Ui_MainWindow(object):
             pass
 
     def connectToStream(self):
-        self.captureArea.stream_setup()
+        pass
+        #self.connectToStreamBox = ConnectToStreamBox(self.captureArea)
+        #ipAddress = self.connectToStreamBox.getIpAddress()
+        #self.captureArea.connectToIP(self.connectToStreamBox)
+
 
     #The following function will deal with opening Docked Windows
     def openProjectViewerWindow(self):
@@ -299,12 +308,34 @@ class Ui_MainWindow(object):
     def openConsoleOutputWindow(self):
         self.consoleOutput.open_docker()
 
+    def closeEvent(self,event):
+        result = QtGui.QMessageBox.question(self,
+                      "Confirm Exit...",
+                      "Are you sure you want to exit ?",
+                      QtGui.QMessageBox.Yes| QtGui.QMessageBox.No)
+        event.ignore()
+
+        if result == QtGui.QMessageBox.Yes:
+            event.accept()
+
+
+class MyWindow(QtGui.QMainWindow):
+    def closeEvent(self,event):
+        result = QtGui.QMessageBox.question(self,
+                      "Confirm Exit...",
+                      "Are you sure you want to exit ?",
+                      QtGui.QMessageBox.Yes| QtGui.QMessageBox.No)
+        event.ignore()
+
+        if result == QtGui.QMessageBox.Yes:
+            event.accept()
+
+
 if __name__ == "__main__":
     import sys
     app = QtGui.QApplication(sys.argv)
-    MainWindow = QtGui.QMainWindow()
-    ui = Ui_MainWindow()
-    ui.setupUi(MainWindow)
+    MainWindow = MyWindow()
+    ui = Ui_MainWindow(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())
 

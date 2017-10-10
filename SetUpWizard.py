@@ -38,6 +38,7 @@ class SetUpWizard(QtGui.QWidget):
         self.nextButton.setObjectName(_fromUtf8("nextButton"))
 
         self.nextButton.clicked.connect(self.connectCamera)
+        self.cancelButton.clicked.connect(self.cancelBox)
 
         self.gridLayout.addWidget(self.nextButton, 2, 2, 1, 1)
         self.label_2 = QtGui.QLabel(self)
@@ -127,9 +128,12 @@ class SetUpWizard(QtGui.QWidget):
             _translate("Form", "Welcome to the Set up wizard, I will walk you through setting up the cameras.", None))
         self.label_3.setText(_translate("Form", "So You Want to Set up the Cameras?", None))
 
-        self.update()
+        self.show()
 
     def paintEvent(self, e):
         dc = QtGui.QPainter(self)
         dc.drawLine(0, 0, 100, 100)
         dc.drawLine(100, 0, 0, 100)
+
+    def cancelBox(self):
+        self.deleteLater()

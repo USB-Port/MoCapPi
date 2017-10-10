@@ -10,6 +10,7 @@ from CVHandler import *
 from OpenGLHandler import *
 
 
+
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
@@ -50,7 +51,7 @@ class CaptureArea(QtGui.QWidget):
         widgetObjectName = "widget" + str(len(self.widgets) - 1)
         self.widgets[len(self.widgets) - 1].setObjectName(_fromUtf8(widgetObjectName))
 
-        self.gridLayouts[len(self.gridLayouts) - 1].addWidget(self.widgets[len(self.widgets) - 1], 0, 0, 1, 1)
+        #self.gridLayouts[len(self.gridLayouts) - 1].addWidget(self.widgets[len(self.widgets) - 1], 0, 0, 1, 1)
         self.captureArea.addTab(self.tabs[len(self.tabs) - 1], _fromUtf8(""))
 
         self.captureArea.setCurrentWidget(self.tabs[(len(self.tabs) - 1)])
@@ -127,25 +128,34 @@ class CaptureArea(QtGui.QWidget):
         self.newTab()
         self.newTab()
         self.newTab()
+
+        #text = "http://"+ str(self.ip) +":9090/?action=stream?dummy=param.mjpg"
+
+
         self.cvHandler2 = CVHandler(self.widgets[1], 0)
         self.cvHandler2.start_clicked()
 
-        self.cvHandler3 = CVHandler(self.widgets[2], 1)
-        self.cvHandler3.start_clicked()
-
         #running = True
         #self.capture_thread.start()
+
         #self.captureArea.setCurrentWidget(self.tabs[2])
         #self.capture_thread2.start()
 
 
-
-
     def stop_playback(self):
-        self.cvHandler.stop_playback()
+        self.cvHandler2.stop_playback()
 
-    def stream_setup(self):
-        pass
-        #connectToIPWindow = Ui_connectToIPBox(QtGui.QDialog)
-        #print(connectToIPWindow)
+    def connectToIP(self, ipAddress, test):
+        self.newTab()
+        test.connectToStream(self)
+        #self.cvHandler2 = CVHandler(self.widgets[(len(self.tabs) - 1)], ipAddress)
+        #self.cvHandler2.start_clicked()
+
+    def getWidget(self):
+        #CaptureArea.newTab()
+        #lastTab = len(self.tabs) - 1
+        lastWidget = len(self.widgets) - 1
+        print(lastWidget)
+        return self.widgets[1]
+
 
