@@ -1,11 +1,31 @@
-# -*- coding: utf-8 -*-
+###############################################################################
+#Name:
+#   main.py
 
-# Form implementation generated from reading ui file 'mocappi.ui'
+#What is this Class for:
+#   This file is for the over all application of the program.
+#   This class stores the UI layout of the different parts of the app, This also stores the
+#   QMainWindow class which handles OS events. The class also manages the tool bar and the menu bar.
+#   Most of the classes are instatiated in this class. This is the base of the app.
 #
-# Created by: PyQt4 UI code generator 4.11.4
+#What Can I do here:
+#   Add Menu Items, Add Tool Bar Items, Backend Design of classes, App Event handling,
+#   Modify Over all UI design, change Dockable widgets, change Window Title, Create a software DRM activation key.
+#   make a trial version of the software, anything that deals with the whole application
 #
-# WARNING! All changes made in this file will be lost!
+#What needs to be done in this class:
+#   -Improved Class architecture - Fixing bad design starts here with the instatiation of the classes
+#   -Improve UI
+#   -anything that you want to see in the over all application window.
+#   Yea, not much as most bugs are in the other classes
+#
+################################################################################
 
+
+
+
+
+import sys
 from PyQt4 import QtCore, QtGui
 from ProjectViewer import *
 from CaptureArea import *
@@ -13,12 +33,12 @@ from ConsoleOutput import *
 from SetUpWizard import *
 from ConnectToStreamBox import *
 
+#This two try except is used to support multiple languages. still need it to support English
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
     def _fromUtf8(s):
         return s
-
 try:
     _encoding = QtGui.QApplication.UnicodeUTF8
     def _translate(context, text, disambig):
@@ -27,13 +47,16 @@ except AttributeError:
     def _translate(context, text, disambig):
         return QtGui.QApplication.translate(context, text, disambig)
 
+
+#This is the UI for the main Window. this is the class that links everything together. This class is long because
+#it links everything together. This class is mainly made up of the over all UI design and the Tool Bar
+#A lot of this code is self generated from QT designer, Don't really have to mess with a lot of it.
 class Ui_MainWindow(QtGui.QMainWindow):
     def __init__(self, MainWindow, *args, **kwargs):
         super(Ui_MainWindow, self).__init__(*args, **kwargs)
         self.setupUi(MainWindow)
 
     def setupUi(self, MainWindow):
-
         MainWindow.setObjectName(_fromUtf8("MainWindow"))
         MainWindow.resize(1016, 818)
 
@@ -42,9 +65,7 @@ class Ui_MainWindow(QtGui.QMainWindow):
         self.centralwidget = QtGui.QWidget(MainWindow)
         self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
 
-
         self.init_tool_bar(MainWindow)
-
 
         #initialize the Capture Area
         self.captureArea = CaptureArea(self.centralwidget)
@@ -83,6 +104,7 @@ class Ui_MainWindow(QtGui.QMainWindow):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
 
+    #This is a virtual method that is used to set the text, this makes it easy to support multiple languages
     def retranslateUi(self, MainWindow):
         #This will be used to support multiple languages
 
@@ -91,9 +113,16 @@ class Ui_MainWindow(QtGui.QMainWindow):
         #self.captureArea.setTabText(self.captureArea.indexOf(self.tab), _translate("MainWindow", "Tab 1", None))
         #self.captureArea.setTabText(self.captureArea.indexOf(self.tab_2), _translate("MainWindow", "Tab 2", None))
 
+    #Method I wrote to set up the docakable tool bar
     def init_tool_bar(self, MainWindow):
+
+        #This line assigns this veriable to a QAction. then set the ICON and text
         self.playMotionAction = QtGui.QAction(QtGui.QIcon("./imgs/PlayGreenButton.ico"), "Play Motion", MainWindow)
+        #This is how you link a QAction to a function. The function here is Play_motion
         self.playMotionAction.triggered.connect(self.play_motion)
+
+        #If you would like a new button, you can just copy these 2 lines like how I did for the next 3. This simpley makes
+        #the veriable, once created, you have to add these "actions" to a menu or tool bar.
 
         self.pauseMotionAction = QtGui.QAction(QtGui.QIcon("./imgs/Pause.ico"), "Pause Motion Capture", MainWindow)
         self.pauseMotionAction.triggered.connect(self.pause_motion)
@@ -105,19 +134,26 @@ class Ui_MainWindow(QtGui.QMainWindow):
         self.recordMotionAction.triggered.connect(self.record_Motion)
 
         # Let me tell you all a story about a mouse named glory
+        #Here I create a tool bar and add it to the MainWindow.
         self.toolBar = MainWindow.addToolBar("Test test")
+        #Once the toolbar is made, you can add the actions, AKA buttons, to the tool bar like so.
         self.toolBar.addAction(self.playMotionAction)
         self.toolBar.addAction(self.pauseMotionAction)
         self.toolBar.addAction(self.stopMotionAction)
         self.toolBar.addAction(self.recordMotionAction)
 
+    #Yoy need to link a button action to a method, so this method is called when the user clicks, "record motion" button
     def record_Motion(self):
+        #this line just prints the string to the output console in the program
         self.consoleOutput.outputText("Recording motion...")
+        # you could just do "print("test stuff")" to print to IDE consoles
 
+    #same as above, this method is called wehn you click play motion button
     def play_motion(self):
         self.consoleOutput.outputText("playing motion...")
         self.captureArea.start_clicked()
 
+    #Same, this button does not work. To pause, need access to CVHandlerCLass which is not made in this class.
     def pause_motion(self):
         self.consoleOutput.outputText("Motion Capture paused")
         #self.playMotionAction.setEnabled(False)
@@ -125,39 +161,73 @@ class Ui_MainWindow(QtGui.QMainWindow):
         #self.setUpWizard.setGeometry(QtCore.QRect(1000,500,100,30))
         #self.setUpWizard.show()
 
+    #same as above
     def stop_motion(self):
         self.consoleOutput.outputText("Motion Captured stopped")
         self.captureArea.stop_playback()
 
+    #This method is called when clicked set up cameras button
     def setUpWizardAction(self):
+        #This creates a new instance of SetUpWizard class
         self.setUpWizard = SetUpWizard()
 
-
+    #This is just like the tool bar except this is a menu bar. "File, Edit, Help, ect"
     def init_menu_bar(self, MainWindow):
+        #Create a new QMenuBar, Takes in a QMainWindow
         self.menuBar = QtGui.QMenuBar(MainWindow)
+        #This line is false to improve functionality for Linux.
         self.menuBar.setNativeMenuBar(False)
+        #This changes the size. NOTE: I did not set these numbers, they are auto generated in QT Designer 4
         self.menuBar.setGeometry(QtCore.QRect(0, 0, 1055, 25))
+        #Every single QSomthing, need a UNIQUE object name, no 2 can be alike
         self.menuBar.setObjectName(_fromUtf8("menubar"))
 
         #Initialze the Menu Items
+        #This is how you make menu items, like "File"
         self.menuFile = QtGui.QMenu(self.menuBar)
+        # again needs a unique object name
         self.menuFile.setObjectName(_fromUtf8("menuFile"))
+
+        #made a "Edit" menu item here
         self.menuEdit = QtGui.QMenu(self.menuBar)
         self.menuEdit.setObjectName(_fromUtf8("menuEdit"))
+
+        #made a "Project" menu item
         self.menuProject = QtGui.QMenu(self.menuBar)
         self.menuProject.setObjectName(_fromUtf8("menuProject"))
+
+        #made a "View" menu item here
         self.menuView = QtGui.QMenu(self.menuBar)
         self.menuView.setObjectName(_fromUtf8("menuView"))
+
+        #made a "Tools" menu item
         self.menuTools = QtGui.QMenu(self.menuBar)
         self.menuTools.setObjectName(_fromUtf8("menuTools"))
+
+        #Help menu item
         self.menuHelp = QtGui.QMenu(self.menuBar)
         self.menuHelp.setObjectName(_fromUtf8("menuHelp"))
 
+        #Note: The above lines makes the Main Menus, these are not the sub menus
+
+
+        #blow is how to make actions for the menu bar.
+
+        #These 5 lines is how to create a sub menu item
         #Open a project file Action
         self.actionOpen = QtGui.QAction(MainWindow)
         self.actionOpen.setObjectName(_fromUtf8("actionOpen"))
+        #This is how to set a shortcut.
         self.actionOpen.setShortcut("Ctrl+O")
+        #this is a tool tip, just a tip that pops up if the user hovers over the button
         self.actionOpen.setStatusTip("Open a file")
+
+        #this is how you link the button to a function
+        #You might have notcie the "lambda". I don't truly understand it but let me explain why and what it is for.
+        # in Python, to create an Anonamous function, you use the keyword lambda. Anonamous methods are like regular methods
+        #except they do not have a method name. This is used here to pass in "MainWindow" to the Open_File method when the
+        #user clicks
+        #This is how you pass in veriables to a method that is connected to a button.
         self.actionOpen.triggered.connect(lambda: self.open_file(MainWindow))
 
         # New File Action
@@ -217,6 +287,7 @@ class Ui_MainWindow(QtGui.QMainWindow):
         self.actionConnectToStream.triggered.connect(self.connectToStream)
 
         #Add Action to the "File" submenu
+        #here we add all the items to the "File" Menu
         self.menuFile.addAction(self.actionNewFile)
         self.menuFile.addAction(self.actionOpen)
         self.menuFile.addAction(self.actionSave)
@@ -224,6 +295,7 @@ class Ui_MainWindow(QtGui.QMainWindow):
         self.menuFile.addAction(self.actionQuit)
 
         #Add Action to the "Project" submenu
+        #Here we add actions to the "Project" menu
         self.menuProject.addAction(self.actionOpenProjectDirectory)
         self.menuProject.addAction(self.actionConnectToStream)
 
@@ -232,6 +304,7 @@ class Ui_MainWindow(QtGui.QMainWindow):
         self.menuView.addAction(self.actionOpenConsoleOutputWindow)
 
         #Add Menu Items to the Menu Bar
+        #Here we add all the main menus to the menu Bar
         self.menuBar.addAction(self.menuFile.menuAction())
         self.menuBar.addAction(self.menuEdit.menuAction())
         self.menuBar.addAction(self.menuProject.menuAction())
@@ -243,9 +316,9 @@ class Ui_MainWindow(QtGui.QMainWindow):
         #Add Menu Items to the Menu Bar
         self.menuTools.addAction(self.setUpWizardActionButton)
 
-
        
         #Name the Menu Items
+        #used to set the text, can be used to translate to different languges
         self.menuFile.setTitle(_translate("MainWindow", "File", None))
         self.menuEdit.setTitle(_translate("MainWindow", "Edit", None))
         self.menuProject.setTitle(_translate("MainWindow", "Project", None))
@@ -263,8 +336,11 @@ class Ui_MainWindow(QtGui.QMainWindow):
         self.actionOpenConsoleOutputWindow.setText(_translate("MainWindow", "Open Console Output Window", None))
         self.setUpWizardActionButton.setText(_translate("MainWindow", "Set up Cameras Wizard", None))
 
-
+        #Set the Menu mar to the main menu.
+        #You can put a menu bar on any Qwidget
         MainWindow.setMenuBar(self.menuBar)
+
+    #A lot of the following methods are just used to link the menu buttons to.
 
     def open_project_directory(self):
       self.projectViewer.open_project_directory()
@@ -273,19 +349,27 @@ class Ui_MainWindow(QtGui.QMainWindow):
     def new_file(self):
         self.captureArea.newTab()
 
+    #This code is used to open up a file
     def open_file(self, MainWindow):
         self.dlg = QtGui.QFileDialog(MainWindow)
         self.dlg.setFileMode(QtGui.QFileDialog.AnyFile)
         self.dlg.setFilter("Text files (*.mp4)")
         #self.fileName = QtCore.QString()
 
+        #once you open a file, the file Name is set here
+        #You can use this file name to do a "open(self.fileName, 'r')" This will be used when we open up files
         self.fileName = QtGui.QFileDialog.getOpenFileName(MainWindow, 'Open File', '/')
 
+        #siple output the text to console
         self.consoleOutput.outputText("Opening file")
+
+        #Here we need to check if it is a valid file. we can set filters in the project viewer class
+        #once we have the motion file we want, pass it to Capture Area to open it in a tab.
         self.captureArea.openVideoFile(self.fileName)
 
         print(str(self.fileName))
 
+    #This is used by the Quit button in the menu bar
     def close_application(self, MainWindow):
         choice = QtGui.QMessageBox.question(MainWindow,'Extract!', "Quit the Application?",QtGui.QMessageBox.No | QtGui.QMessageBox.Yes)
 
@@ -294,20 +378,23 @@ class Ui_MainWindow(QtGui.QMainWindow):
         else:
             pass
 
+    #This is used by the connect to a stream
     def connectToStream(self):
-        pass
-        #self.connectToStreamBox = ConnectToStreamBox(self.captureArea)
+        #This makes a pop up box asking for an IP to connect to
+        self.connectToStreamBox = ConnectToStreamBox(self.captureArea)
         #ipAddress = self.connectToStreamBox.getIpAddress()
         #self.captureArea.connectToIP(self.connectToStreamBox)
 
 
     #The following function will deal with opening Docked Windows
+    #If you close out a dock widget, you can get them back with these lines.
     def openProjectViewerWindow(self):
         self.projectViewer.open_docker()
 
     def openConsoleOutputWindow(self):
         self.consoleOutput.open_docker()
 
+    #Doesn't work here, Maybe Fix, maybe now. WOrks in MyWIndow CLass
     def closeEvent(self,event):
         result = QtGui.QMessageBox.question(self,
                       "Confirm Exit...",
@@ -319,23 +406,41 @@ class Ui_MainWindow(QtGui.QMainWindow):
             event.accept()
 
 
+#This class represents the whole window frame. This class is for handling OS Events. (X-out, keyboard, ect)
+#This is a PyQT subclass. This class inherents from QtGUI.QMainWindow.
+#NOTE: There can only be ONE QMainWindow class per program. SO do make pop up windows a MainWindow.
+#also, this class creates a main thread, and like all GUI shit, some some connect be done in the main thread.
 class MyWindow(QtGui.QMainWindow):
+
+    #this is a virtual method that I have overridden from the super class.
+    #this method is called when the user presses the red X at the top right.
     def closeEvent(self,event):
+        #A simple pop up message with a yes or no option
         result = QtGui.QMessageBox.question(self,
                       "Confirm Exit...",
                       "Are you sure you want to exit ?",
                       QtGui.QMessageBox.Yes| QtGui.QMessageBox.No)
         event.ignore()
 
+        #if the use clicks yes.
         if result == QtGui.QMessageBox.Yes:
+            #I'm not sure what this does but it quits the program as I should.
             event.accept()
 
 
+#This is the entry point into the program
 if __name__ == "__main__":
-    import sys
+    #app is used to pass in system arguments to the application, not used for us
     app = QtGui.QApplication(sys.argv)
+
+    #The main Window and the UI is best designed as 2 seperate things. This keeps design better
     MainWindow = MyWindow()
+    #The ui is for the user interface, The main window is where all the UI needs to be placed, so we pass in the main window
     ui = Ui_MainWindow(MainWindow)
+
+    #after we built the UI, we must show it.
     MainWindow.show()
+
+    #exit
     sys.exit(app.exec_())
 
