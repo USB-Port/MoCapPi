@@ -51,6 +51,7 @@ import time
 from multiprocessing import Queue
 from CVHandler import *
 from OpenGLHandler import *
+from MaskingDebug import  *
 
 
 
@@ -226,4 +227,6 @@ class CaptureArea(QtGui.QWidget):
     def openVideoFile(self, fileName):
         pass
 
+    def openMaskingDebugWindow(self):
+        self.debugWin = MaskingDebug()
 

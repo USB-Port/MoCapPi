@@ -87,7 +87,7 @@ class SetUpWizard(QtGui.QWidget):
         self.setWindowTitle(_translate("Form", "When you ask someone to do work", None))
         self.cancelButton.setText(_translate("Form", "Cancel", None))
         self.nextButton.setText(_translate("Form", "Next", None))
-        self.label_2.setText(_translate("Form", "Welcome to the Set up wizard, I will walk you through setting up the cameras.", None))
+        self.label_2.setText(_translate("Form", "Welcome, I am the Set up wizard, I will walk you through setting up the cameras.", None))
         self.label_3.setText(_translate("Form", "So You Want to Set up the Cameras?", None))
 
         #self.myPic  = QtGui.QPixmap(_fromUtf8("./imgs/pic.jpg"))

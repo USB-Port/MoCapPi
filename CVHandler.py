@@ -39,6 +39,7 @@ import argparse
 from multiprocessing import Queue
 from OpenGL import GL
 from OpenGLHandler import *
+from Point import *
 
 
 try:
@@ -48,8 +49,22 @@ except AttributeError:
         return s
 
 
+
+
+try:
+    _encoding = QtGui.QApplication.UnicodeUTF8
+
+
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig, _encoding)
+except AttributeError:
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig)
+
+
 #The class still inherit from QWidget
 class CVHandler(QtGui.QWidget):
+
 
     #To create a new OCV Handler you must pass in a QWidget, cam, and a OpenGLhandler. The cam veriable can be numbers 0-2 depending on how many
     #cameras you have connected, 0 being first, or a IP adderess like "tcp://192.168.2.9:9092". The OpenGLHandler being passed
@@ -57,7 +72,7 @@ class CVHandler(QtGui.QWidget):
     # and each camera can update the OpenGLHandler, then the OpenGLHandler can concregate the point positions.
     #The QWidget is a tab that tells the class where to put the video feed. NOTE, Once we get everything all sorted,
     # we will not need to show the video feed unless we need to, so a default None could be used.
-    def __init__(self, QWidget, cam, openGLHandler):
+    def __init__(self, QWidget, cam, openGLHandler=None):
         super(CVHandler, self).__init__()
         #this just assigns the class veriable to what was passed in
         self.openGLHandler = openGLHandler
@@ -66,6 +81,9 @@ class CVHandler(QtGui.QWidget):
         self.capture_thread = None
         self.widget = QWidget
         self.queue = Queue()
+
+        self.trackingFrame = None
+        self.points = []
 
         #This is how you create a thread and pass in arguments in python. The function is called  grab(cam, w, h, FPS)
         self.capture_thread = threading.Thread(target=self.grab, args=(cam, 1920, 1080, 60))
@@ -85,8 +103,12 @@ class CVHandler(QtGui.QWidget):
         #New Stuff for Tracking
         #These 2 lines set the mask, the value are in HSV format. idk why it's not RGB, right now the color is masked for red
         sensitivity = 15
-        self.lower = (0, 100, 100)
-        self.upper = (20, 255, 255)
+        #self.lower = (0, 100, 100)
+        #self.upper = (20, 255, 255)
+
+        self.lower = 200
+        self.upper = 255
+        self.radiusBound = 1
 
         #These 2 lines are another way to set the mask. I was trying different ways, Not sure which way is better, both seem the same
         #self.lower = np.array([78, 158, 124])
@@ -102,6 +124,64 @@ class CVHandler(QtGui.QWidget):
         self.args = vars(ap.parse_args())
         self.pts = deque(maxlen=self.args["buffer"])
 
+    #####################################################################################
+
+
+        self.setObjectName(_fromUtf8("Form"))
+        self.resize(568, 184)
+        self.gridLayout = QtGui.QGridLayout(self)
+        self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
+        self.label = QtGui.QLabel(self)
+        self.label.setObjectName(_fromUtf8("label"))
+        self.gridLayout.addWidget(self.label, 0, 0, 1, 1)
+        self.horizontalSlider = QtGui.QSlider(self)
+        self.horizontalSlider.setOrientation(QtCore.Qt.Horizontal)
+        self.horizontalSlider.setObjectName(_fromUtf8("horizontalSlider"))
+        self.gridLayout.addWidget(self.horizontalSlider, 1, 0, 1, 1)
+        self.textEdit = QtGui.QTextEdit(self)
+        self.textEdit.setObjectName(_fromUtf8("textEdit"))
+        self.gridLayout.addWidget(self.textEdit, 1, 1, 1, 1)
+        self.label_2 = QtGui.QLabel(self)
+        self.label_2.setObjectName(_fromUtf8("label_2"))
+        self.gridLayout.addWidget(self.label_2, 2, 0, 1, 1)
+        self.pushButton_2 = QtGui.QPushButton(self)
+        self.pushButton_2.setObjectName(_fromUtf8("pushButton_2"))
+        self.gridLayout.addWidget(self.pushButton_2, 5, 3, 1, 1)
+        self.pushButton = QtGui.QPushButton(self)
+        self.pushButton.setObjectName(_fromUtf8("pushButton"))
+        self.gridLayout.addWidget(self.pushButton, 5, 2, 1, 1)
+        self.textEdit_2 = QtGui.QTextEdit(self)
+        self.textEdit_2.setObjectName(_fromUtf8("textEdit_2"))
+        self.gridLayout.addWidget(self.textEdit_2, 2, 1, 2, 1)
+        self.textEdit_3 = QtGui.QTextEdit(self)
+        self.textEdit_3.setObjectName(_fromUtf8("textEdit_3"))
+        self.gridLayout.addWidget(self.textEdit_3, 4, 1, 2, 1)
+        self.label_3 = QtGui.QLabel(self)
+        self.label_3.setObjectName(_fromUtf8("label_3"))
+        self.gridLayout.addWidget(self.label_3, 4, 0, 1, 1)
+        self.horizontalSlider_2 = QtGui.QSlider(self)
+        self.horizontalSlider_2.setOrientation(QtCore.Qt.Horizontal)
+        self.horizontalSlider_2.setObjectName(_fromUtf8("horizontalSlider_2"))
+        self.gridLayout.addWidget(self.horizontalSlider_2, 3, 0, 1, 1)
+        self.horizontalSlider_3 = QtGui.QSlider(self)
+        self.horizontalSlider_3.setOrientation(QtCore.Qt.Horizontal)
+        self.horizontalSlider_3.setObjectName(_fromUtf8("horizontalSlider_3"))
+        self.gridLayout.addWidget(self.horizontalSlider_3, 5, 0, 1, 1)
+
+        self.retranslateUi()
+        QtCore.QMetaObject.connectSlotsByName(self)
+        self.show()
+
+    def retranslateUi(self):
+        self.setWindowTitle(_translate("Form", "Form", None))
+        self.label.setText(_translate("Form", "Lower Bound", None))
+        self.label_2.setText(_translate("Form", "Upper Bound", None))
+        self.pushButton_2.setText(_translate("Form", "Quit", None))
+        self.pushButton.setText(_translate("Form", "Set", None))
+        self.label_3.setText(_translate("Form", "Radius", None))
+
+
+    #########################################
 
     #This button is called from the captureArea which is from the Main.py. The green play button. I tend to use this method
     #for debuggin stuff.
@@ -133,8 +213,14 @@ class CVHandler(QtGui.QWidget):
             #frame is a dictionry, so this will give us the data accotiated with the key value "img"
             img = frame["img"]
 
+            #self.trackingFrame = cv2.cv.CreateImage(cv2.GetSize(img), 8, 3)
+
+
             #Get the height width and color of the image
             img_height, img_width, img_colors = img.shape
+
+            height, width, bpc = img.shape
+            bpl = bpc * width
 
             #These 3 lines are to keep the correct aspect ratio. This might not be needed.
             scale_w = float(self.window_width) / float(img_width)
@@ -146,36 +232,96 @@ class CVHandler(QtGui.QWidget):
                 scale = 1
 
             #Not sure why this is here, must be for some kind of resizing
-            img = cv2.resize(img, None, fx=scale, fy=scale, interpolation=cv2.INTER_CUBIC)
+            #img = cv2.resize(img, None, fx=scale, fy=scale, interpolation=cv2.INTER_CUBIC)
 
             #changes this from BGR2HSV, This is done to apply the mask based on our HSV color values above
-            img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+            #img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+            img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+            blurred = cv2.GaussianBlur(img, (11,11), 0)
+            threshed = cv2.threshold(blurred, self.lower, self.upper, cv2.THRESH_BINARY)[1]
+            threshed = cv2.erode(threshed, None, iterations=2)
+            threshed = cv2.dilate(threshed, None, iterations=4)
 
             #img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
             #Already got these values probably can remove
-            height, width, bpc = img.shape
+
+            self.trackingFrame = np.zeros((height, width, 3), np.uint8)
 
             #Not sure wht this is for
-            bpl = bpc * width
+
 
             #image = QtGui.QImage(frame.tostring(), 640, 480, QtGui.QImage.Format_RGB888).rgbSwapped()
             #pixmap = QtGui.QPixmap.fromImage(image)
 
             #New Stuff for Tracking
+            kernelOpen = np.ones((5, 5))
+            kernelClose = np.ones((20, 20))
+
             #These 3 lines will apply the mask for the color we picked above.
-            self.mask = cv2.inRange(img, self.lower, self.upper)
-            self.mask = cv2.erode(self.mask, None, iterations=2)
-            self.mask = cv2.dilate(self.mask, None, iterations=2)
+            #self.mask = cv2.inRange(img, self.lower, self.upper)
+            #self.mask = cv2.morphologyEx(self.mask, cv2.MORPH_OPEN, kernelOpen)
+            #self.mask = cv2.morphologyEx(self.mask, cv2.MORPH_CLOSE, kernelClose)
+            #self.mask = cv2.erode(self.mask, None, iterations=2)
+            #self.mask = cv2.dilate(self.mask, None, iterations=2)
+            cv2.imshow("mask", threshed)
 
             #You can play the Masked video if you want to see what it looks like, It looks like all black with back as bright spot.
 
             # find contours in the mask and initialize the current
             # (x, y) center of the ball
-            cnts = cv2.findContours(self.mask.copy(), cv2.RETR_EXTERNAL,
+            cnts = cv2.findContours(threshed.copy(), cv2.RETR_EXTERNAL,
                                     cv2.CHAIN_APPROX_SIMPLE)[-2]
             center = None
 
+
+
+            #for i in range(len(cnts)):
+                #print("I is :" + str(i))
+                #point = Point()
+                #points.append(point)
+            i = 0
+            self.points = []
+            #for i in range(0, len(cnts)):
+            for (i, c) in enumerate(cnts):
+                print("I is :" + str(i))
+                point = Point()
+                self.points.append(point)
+
+                #c = max(cnts, key=cv2.contourArea)
+
+                ((x, y), radius) = cv2.minEnclosingCircle(c)
+
+                self.points[i].setX(x)
+                self.points[i].setY(y)
+                self.points[i].setRadius(radius)
+
+                M = cv2.moments(c)
+
+                # this is center of a circle
+                self.points[i].setCenter((int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"])))
+
+                # These 2 points are the center of the mask object found. This only works on Balls
+                xx = int(M['m10'] / M['m00'])
+                yy = int(M['m01'] / M['m00'])
+                self.points[i].setPosition(xx, yy, 0)
+
+                #self.openGLHandler.setPos(self.cx, self.cy)
+
+                # print("cx is: " + str(cx))
+                # print("cy is: " + str(cy))
+
+                # only proceed if the radius meets a minimum size
+                if self.points[i].getRadius() > self.radiusBound:
+                    # draw the circle and centroid on the frame,
+                    # then update the list of tracked points
+                    cv2.circle(img, (int(self.points[i].getX()), int(self.points[i].getY())), int(self.points[i].getRadius()),
+                               (0, 255, 255), 2)
+                    cv2.circle(img, self.points[i].getCenter(), 5, (0, 0, 255), -1)
+                    #cv2.add(self.trackingFrame, img, img)
+                #self.pts.appendleft(self.points[i].getCenter())
+
+            '''
             # only proceed if at least one contour was found
             if len(cnts) > 0:
                 # find the largest contour in the mask, then use
@@ -183,6 +329,7 @@ class CVHandler(QtGui.QWidget):
                 # centroid
                 c = max(cnts, key=cv2.contourArea)
                 ((x, y), radius) = cv2.minEnclosingCircle(c)
+
                 M = cv2.moments(c)
 
                 #this is center of a circle
@@ -193,10 +340,7 @@ class CVHandler(QtGui.QWidget):
                 self.cy = int(M['m01'] / M['m00'])
 
 
-
                 self.openGLHandler.setPos(self.cx,self.cy)
-
-
 
 
                 #print("cx is: " + str(cx))
@@ -210,26 +354,31 @@ class CVHandler(QtGui.QWidget):
                                (0, 255, 255), 2)
                     cv2.circle(img, center, 5, (0, 0, 255), -1)
 
+
+            '''
+
+
             # update the points queue
-            self.pts.appendleft(center)
+            #self.pts.appendleft(center)
 
             # loop over the set of tracked points
-            for i in range(1, len(self.pts)):
+            #for i in range(1, len(self.pts)):
                 # if either of the tracked points are None, ignore
                 # them
-                if self.pts[i - 1] is None or self.pts[i] is None:
-                    continue
+                #if self.pts[i - 1] is None or self.pts[i] is None:
+                #   continue
 
                 # otherwise, compute the thickness of the line and
                 # draw the connecting lines
-                thickness = int(np.sqrt(self.args["buffer"] / float(i + 1)) * 2.5)
+                #thickness = int(np.sqrt(self.args["buffer"] / float(i + 1)) * 2.5)
                 #cv2.line(img, self.pts[i - 1], self.pts[i], (0, 0, 255), thickness)
 
             #End new stuff, This comment is here just in case I break things
 
 
             #After tracking is done, convert to RGB for PyQt
-            img = cv2.cvtColor(img, cv2.COLOR_HSV2RGB)
+            #img = cv2.cvtColor(img, cv2.COLOR_HSV2RGB)
+            img = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
 
             #convert the img data to a QImage Format
             image = QtGui.QImage(img.data, width, height, bpl, QtGui.QImage.Format_RGB888)
@@ -319,4 +468,6 @@ class OwnImageWidget(QtGui.QWidget):
         if self.image:
             qp.drawImage(QtCore.QPoint(0, 0), self.image)
         qp.end()
+
+
 

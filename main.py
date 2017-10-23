@@ -156,6 +156,7 @@ class Ui_MainWindow(QtGui.QMainWindow):
     #Same, this button does not work. To pause, need access to CVHandlerCLass which is not made in this class.
     def pause_motion(self):
         self.consoleOutput.outputText("Motion Capture paused")
+        self.captureArea.openMaskingDebugWindow()
         #self.playMotionAction.setEnabled(False)
 
         #self.setUpWizard.setGeometry(QtCore.QRect(1000,500,100,30))

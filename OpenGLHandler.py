@@ -40,9 +40,11 @@ except AttributeError:
         return s
 
 class OpenGLHandler(QtOpenGL.QGLWidget):
+    keyPressed = QtCore.pyqtSignal(QtCore.QEvent)
     xRotationChanged = QtCore.pyqtSignal(int)
     yRotationChanged = QtCore.pyqtSignal(int)
     zRotationChanged = QtCore.pyqtSignal(int)
+
 
     def __init__(self, windowWidth, windowHeight):
         super(OpenGLHandler, self).__init__()
@@ -111,17 +113,20 @@ class OpenGLHandler(QtOpenGL.QGLWidget):
         self.qglClearColor(self.trolltechPurple.dark())
         #self.object = self.makeObject()
         #gluPerspective(90, (self.windowWidth / self.windowHeight), 0.1, 150.0)
-        gluPerspective(60, (self.windowWidth / self.windowHeight), 1.0, 20.0)
+        #gluPerspective(60, (self.windowWidth / self.windowHeight), 1.0, 150.0)
         self.singlePoint = self.makeObject()
         GL.glShadeModel(GL.GL_FLAT)
         GL.glEnable(GL.GL_DEPTH_TEST)
         GL.glEnable(GL.GL_CULL_FACE)
+        #glutInit(sys.argv)
+
+
 
 
     def paintGL(self):
         GL.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT)
         GL.glLoadIdentity()
-        GL.glTranslated(0.0, 0.0, -10.0)
+        GL.glTranslated(self.y1, self.y1, -10.0)
         #GL.glRotated(self.xRot / 16.0, 1.0, 0.0, 0.0)
         #GL.glRotated(self.yRot / 16.0, 0.0, 1.0, 0.0)
         #GL.glRotated(self.zRot / 16.0, 0.0, 0.0, 1.0)
@@ -137,34 +142,54 @@ class OpenGLHandler(QtOpenGL.QGLWidget):
         # GL.glLoadIdentity()
         # GL.glOrtho(-0.5, +0.5, +0.5, -0.5, 4.0, 15.0)
         # GL.glMatrixMode(GL.GL_MODELVIEW)
-        GL.glViewport(0,0,self.windowWidth,self.windowHeight)
+        #GL.glViewport(0,0,self.windowWidth,self.windowHeight)
         GL.glMatrixMode(GL.GL_PROJECTION)
         GL.glLoadIdentity()
         #GL.glOrtho(0,680,0,480,0,1)
-        #GL.glOrtho(-0.5, +0.5, +0.5, -0.5, 4.0, 15.0)
+        GL.glOrtho(0, self.windowWidth, self.windowHeight, 0, -1.0, 15.0)
         #GL.glFrustum(-1.0, 1.0, -1.0, 1.0, 1.5, 20.0)
-        gluPerspective(60, (self.windowWidth / self.windowHeight), 1.0, 20.0)
+        #gluPerspective(60, (self.windowWidth / self.windowHeight), 1.0, 150.0)
         GL.glMatrixMode(GL.GL_MODELVIEW)
         #GL.glLoadIdentity()
 
-    def  keyPressed(self, *args):
-        print(str(args[0]))
+
 
     def mousePressEvent(self, event):
         self.lastPos = event.pos()
+
+    def keyPressEvent(self, event):
+        super(OpenGLHandler, self).keyPressEvent(event)
+        self.keyPressed.emit(event)
+
+    def onKeyEvent(self, event):
+        if event.key() == QtCore.Qt.Key_W:
+            self.y1 = self.y1 + 1.0
+        elif event.key() == QtCore.Qt.Key_S:
+            self.y1 = self.y1 - 1.0
+        elif event.key() == QtCore.Qt.Key_D:
+            self.x1 = self.x1 + 1.0
+        elif event.key() == QtCore.Qt.Key_A:
+            self.x1 = self.x1 - 1.0
+        elif event.key() == QtCore.Qt.Key_Enter:
+            print("YO YO")
+        elif event.key() == QtCore.Qt.Key_Return:
+            print("YO NO")
 
     def mouseMoveEvent(self, event):
         dx = event.x() - self.lastPos.x()
         dy = event.y() - self.lastPos.y()
 
         if event.buttons() & QtCore.Qt.LeftButton:
-            self.pointY = self.pointY + 0.1
-            print(str(self.pointY))
+            self.y1 = self.y1 + 1.0
+            print(str(self.y1))
+            self.updateGL()
             #self.setXRotation(self.xRot + 8 * dy)
             #self.setYRotation(self.yRot + 8 * dx)
         elif event.buttons() & QtCore.Qt.RightButton:
-            self.pointY = self.pointY - 0.1
-            print(str(self.pointY))
+            self.y1 = self.y1 - 1.0
+            print(str(self.y1))
+            self.updateGL()
+
 
         elif QtCore.QEvent.KeyPress == QtCore.Qt.Key_0:
             self.pointX = self.pointX - 0.1
@@ -187,8 +212,8 @@ class OpenGLHandler(QtOpenGL.QGLWidget):
 
 
 
-        x1 = +0.06
-        y1 = -0.14
+        self.x1 = +0.06
+        self.y1 = -0.14
         x2 = +0.14
         y2 = -0.06
         x3 = +0.08
@@ -231,10 +256,10 @@ class OpenGLHandler(QtOpenGL.QGLWidget):
         GL.glBegin(GL.GL_POINTS)
         self.qglColor(self.trolltechGreen)
         #for i in range(0, 10):
-        print("x1 " + str(x1))
+        #print("x1 " + str(self.x1))
 
-        print("y1 " + str(y1))
-        GL.glVertex2d(x1,y2)
+        #print("y1 " + str(self.y1))
+        GL.glVertex2d(self.y1,self.y1)
 
         GL.glEnd()
         GL.glEndList()
