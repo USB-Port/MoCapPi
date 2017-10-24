@@ -428,6 +428,10 @@ class MyWindow(QtGui.QMainWindow):
             #I'm not sure what this does but it quits the program as I should.
             event.accept()
 
+    def resizeEvent(self, evt=None):
+        pass
+        #print("does this work")
+
 
 #This is the entry point into the program
 if __name__ == "__main__":

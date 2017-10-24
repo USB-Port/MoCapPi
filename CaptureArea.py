@@ -52,6 +52,9 @@ from multiprocessing import Queue
 from CVHandler import *
 from OpenGLHandler import *
 from MaskingDebug import  *
+from GraphHandler import *
+import pyqtgraph.opengl as gl
+
 
 
 
@@ -71,7 +74,8 @@ p = Queue()
 class CaptureArea(QtGui.QWidget):
 
     #This is how you pass a QWidget (MainWindow from main.py) to a class
-    def __init__(self, QWidget):
+    def __init__(self, QWidget, parent=None):
+        QtGui.QWidget.__init__(self,parent)
         #Unlike better languages, you have to manually call the super constructor
         super(CaptureArea, self).__init__()
 
@@ -155,9 +159,54 @@ class CaptureArea(QtGui.QWidget):
         #self.ImgWidget = OwnImageWidget(self.widget)
 
         #self.cvHandler = CVHandler(self.widgets[0], 0)
-        self.gridLayouts[0].setSizeConstraint(QtGui.QLayout.SetMaximumSize)
-        self.openGLHandler = OpenGLHandler(self.window_width, self.window_height)
-        self.gridLayouts[0].addWidget(self.openGLHandler)
+        #self.gridLayouts[0].setSizeConstraint(QtGui.QLayout.SetMaximumSize)
+        #self.openGLHandler = OpenGLHandler(self)
+        #self.graphHandler = GraphHandler(self)
+        self.graphHandler =  GraphHandler(self)
+        #self.graphHandler.opts['distance'] = 50
+
+        #self.xgrid = gl.GLGridItem()
+        #self.ygrid = gl.GLGridItem()
+        #self.zgrid = gl.GLGridItem()
+
+        #self.graphHandler.addItem(self.xgrid)
+        #self.graphHandler.addItem(self.ygrid)
+        #self.graphHandler.addItem(self.zgrid)
+
+
+        self.tabs.append(QtGui.QWidget() )
+
+        tabObjectName = "tab" + str(len(self.tabs) - 1)
+        self.tabs[(len(self.tabs) - 1)].setObjectName(_fromUtf8(tabObjectName))
+
+
+        #self.captureArea.addTab(self.tabs[len(self.tabs) - 1], _fromUtf8(""))
+
+        self.tab = QtGui.QWidget()
+        self.layout1 = QtGui.QVBoxLayout()
+        self.layout1.addWidget(self.graphHandler)
+        self.tabs[1].setLayout(self.layout1)
+        #self.captureArea.addTab(self.tabs[1], _fromUtf8(""))
+        self.captureArea.insertTab(3, self.graphHandler, "plot")
+        self.captureArea.setCurrentWidget(self.tabs[(len(self.tabs) - 1)])
+
+
+
+
+
+        #self.tabs[1].addWidget(self.graphHandler)
+
+
+
+
+        self.connect(self.gridLayout_2, QtCore.SIGNAL("resized()"), self.onResize)
+
+
+
+    def resizeEvent(self, evt=None):
+        print("HEYT \n")
+        self.emit(QtCore.SIGNAL("resize()"))
+        print("HEYT \n")
 
     def newTab(self):
         self.tabs.append(QtGui.QWidget())
@@ -192,9 +241,7 @@ class CaptureArea(QtGui.QWidget):
 
         self.newTab()
 
-
         #text = "http://"+ str(self.ip) +":9090/?action=stream?dummy=param.mjpg"
-
 
         self.cvHandler2 = CVHandler(self.widgets[1], 0, self.openGLHandler)
         self.cvHandler2.start_clicked()
@@ -230,3 +277,18 @@ class CaptureArea(QtGui.QWidget):
     def openMaskingDebugWindow(self):
         self.debugWin = MaskingDebug()
 
+    def onResize(self):
+        self.window_width = self.widgets[0].frameSize().width()
+        self.window_height = self.widgets[0].frameSize().height()
+        self.openGLHandler.updateWindowSize(self.window_width, self.window_height)
+
+    def getWindowHeight(self):
+        return self.window_height
+    def getWindowWidth(self):
+        return self.window_width
+
+
+    def updateWindowSize(self):
+        print("wht the fuck")
+        self.window_width = self.captureArea.frameSize().width()
+        self.window_height = self.captureArea.frameSize().height()

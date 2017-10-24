@@ -40,6 +40,8 @@ from multiprocessing import Queue
 from OpenGL import GL
 from OpenGLHandler import *
 from Point import *
+import pyqtgraph.opengl as gl
+from PyQt4.QtCore import QObject, pyqtSignal
 
 
 try:
@@ -125,6 +127,8 @@ class CVHandler(QtGui.QWidget):
         self.pts = deque(maxlen=self.args["buffer"])
 
     #####################################################################################
+        ###############THE below code is just for testing Will either delete this or move it#######
+        # This code is just for debugging the mask on the cameras, cool to play around with.
 
 
         self.setObjectName(_fromUtf8("Form"))
@@ -168,9 +172,38 @@ class CVHandler(QtGui.QWidget):
         self.horizontalSlider_3.setObjectName(_fromUtf8("horizontalSlider_3"))
         self.gridLayout.addWidget(self.horizontalSlider_3, 5, 0, 1, 1)
 
+        self.horizontalSlider.setRange(0, 255)
+        self.horizontalSlider_2.setRange(0,255)
+        self.horizontalSlider_3.setRange(0,100)
+        self.pushButton.clicked.connect(self.updateMasking)
+
+
+        self.connect(self.horizontalSlider, QtCore.SIGNAL("valueChanged(int)"),self.updateMasking)
+        self.connect(self.horizontalSlider_2, QtCore.SIGNAL("valueChanged(int)"), self.updateMasking)
+        self.connect(self.horizontalSlider_3, QtCore.SIGNAL("valueChanged(int)"), self.updateMasking)
+
         self.retranslateUi()
         QtCore.QMetaObject.connectSlotsByName(self)
         self.show()
+
+    def updateMasking(self):
+        self.lower = self.horizontalSlider.value()
+        print("lower "+str(self.lower))
+        self.textEdit.setText(str(self.lower))
+
+        self.upper = self.horizontalSlider_2.value()
+        self.textEdit_2.setText(str(self.upper))
+
+        self.radiusBound = self.horizontalSlider_3.value()
+        self.textEdit_3.setText(str(self.radiusBound))
+
+    def valuechange(self):
+        self.textEdit.setText(str(self.horizontalSlider.value()))
+        self.textEdit_2.setText(str(self.horizontalSlider_2.value()))
+        self.textEdit_3.setText(str(self.horizontalSlider_3.value()))
+
+        # END of Debug mask stuff
+        #####################################################################################
 
     def retranslateUi(self):
         self.setWindowTitle(_translate("Form", "Form", None))
@@ -264,7 +297,9 @@ class CVHandler(QtGui.QWidget):
             #self.mask = cv2.morphologyEx(self.mask, cv2.MORPH_CLOSE, kernelClose)
             #self.mask = cv2.erode(self.mask, None, iterations=2)
             #self.mask = cv2.dilate(self.mask, None, iterations=2)
-            cv2.imshow("mask", threshed)
+
+            #If you want to see the mask
+            #cv2.imshow("mask", threshed)
 
             #You can play the Masked video if you want to see what it looks like, It looks like all black with back as bright spot.
 
@@ -284,7 +319,7 @@ class CVHandler(QtGui.QWidget):
             self.points = []
             #for i in range(0, len(cnts)):
             for (i, c) in enumerate(cnts):
-                print("I is :" + str(i))
+                #print("I is :" + str(i))
                 point = Point()
                 self.points.append(point)
 

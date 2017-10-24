@@ -21,9 +21,10 @@ import sys
 import math
 import numpy as np
 from PyQt4 import QtCore, QtGui, QtOpenGL
-from OpenGL.GLU import *
-from OpenGL.GLUT import *
+import OpenGL.GLU as glu
+import OpenGL.GLUT as glut
 from OpenGL.GL import *
+from CaptureArea import *
 
 try:
     from OpenGL import GL
@@ -46,11 +47,13 @@ class OpenGLHandler(QtOpenGL.QGLWidget):
     zRotationChanged = QtCore.pyqtSignal(int)
 
 
-    def __init__(self, windowWidth, windowHeight):
+    def __init__(self, CaptureArea):
         super(OpenGLHandler, self).__init__()
 
-        self.windowWidth = windowWidth
-        self.windowHeight = windowHeight
+        self.captureArea = CaptureArea
+
+        self.windowWidth = self.captureArea.getWindowWidth()
+        self.windowHeight = self.captureArea.getWindowHeight()
 
         #self.object = 0
         self.singlePoint = 0
@@ -68,14 +71,17 @@ class OpenGLHandler(QtOpenGL.QGLWidget):
 
         self.timer = QtCore.QTimer(self)
         self.timer.timeout.connect(self.refresh)
-        self.timer.start(1)
+        #self.timer.start(1)
+
+
 
     def setPos(self, x, y):
+        pass
 
         #self.pointX = (x/680) - 1
         #self.pointY = (y/440) -1
 
-        print(str(self.pointY))
+        #print(str(self.pointY))
 
 
     def refresh(self):
@@ -83,9 +89,15 @@ class OpenGLHandler(QtOpenGL.QGLWidget):
         self.updateGL()
 
     def minimumSizeHint(self):
+        self.captureArea.updateWindowSize()
+        self.windowHeight = self.captureArea.getWindowHeight()
+        self.windowWidth = self.captureArea.getWindowWidth()
         return QtCore.QSize(self.windowWidth, self.windowHeight)
 
     def sizeHint(self):
+        self.captureArea.updateWindowSize()
+        self.windowHeight = self.captureArea.getWindowHeight()
+        self.windowWidth = self.captureArea.getWindowWidth()
         return QtCore.QSize(self.windowWidth, self.windowHeight)
 
     def setXRotation(self, angle):
@@ -126,7 +138,7 @@ class OpenGLHandler(QtOpenGL.QGLWidget):
     def paintGL(self):
         GL.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT)
         GL.glLoadIdentity()
-        GL.glTranslated(self.y1, self.y1, -10.0)
+        GL.glTranslated(self.x1, self.y1, -10.0)
         #GL.glRotated(self.xRot / 16.0, 1.0, 0.0, 0.0)
         #GL.glRotated(self.yRot / 16.0, 0.0, 1.0, 0.0)
         #GL.glRotated(self.zRot / 16.0, 0.0, 0.0, 1.0)
@@ -136,21 +148,22 @@ class OpenGLHandler(QtOpenGL.QGLWidget):
 
     def resizeGL(self, width, height):
 
-        # GL.glViewport(int((width - side) / 2), int((height - side) / 2), side, side)
-        #
-        # GL.glMatrixMode(GL.GL_PROJECTION)
-        # GL.glLoadIdentity()
-        # GL.glOrtho(-0.5, +0.5, +0.5, -0.5, 4.0, 15.0)
-        # GL.glMatrixMode(GL.GL_MODELVIEW)
-        #GL.glViewport(0,0,self.windowWidth,self.windowHeight)
-        GL.glMatrixMode(GL.GL_PROJECTION)
+
+
+        self.captureArea.updateWindowSize()
+        self.windowHeight = self.captureArea.getWindowHeight()
+        self.windowWidth = self.captureArea.getWindowWidth()
+        GL.glMatrixMode(GL_PROJECTION)
         GL.glLoadIdentity()
-        #GL.glOrtho(0,680,0,480,0,1)
-        GL.glOrtho(0, self.windowWidth, self.windowHeight, 0, -1.0, 15.0)
-        #GL.glFrustum(-1.0, 1.0, -1.0, 1.0, 1.5, 20.0)
-        #gluPerspective(60, (self.windowWidth / self.windowHeight), 1.0, 150.0)
+        #GL.glOrtho(0, self.windowWidth, self.windowHeight, 0, -1.0, 15.0)
+        GL.glOrtho(self.windowWidth,0 , self.windowHeight, 0, -1.0, 15.0)
+
+        print("width "+str(self.windowWidth))
+        print("hieght "+str(self.windowHeight))
+
         GL.glMatrixMode(GL.GL_MODELVIEW)
-        #GL.glLoadIdentity()
+        GL.glLoadIdentity()
+
 
 
 
@@ -165,7 +178,7 @@ class OpenGLHandler(QtOpenGL.QGLWidget):
         if event.key() == QtCore.Qt.Key_W:
             self.y1 = self.y1 + 1.0
         elif event.key() == QtCore.Qt.Key_S:
-            self.y1 = self.y1 - 1.0
+            self.y1 = self.y1 - 0.1
         elif event.key() == QtCore.Qt.Key_D:
             self.x1 = self.x1 + 1.0
         elif event.key() == QtCore.Qt.Key_A:
@@ -180,14 +193,18 @@ class OpenGLHandler(QtOpenGL.QGLWidget):
         dy = event.y() - self.lastPos.y()
 
         if event.buttons() & QtCore.Qt.LeftButton:
-            self.y1 = self.y1 + 1.0
-            print(str(self.y1))
+            self.x1 = self.x1 + 5.0
+            #self.y1 = self.y1 + 5.0
+            print(str(self.x1))
+            #print(str(self.y1))
             self.updateGL()
             #self.setXRotation(self.xRot + 8 * dy)
             #self.setYRotation(self.yRot + 8 * dx)
         elif event.buttons() & QtCore.Qt.RightButton:
-            self.y1 = self.y1 - 1.0
-            print(str(self.y1))
+            self.x1 = self.x1 - 5.0
+            print(str(self.x1))
+            #self.y1 = self.y1 - 5.0
+            #print(str(self.y1))
             self.updateGL()
 
 
@@ -196,8 +213,9 @@ class OpenGLHandler(QtOpenGL.QGLWidget):
             print(str(self.pointX))
 
         elif event.buttons() & QtCore.Qt.MiddleButton:
-            self.pointX = self.pointX + 0.1
-            print(str(self.pointX))
+            self.x1 = self.x1 + 5.0
+            print(str(self.x1))
+            self.updateGL()
             #self.setXRotation(self.xRot + 8 * dy)
             #self.setZRotation(self.zRot + 8 * dx)
 
@@ -212,8 +230,8 @@ class OpenGLHandler(QtOpenGL.QGLWidget):
 
 
 
-        self.x1 = +0.06
-        self.y1 = -0.14
+        self.x1 = 200
+        self.y1 = 200
         x2 = +0.14
         y2 = -0.06
         x3 = +0.08
@@ -259,7 +277,7 @@ class OpenGLHandler(QtOpenGL.QGLWidget):
         #print("x1 " + str(self.x1))
 
         #print("y1 " + str(self.y1))
-        GL.glVertex2d(self.y1,self.y1)
+        GL.glVertex2d(self.x1,self.y1)
 
         GL.glEnd()
         GL.glEndList()
