@@ -74,10 +74,10 @@ class CVHandler(QtGui.QWidget):
     # and each camera can update the OpenGLHandler, then the OpenGLHandler can concregate the point positions.
     #The QWidget is a tab that tells the class where to put the video feed. NOTE, Once we get everything all sorted,
     # we will not need to show the video feed unless we need to, so a default None could be used.
-    def __init__(self, QWidget, cam, openGLHandler=None):
+    def __init__(self, QWidget, cam):
         super(CVHandler, self).__init__()
         #this just assigns the class veriable to what was passed in
-        self.openGLHandler = openGLHandler
+
         self.image = None
         self.running = False
         self.capture_thread = None

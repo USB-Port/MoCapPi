@@ -14,16 +14,31 @@ class GraphHandler(gl.GLViewWidget):
 
 
         self.opts['distance'] = 50
-        #self.view.show()
+
+        pos = np.empty((53, 3))
+        size = np.empty((53))
+        color = np.empty((53, 4))
+        pos[0] = (1,0,0)
+        size[0] = 0.1
+        color[0] = (1.0, 0.0, 0.0, 0.5)
+        pos[1] = (0,1,0)
+        size[1] = 0.1
+        color[1] = (0.0, 0.0, 1.0, 0.5)
+        pos[2] = (0,0,1)
+        size[2] = 0.1
+        color[2] = (0.0, 1.0, 0.0, 0.5)
 
         ## create three grids, add each to the view
         self.xgrid = gl.GLGridItem()
         self.ygrid = gl.GLGridItem()
         self.zgrid = gl.GLGridItem()
 
+        self.point = gl.GLScatterPlotItem(pos=pos, size=size, color=color, pxMode=False)
+        #self.addItem(self.point)
         self.addItem(self.xgrid)
         self.addItem(self.ygrid)
         self.addItem(self.zgrid)
+
 
         # pos = np.empty((53, 3))
         # size = np.empty((53))

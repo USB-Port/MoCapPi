@@ -85,6 +85,9 @@ class CaptureArea(QtGui.QWidget):
         self.captureArea = QtGui.QTabWidget(QWidget)
         self.captureArea.setObjectName(_fromUtf8("captureArea"))
 
+        #The graph handler object
+        self.graphHandler = GraphHandler(self)
+
         #This line can make it where you cannot close the tabs
         #self.captureArea.setTabsClosable(False)
 
@@ -96,28 +99,30 @@ class CaptureArea(QtGui.QWidget):
         self.gridLayouts = []
         self.widgets = []
 
+        self.captureArea.insertTab(3, self.graphHandler, "plot")
+
         #Add a new QWidget to the tab list
-        self.tabs.append(QtGui.QWidget())
-        tabObjectName = "tab" + str(len(self.tabs) - 1)
-        self.tabs[(len(self.tabs) - 1)].setObjectName(_fromUtf8(tabObjectName))
+        #self.tabs.append(QtGui.QWidget())
+        #tabObjectName = "tab" + str(len(self.tabs) - 1)
+        #self.tabs[(len(self.tabs) - 1)].setObjectName(_fromUtf8(tabObjectName))
 
         #Add a new Gridlayout to to the Tab Widgets and add that to the grid layout list
-        self.gridLayouts.append(QtGui.QGridLayout(self.tabs[len(self.tabs) - 1]))
-        gridLayoutObjectName = "gridLayout" + str(len(self.gridLayouts) - 1)
-        self.gridLayouts[len(self.gridLayouts) - 1].setObjectName(_fromUtf8(gridLayoutObjectName))
+        #self.gridLayouts.append(QtGui.QGridLayout(self.tabs[len(self.tabs) - 1]))
+        #gridLayoutObjectName = "gridLayout" + str(len(self.gridLayouts) - 1)
+        #self.gridLayouts[len(self.gridLayouts) - 1].setObjectName(_fromUtf8(gridLayoutObjectName))
 
         #add the list of tabs widgets to the widgets list. You will pass these widgets to OpenCVHandler
-        self.widgets.append(QtGui.QWidget(self.tabs[len(self.tabs) - 1]))
-        widgetObjectName = "widget" + str(len(self.widgets) - 1)
-        self.widgets[len(self.widgets) - 1].setObjectName(_fromUtf8(widgetObjectName))
+        #self.widgets.append(QtGui.QWidget(self.tabs[len(self.tabs) - 1]))
+        #widgetObjectName = "widget" + str(len(self.widgets) - 1)
+        #self.widgets[len(self.widgets) - 1].setObjectName(_fromUtf8(widgetObjectName))
 
         #self.gridLayouts[len(self.gridLayouts) - 1].addWidget(self.widgets[len(self.widgets) - 1], 0, 0, 1, 1)
 
         #This line, adds a tab to the Capture area. I add the last index tab.
-        self.captureArea.addTab(self.tabs[len(self.tabs) - 1], _fromUtf8(""))
+        #self.captureArea.addTab(self.tabs[len(self.tabs) - 1], _fromUtf8(""))
 
         #This just sets the last tab as the active tab.
-        self.captureArea.setCurrentWidget(self.tabs[(len(self.tabs) - 1)])
+        #self.captureArea.setCurrentWidget(self.tabs[(len(self.tabs) - 1)])
 
 
         #The follow commented out code is a relic from the pass. But I recall that a
@@ -153,8 +158,8 @@ class CaptureArea(QtGui.QWidget):
         #self.startButton.clicked.connect(self.start_clicked)
 
         #self.window_width = self.ImgWidget.frameSize().width()
-        self.window_width = self.widgets[0].frameSize().width()
-        self.window_height = self.widgets[0].frameSize().height()
+        #self.window_width = self.widgets[0].frameSize().width()
+        #self.window_height = self.widgets[0].frameSize().height()
 
         #self.ImgWidget = OwnImageWidget(self.widget)
 
@@ -162,7 +167,7 @@ class CaptureArea(QtGui.QWidget):
         #self.gridLayouts[0].setSizeConstraint(QtGui.QLayout.SetMaximumSize)
         #self.openGLHandler = OpenGLHandler(self)
         #self.graphHandler = GraphHandler(self)
-        self.graphHandler =  GraphHandler(self)
+
         #self.graphHandler.opts['distance'] = 50
 
         #self.xgrid = gl.GLGridItem()
@@ -174,21 +179,14 @@ class CaptureArea(QtGui.QWidget):
         #self.graphHandler.addItem(self.zgrid)
 
 
-        self.tabs.append(QtGui.QWidget() )
-
-        tabObjectName = "tab" + str(len(self.tabs) - 1)
-        self.tabs[(len(self.tabs) - 1)].setObjectName(_fromUtf8(tabObjectName))
-
-
         #self.captureArea.addTab(self.tabs[len(self.tabs) - 1], _fromUtf8(""))
 
-        self.tab = QtGui.QWidget()
-        self.layout1 = QtGui.QVBoxLayout()
-        self.layout1.addWidget(self.graphHandler)
-        self.tabs[1].setLayout(self.layout1)
+
         #self.captureArea.addTab(self.tabs[1], _fromUtf8(""))
-        self.captureArea.insertTab(3, self.graphHandler, "plot")
-        self.captureArea.setCurrentWidget(self.tabs[(len(self.tabs) - 1)])
+
+        #self.captureArea.insertTab(3, self.graphHandler, "plot")
+
+        #self.captureArea.setCurrentWidget(self.tabs[(len(self.tabs) - 1)])
 
 
 
@@ -201,6 +199,7 @@ class CaptureArea(QtGui.QWidget):
 
         self.connect(self.gridLayout_2, QtCore.SIGNAL("resized()"), self.onResize)
 
+        self.newTab()
 
 
     def resizeEvent(self, evt=None):
@@ -243,7 +242,7 @@ class CaptureArea(QtGui.QWidget):
 
         #text = "http://"+ str(self.ip) +":9090/?action=stream?dummy=param.mjpg"
 
-        self.cvHandler2 = CVHandler(self.widgets[1], 0, self.openGLHandler)
+        self.cvHandler2 = CVHandler(self.widgets[1], 0)
         self.cvHandler2.start_clicked()
 
         self.update()

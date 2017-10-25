@@ -404,6 +404,7 @@ class Ui_MainWindow(QtGui.QMainWindow):
         event.ignore()
 
         if result == QtGui.QMessageBox.Yes:
+            self.captureArea.stop_playback()
             event.accept()
 
 
@@ -412,7 +413,6 @@ class Ui_MainWindow(QtGui.QMainWindow):
 #NOTE: There can only be ONE QMainWindow class per program. SO do make pop up windows a MainWindow.
 #also, this class creates a main thread, and like all GUI shit, some some connect be done in the main thread.
 class MyWindow(QtGui.QMainWindow):
-
     #this is a virtual method that I have overridden from the super class.
     #this method is called when the user presses the red X at the top right.
     def closeEvent(self,event):
@@ -435,11 +435,16 @@ class MyWindow(QtGui.QMainWindow):
 
 #This is the entry point into the program
 if __name__ == "__main__":
+
+
     #app is used to pass in system arguments to the application, not used for us
     app = QtGui.QApplication(sys.argv)
 
     #The main Window and the UI is best designed as 2 seperate things. This keeps design better
     MainWindow = MyWindow()
+
+
+
     #The ui is for the user interface, The main window is where all the UI needs to be placed, so we pass in the main window
     ui = Ui_MainWindow(MainWindow)
 
