@@ -40,6 +40,7 @@ from multiprocessing import Queue
 from OpenGL import GL
 from GraphHandler import *
 from Point import *
+import re
 import pyqtgraph.opengl as gl
 from PyQt4.QtCore import QObject, pyqtSignal
 from PyQt4 import QtCore, QtGui
@@ -85,8 +86,14 @@ class CVHandler(QtGui.QWidget):
         self.widget = QWidget
         self.queue = Queue()
 
-        self.trackingFrame = None
+
         self.points = []
+
+        self.pos = np.empty((0, 3))
+        self.posArray = []
+        self.numCurrentTrackPoints = 0
+        self.numLastFrameTrackPoints = 0
+        self.file = None
 
 
         self.graphHandler = GraphHandler
@@ -254,12 +261,6 @@ class CVHandler(QtGui.QWidget):
             #frame is a dictionry, so this will give us the data accotiated with the key value "img"
             img = frame["img"]
 
-            #self.trackingFrame = cv2.cv.CreateImage(cv2.GetSize(img), 8, 3)
-
-
-            #Get the height width and color of the image
-            ###img_height, img_width, img_colors = img.shape
-
             height, width, bpc = img.shape
             bpl = bpc * width
 
@@ -272,189 +273,83 @@ class CVHandler(QtGui.QWidget):
             if scale == 0:
                 scale = 1
 
-            #Not sure why this is here, must be for some kind of resizing
-            #img = cv2.resize(img, None, fx=scale, fy=scale, interpolation=cv2.INTER_CUBIC)
-
-            #changes this from BGR2HSV, This is done to apply the mask based on our HSV color values above
-            #img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
             img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
             blurred = cv2.GaussianBlur(img, (11,11), 0)
             threshed = cv2.threshold(blurred, self.lower, self.upper, cv2.THRESH_BINARY)[1]
             threshed = cv2.erode(threshed, None, iterations=2)
             threshed = cv2.dilate(threshed, None, iterations=4)
 
-            #img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-
-            #Already got these values probably can remove
-
-            #Not sure wht this is for
-
-
-            #image = QtGui.QImage(frame.tostring(), 640, 480, QtGui.QImage.Format_RGB888).rgbSwapped()
-            #pixmap = QtGui.QPixmap.fromImage(image)
-
-            #New Stuff for Tracking
-
-            #These 3 lines will apply the mask for the color we picked above.
-            #self.mask = cv2.inRange(img, self.lower, self.upper)
-            #self.mask = cv2.morphologyEx(self.mask, cv2.MORPH_OPEN, kernelOpen)
-            #self.mask = cv2.morphologyEx(self.mask, cv2.MORPH_CLOSE, kernelClose)
-            #self.mask = cv2.erode(self.mask, None, iterations=2)
-            #self.mask = cv2.dilate(self.mask, None, iterations=2)
-
-            #If you want to see the mask
-            #cv2.imshow("mask", threshed)
-
-            #You can play the Masked video if you want to see what it looks like, It looks like all black with back as bright spot.
-
-            # find contours in the mask and initialize the current
-            # (x, y) center of the ball
 
             cnts = cv2.findContours(threshed.copy(), cv2.RETR_EXTERNAL,
                                     cv2.CHAIN_APPROX_SIMPLE)[-2]
-            ###center = None
 
 
-
-            #for i in range(len(cnts)):
-                #print("I is :" + str(i))
-                #point = Point()
-                #points.append(point)
             i = 0
-            ###self.pts = []
-            self.pos = np.empty((len(self.points), 3))
-            self.t = 0
-            #for i in range(0, len(cnts)):
-            for (i, c) in enumerate(cnts):
-                #print("I is :" + str(i))
-                #point = Point()
-                # self.pts.append(point)
 
-                #c = max(cnts, key=cv2.contourArea)
+            ###self.pos = np.empty((len(self.points), 3))
+
+            self.numCurrentTrackPoints = 0
+
+            for (i, c) in enumerate(cnts):
 
                 ((x, y), radius) = cv2.minEnclosingCircle(c)
-
-                # self.pts[i].setX(x)
-                # self.pts[i].setY(y)
-                # self.pts[i].setRadius(radius)
-
 
 
                 M = cv2.moments(c)
 
                 # this is center of a circle
-                ###self.pts[i].setCenter((int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"])))
                 center = int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"])
 
                 # These 2 points are the center of the mask object found. This only works on Balls
                 xx = int(M['m10'] / M['m00'])
                 yy = int(M['m01'] / M['m00'])
 
-                #for t in range(0, len(self.points)):
-                if len(self.points) > 0 and self.t < len(self.points):
-                    self.pos[self.t] = (xx, yy, 0)
-                    self.t =self.t + 1
-                ###self.pts[i].setPosition(xx, yy, 0)
 
-                #self.openGLHandler.setPos(self.cx, self.cy)
-
-                # print("cx is: " + str(cx))
-                # print("cy is: " + str(cy))
+                ###self.pos[self.t] = (xx, yy, 0)
+                self.posArray.append([xx, yy, 0])
+                #print(str(self.posArray))
+                self.numCurrentTrackPoints = self.numCurrentTrackPoints + 1
 
                 # only proceed if the radius meets a minimum size
-                if radius < self.radiusBound:
+                ###if radius < self.radiusBound:
                     # draw the circle and centroid on the frame,
                     # then update the list of tracked points
-                    cv2.circle(img, (int(xx), int(yy)), int(radius),
+                cv2.circle(img, (int(xx), int(yy)), int(radius),
                                (0, 255, 255), 2)
-                    cv2.circle(img, center, 5, (0, 0, 255), -1)
+                cv2.circle(img, center, 5, (0, 0, 255), -1)
 
-                #self.pts.appendleft(self.points[i].getCenter())
+            ###if self.pos.shape[0] != len(cnts):
+                ###self.graphHandler.setPoints(self.pos)
 
+            if self.numCurrentTrackPoints != self.numLastFrameTrackPoints:
+                if(self.file is not None):
+                    self.file.write("\naddpoint\n")
+                    for line in self.pos:
 
-                #for point in self.points:
-                #    point.setPosition(self.pts[i].getX(), self.pts[i].getY(),self.pts[i].getZ())
-
-                #j =0
-                #for j in range(0, len(self.points)):
-                    #print("j is" +str(j))
-                    #self.points[j].setPosition(self.pts[i].getX(), self.pts[i].getY(),self.pts[i].getZ())
-
-            #self.ii = 0
-            #for self.ii in range(0, len(self.points)):
-            #    self.points[self.ii].setPosition(self.pts[self.ii].getX(), self.pts[self.ii].getY(), self.pts[self.ii].getZ())
-
-            # self.pos = np.empty((len(self.points), 3))
-            # t = 0
-            # for t in range(0, len(self.points)):
-            #     self.pos[t] = (self.pts[t].getX(), self.pts[t].getY(), self.pts[t].getZ())
+                        self.file.write("%s " % line)
+                    self.file.write("\n")
+                self.pos = np.asarray(self.posArray)
+                self.graphHandler.setPoints(self.pos)
 
 
-            #i =0
+            elif self.graphHandler:
+                if (self.file is not None):
+                    self.file.write("\ntranspoint\n")
+                    for line in self.pos:
+                        linecpy = ''.join(str(line))
+                        linecpy.strip("[")
+                        linecpy.strip("]")
+                        self.file.write("%s " % linecpy)
+                    self.file.write("\n")
 
-            if self.graphHandler:
-                #self.graphHandler.translatePoints(self.points)
                 print(str(self.pos))
+                self.pos = np.asarray(self.posArray)
                 self.graphHandler.translatePoints(self.pos)
-            '''
-            # only proceed if at least one contour was found
-            if len(cnts) > 0:
-                # find the largest contour in the mask, then use
-                # it to compute the minimum enclosing circle and
-                # centroid
-                c = max(cnts, key=cv2.contourArea)
-                ((x, y), radius) = cv2.minEnclosingCircle(c)
 
-                M = cv2.moments(c)
+            #clear out whole list
+            del self.posArray[:]
 
-                #this is center of a circle
-                center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
-
-                #These 2 points are the center of the mask object found. This only works on Balls
-                self.cx = int(M['m10'] / M['m00'])
-                self.cy = int(M['m01'] / M['m00'])
-
-
-                self.openGLHandler.setPos(self.cx,self.cy)
-
-
-                #print("cx is: " + str(cx))
-                #print("cy is: " + str(cy))
-
-                # only proceed if the radius meets a minimum size
-                if radius > 10:
-                    # draw the circle and centroid on the frame,
-                    # then update the list of tracked points
-                    cv2.circle(img, (int(x), int(y)), int(radius),
-                               (0, 255, 255), 2)
-                    cv2.circle(img, center, 5, (0, 0, 255), -1)
-
-
-            '''
-
-
-            # update the points queue
-            #self.pts.appendleft(center)
-
-            # loop over the set of tracked points
-            #for i in range(1, len(self.pts)):
-                # if either of the tracked points are None, ignore
-                # them
-                #if self.pts[i - 1] is None or self.pts[i] is None:
-                #   continue
-
-                # otherwise, compute the thickness of the line and
-                # draw the connecting lines
-                #thickness = int(np.sqrt(self.args["buffer"] / float(i + 1)) * 2.5)
-                #cv2.line(img, self.pts[i - 1], self.pts[i], (0, 0, 255), thickness)
-
-            #End new stuff, This comment is here just in case I break things
-
-
-            #After tracking is done, convert to RGB for PyQt
-            #img = cv2.cvtColor(img, cv2.COLOR_HSV2RGB)
-
-
+            self.numLastFrameTrackPoints = self.numCurrentTrackPoints
 
             img = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
 
@@ -532,6 +427,13 @@ class CVHandler(QtGui.QWidget):
 
     def isRunning(self):
         return self.running
+
+    def recordMotion(self):
+        self.file = open("motion.txt", "+w")
+
+    def stopRecording(self):
+        self.file.close()
+        self.file = None
 
     def setPoints(self):
         img = cv2.cvtColor(self.img, cv2.COLOR_BGR2GRAY)

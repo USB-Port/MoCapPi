@@ -10,6 +10,7 @@ from OpenGL import GL
 from Point import *
 from time import sleep
 import types
+import re
 
 #pg.GraphicsLayoutWidget
 class GraphHandler(gl.GLViewWidget):
@@ -63,10 +64,6 @@ class GraphHandler(gl.GLViewWidget):
         size[0] = 10.0
         color[0] = (0.0, 1.0, 0.0, 0.5)
 
-        #self.q = gl.GLScatterPlotItem(pos=pos, size=size, color=color)
-        #self.addItem(self.q)
-
-
 
         self.zgrid.rotate(90, 0, 1, 0)
         self.ygrid.rotate(90, 1, 0, 0)
@@ -88,118 +85,29 @@ class GraphHandler(gl.GLViewWidget):
         color[0] = (0.0, 1.0, 0.0, 0.5)
         self.p.setData(pos=pos, size=size, color=color)
 
-    def translatePoints(self, Point):
+    def translatePoints(self, PosArray):
 
-        #print(str(Point))
-
-        #for item in self.items:
-        #    if isinstance(item, gl.GLScatterPlotItem):
-        #        item.setData(pos=Point)
-
-        #if(self.ppt is not None):
-        #    self.ppt.setData(pos=Point)
-        print(str(self.items))
+        #print(str(self.items))
         for item in self.items:
             if isinstance(item, gl.GLScatterPlotItem):
-                item.setData(pos=Point)
+                item.setData(pos=PosArray)
 
 
-        #for pts in self.pts:
-        #    pos = np.empty((1, 3))
-        #    pos[0] = (Point[self.i].getX(), Point[self.i].getY(), Point[self.i].getZ())
-        #    #pts.setData(pos=pos[0])
-        #    self.i = self.i + 1
+    def setPoints(self, PosArray):
 
-        #for point in Point:
-            #print("x is " + str(point.getX()) + " y is " + str(point.getY()))
-
-
-        #self.ii = 0
-        #for self.ii in range(0, len(Point)):
-        #    pos = np.empty((1, 3))
-        #    pos[0] = (Point[self.ii].getX(), Point[self.ii].getY(), Point[self.ii].getZ())
-        #    self.pts[self.ii].setData(pos=pos[0])
-
-
-
-        #for pts, point in zip(self.pts, Point):
-        #    pos = np.empty((1, 3))
-        #    pos[0] = (point.getX(), point.getY(), point.getZ())
-        #    #point.printPosition()
-        #    pts.setData(pos=pos[0])
-
-
-
-        '''
-        i = 0
-        pos = np.empty((53, 3))
-        if len(Point) > 0:
-            #print("list " + str(self.items))
-            #print("count of item " + str(len(self.items)))
-            for item in self.items:
-                if isinstance(item, gl.GLScatterPlotItem):
-                    #print("moving")
-                    #Point[i].printPosition()
-                    #print("i " + str(i))
-                    pos[i] = (Point[i].getX(), Point[i].getY(), Point[i].getZ())
-                    i = i + 1
-
-                    item.setData(pos=pos)
-
-
-                    # print("lost point")
-                else:
-                    pass
-                    #print("NOT PLOT")
-
-        '''
-
-    def setPoints(self, Point):
-        size = np.empty((len(Point)))
-        color = np.empty((len(Point), 4))
-
-        for i in range(0, len(Point)):
-            size[i] = 10.0
-            color[i] = (1.0, 0.0, 0.0, 0.5)
-        print(str(size))
-        print(str(color))
-
-        self.ppt = gl.GLScatterPlotItem(pos=Point, size=size, color=color, pxMode=False)
-        self.addItem(self.ppt)
-        #####################################
-        '''
-        self.pts = []
-        i=0
         for item in self.items:
             if isinstance(item, gl.GLScatterPlotItem):
                 self.removeItem(item)
 
-        pos = np.empty((1, 3))
-        size = np.empty((1))
-        color = np.empty((1, 4))
+        size = np.empty((len(PosArray)))
+        color = np.empty((len(PosArray), 4))
 
-        for point in Point:
-            pos = np.empty((1, 3))
-            size = np.empty((1))
-            color = np.empty((1, 4))
+        for i in range(0, len(PosArray)):
+            size[i] = 10.0
+            color[i] = (1.0, 0.0, 0.0, 0.5)
 
-
-            pos[0] = (point.getX(), point.getY(), point.getZ())
-            point.printPosition()
-            size[0] = 5.0
-            color[0] = (1.0, 0.0, 0.0, 0.5)
-            self.pts.append(gl.GLScatterPlotItem(pos=pos[0], size=size[0], color=color[0]))
-
-            #self.addItem(self.pts[i])
-
-        for pts in self.pts:
-            self.addItem(pts)
-        '''
-        ######################################################
-
-        #pptt = gl.GLScatterPlotItem(pos=pos, size=size, color=color, pxMode=False)
-        #self.addItem(pptt)
-        #self.updateGL()
+        self.ppt = gl.GLScatterPlotItem(pos=PosArray, size=size, color=color, pxMode=False)
+        self.addItem(self.ppt)
 
 
     def addPoints(self, Point):
@@ -225,37 +133,30 @@ class GraphHandler(gl.GLViewWidget):
                 limit = limit +1
                 i = i+1
 
-        '''
-            #self.hide()
-            if len(Point) > 0:
-                i=0
-                for po in Point:
-                    self.pos[i] = (po.getX()+10000, po.getY(), po.getZ())
-                    self.size[i] = 10.0
-                    self.color[i] = (1.0, 0.0, 0.0, 0.5)
-                    i = i +1
-                    #po.printPosition()
+    def playbackMotion(self, fileName = "motion.txt"):
 
 
-                self.points = gl.GLScatterPlotItem(pos=self.pos, size=self.size, color=self.color, pxMode=False)
-                self.addItem(self.points)
-                self.SHIT =False
+        #file = open(fileName, "r")
+        lastCommand = None
+        with open(fileName) as file:
+            for line in file:
+                self.pos = []
+                if line == "addpoint":
+                    lastCommand = "addpoint"
 
-            for (po, i) in (self.points, Point):
-                 po.translate(i.getX()-10000, i.getY(), i.getZ())
+                elif line == "transpoint":
+                    lastCommand = "transpoint"
 
-        for (po, i) in (self.points, Point):
-            po.translate(i.getX(), i.getY(), i.getZ())
+                else:
+                    data = re.findall(r"[0-9]+", line)
+                    print(str(data))
+                    if len(data) != 0:
+                    #line = line.strip("[")  # or some other preprocessing
+                        self.pos.append([int(i) for i in data])  # storing everything in memory!
 
-        #sleep(0.1)
-        #self.setVisible(True)
-        #else:
-        #   self.SHIT = self.SHIT + 1
-        #    if self.SHIT == 100000:
-        #        self.SHIT = 0
-
-        #    if len(Point) > 0:
-        #        for (po,i) in (self.points,Point):
-        #            po.translate(i.getX(), i.getY(), i.getZ())
-
-        '''
+                    #innerList = line.split(',')
+                    #del innerList[-1]
+                    #print("innerList is " +str(innerList))
+                    #self.pos.append(innerList)
+                    print("pos is "+ str(self.pos))
+                   # print("pos sssss "+ str(self.pos[0][0]))

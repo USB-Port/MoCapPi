@@ -200,6 +200,8 @@ class CaptureArea(QtGui.QWidget):
         self.connect(self.gridLayout_2, QtCore.SIGNAL("resized()"), self.onResize)
 
         self.newTab()
+        self.newTab()
+        self.newTab()
 
 
     def resizeEvent(self, evt=None):
@@ -246,6 +248,9 @@ class CaptureArea(QtGui.QWidget):
         self.cvHandler2 = CVHandler(self.widgets[1], "tcp://192.168.2.203:9092", self.graphHandler)
         self.cvHandler2.start_clicked()
 
+        self.cvHandler2 = CVHandler(self.widgets[2], "tcp://192.168.2.201:9092", self.graphHandler)
+        self.cvHandler2.start_clicked()
+
         self.update()
 
         #running = True
@@ -257,9 +262,17 @@ class CaptureArea(QtGui.QWidget):
     def deleteThisLater(self):
         self.graphHandler.testtest()
 
+    def recordMotion(self):
+        self.cvHandler2.recordMotion()
+
+    def stopRecording(self):
+        self.cvHandler2.stopRecording()
 
     def stop_playback(self):
         self.cvHandler2.stop_playback()
+
+    def playBackMotion(self):
+        self.graphHandler.playbackMotion()
 
     def connectToIP(self, ipAddress, test):
         self.newTab()

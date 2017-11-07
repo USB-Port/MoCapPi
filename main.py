@@ -148,16 +148,16 @@ class Ui_MainWindow(QtGui.QMainWindow):
 
 
     def test_Motion(self):
-        self.captureArea.deleteThisLater()
+        self.captureArea.playBackMotion()
 
     #Yoy need to link a button action to a method, so this method is called when the user clicks, "record motion" button
     def record_Motion(self):
         #this line just prints the string to the output console in the program
-        self.consoleOutput.outputText("Captured points..")
+
         print(str(self.captureArea.isRunning()))
         if self.captureArea.isRunning() == True:
-            print("wtf")
-            self.captureArea.updatePoints()
+            self.consoleOutput.outputText("Captured points..")
+            self.captureArea.recordMotion()
         # you could just do "print("test stuff")" to print to IDE consoles
 
     #same as above, this method is called wehn you click play motion button
@@ -168,7 +168,10 @@ class Ui_MainWindow(QtGui.QMainWindow):
     #Same, this button does not work. To pause, need access to CVHandlerCLass which is not made in this class.
     def pause_motion(self):
         self.consoleOutput.outputText("Motion Capture paused")
-        self.captureArea.openMaskingDebugWindow()
+        self.captureArea.stopRecording()
+
+
+        #self.captureArea.openMaskingDebugWindow()
         #self.playMotionAction.setEnabled(False)
 
         #self.setUpWizard.setGeometry(QtCore.QRect(1000,500,100,30))
