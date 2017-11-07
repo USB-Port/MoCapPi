@@ -438,7 +438,10 @@ class MyWindow(QtGui.QMainWindow):
         #if the use clicks yes.
         if result == QtGui.QMessageBox.Yes:
             #I'm not sure what this does but it quits the program as I should.
+            cam = cv2.VideoCapture(0)
+            cam.release
             event.accept()
+            print("Camera turned off")
 
     def resizeEvent(self, evt=None):
         pass
