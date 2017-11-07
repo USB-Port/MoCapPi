@@ -133,6 +133,9 @@ class Ui_MainWindow(QtGui.QMainWindow):
         self.recordMotionAction = QtGui.QAction(QtGui.QIcon("./imgs/RecordButton.ico"), "Record New Motion Capture", MainWindow)
         self.recordMotionAction.triggered.connect(self.record_Motion)
 
+        self.testMotionAction = QtGui.QAction(QtGui.QIcon("./imgs/RecordButton.ico"), "Record New Motion Capture",MainWindow)
+        self.testMotionAction.triggered.connect(self.test_Motion)
+
         # Let me tell you all a story about a mouse named glory
         #Here I create a tool bar and add it to the MainWindow.
         self.toolBar = MainWindow.addToolBar("Test test")
@@ -141,11 +144,20 @@ class Ui_MainWindow(QtGui.QMainWindow):
         self.toolBar.addAction(self.pauseMotionAction)
         self.toolBar.addAction(self.stopMotionAction)
         self.toolBar.addAction(self.recordMotionAction)
+        self.toolBar.addAction(self.testMotionAction)
+
+
+    def test_Motion(self):
+        self.captureArea.deleteThisLater()
 
     #Yoy need to link a button action to a method, so this method is called when the user clicks, "record motion" button
     def record_Motion(self):
         #this line just prints the string to the output console in the program
-        self.consoleOutput.outputText("Recording motion...")
+        self.consoleOutput.outputText("Captured points..")
+        print(str(self.captureArea.isRunning()))
+        if self.captureArea.isRunning() == True:
+            print("wtf")
+            self.captureArea.updatePoints()
         # you could just do "print("test stuff")" to print to IDE consoles
 
     #same as above, this method is called wehn you click play motion button

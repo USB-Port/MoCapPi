@@ -38,10 +38,11 @@ from collections import deque
 import argparse
 from multiprocessing import Queue
 from OpenGL import GL
-from OpenGLHandler import *
+from GraphHandler import *
 from Point import *
 import pyqtgraph.opengl as gl
 from PyQt4.QtCore import QObject, pyqtSignal
+from PyQt4 import QtCore, QtGui
 
 
 try:
@@ -74,7 +75,7 @@ class CVHandler(QtGui.QWidget):
     # and each camera can update the OpenGLHandler, then the OpenGLHandler can concregate the point positions.
     #The QWidget is a tab that tells the class where to put the video feed. NOTE, Once we get everything all sorted,
     # we will not need to show the video feed unless we need to, so a default None could be used.
-    def __init__(self, QWidget, cam):
+    def __init__(self, QWidget, cam, GraphHandler=None):
         super(CVHandler, self).__init__()
         #this just assigns the class veriable to what was passed in
 
@@ -86,6 +87,9 @@ class CVHandler(QtGui.QWidget):
 
         self.trackingFrame = None
         self.points = []
+
+
+        self.graphHandler = GraphHandler
 
         #This is how you create a thread and pass in arguments in python. The function is called  grab(cam, w, h, FPS)
         self.capture_thread = threading.Thread(target=self.grab, args=(cam, 1920, 1080, 60))
@@ -177,6 +181,10 @@ class CVHandler(QtGui.QWidget):
         self.horizontalSlider_3.setRange(0,100)
         self.pushButton.clicked.connect(self.updateMasking)
 
+        self.horizontalSlider.setValue(240)
+        self.horizontalSlider_2.setValue(255)
+        self.horizontalSlider_3.setValue(45)
+
 
         self.connect(self.horizontalSlider, QtCore.SIGNAL("valueChanged(int)"),self.updateMasking)
         self.connect(self.horizontalSlider_2, QtCore.SIGNAL("valueChanged(int)"), self.updateMasking)
@@ -250,14 +258,14 @@ class CVHandler(QtGui.QWidget):
 
 
             #Get the height width and color of the image
-            img_height, img_width, img_colors = img.shape
+            ###img_height, img_width, img_colors = img.shape
 
             height, width, bpc = img.shape
             bpl = bpc * width
 
             #These 3 lines are to keep the correct aspect ratio. This might not be needed.
-            scale_w = float(self.window_width) / float(img_width)
-            scale_h = float(self.window_height) / float(img_height)
+            scale_w = float(self.window_width) / float(width)
+            scale_h = float(self.window_height) / float(height)
             scale = min([scale_w, scale_h])
 
             #Can't have a scale of 0 for some reason
@@ -279,8 +287,6 @@ class CVHandler(QtGui.QWidget):
 
             #Already got these values probably can remove
 
-            self.trackingFrame = np.zeros((height, width, 3), np.uint8)
-
             #Not sure wht this is for
 
 
@@ -288,8 +294,6 @@ class CVHandler(QtGui.QWidget):
             #pixmap = QtGui.QPixmap.fromImage(image)
 
             #New Stuff for Tracking
-            kernelOpen = np.ones((5, 5))
-            kernelClose = np.ones((20, 20))
 
             #These 3 lines will apply the mask for the color we picked above.
             #self.mask = cv2.inRange(img, self.lower, self.upper)
@@ -305,9 +309,10 @@ class CVHandler(QtGui.QWidget):
 
             # find contours in the mask and initialize the current
             # (x, y) center of the ball
+
             cnts = cv2.findContours(threshed.copy(), cv2.RETR_EXTERNAL,
                                     cv2.CHAIN_APPROX_SIMPLE)[-2]
-            center = None
+            ###center = None
 
 
 
@@ -316,30 +321,40 @@ class CVHandler(QtGui.QWidget):
                 #point = Point()
                 #points.append(point)
             i = 0
-            self.points = []
+            ###self.pts = []
+            self.pos = np.empty((len(self.points), 3))
+            self.t = 0
             #for i in range(0, len(cnts)):
             for (i, c) in enumerate(cnts):
                 #print("I is :" + str(i))
-                point = Point()
-                self.points.append(point)
+                #point = Point()
+                # self.pts.append(point)
 
                 #c = max(cnts, key=cv2.contourArea)
 
                 ((x, y), radius) = cv2.minEnclosingCircle(c)
 
-                self.points[i].setX(x)
-                self.points[i].setY(y)
-                self.points[i].setRadius(radius)
+                # self.pts[i].setX(x)
+                # self.pts[i].setY(y)
+                # self.pts[i].setRadius(radius)
+
+
 
                 M = cv2.moments(c)
 
                 # this is center of a circle
-                self.points[i].setCenter((int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"])))
+                ###self.pts[i].setCenter((int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"])))
+                center = int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"])
 
                 # These 2 points are the center of the mask object found. This only works on Balls
                 xx = int(M['m10'] / M['m00'])
                 yy = int(M['m01'] / M['m00'])
-                self.points[i].setPosition(xx, yy, 0)
+
+                #for t in range(0, len(self.points)):
+                if len(self.points) > 0 and self.t < len(self.points):
+                    self.pos[self.t] = (xx, yy, 0)
+                    self.t =self.t + 1
+                ###self.pts[i].setPosition(xx, yy, 0)
 
                 #self.openGLHandler.setPos(self.cx, self.cy)
 
@@ -347,15 +362,40 @@ class CVHandler(QtGui.QWidget):
                 # print("cy is: " + str(cy))
 
                 # only proceed if the radius meets a minimum size
-                if self.points[i].getRadius() > self.radiusBound:
+                if radius < self.radiusBound:
                     # draw the circle and centroid on the frame,
                     # then update the list of tracked points
-                    cv2.circle(img, (int(self.points[i].getX()), int(self.points[i].getY())), int(self.points[i].getRadius()),
+                    cv2.circle(img, (int(xx), int(yy)), int(radius),
                                (0, 255, 255), 2)
-                    cv2.circle(img, self.points[i].getCenter(), 5, (0, 0, 255), -1)
-                    #cv2.add(self.trackingFrame, img, img)
+                    cv2.circle(img, center, 5, (0, 0, 255), -1)
+
                 #self.pts.appendleft(self.points[i].getCenter())
 
+
+                #for point in self.points:
+                #    point.setPosition(self.pts[i].getX(), self.pts[i].getY(),self.pts[i].getZ())
+
+                #j =0
+                #for j in range(0, len(self.points)):
+                    #print("j is" +str(j))
+                    #self.points[j].setPosition(self.pts[i].getX(), self.pts[i].getY(),self.pts[i].getZ())
+
+            #self.ii = 0
+            #for self.ii in range(0, len(self.points)):
+            #    self.points[self.ii].setPosition(self.pts[self.ii].getX(), self.pts[self.ii].getY(), self.pts[self.ii].getZ())
+
+            # self.pos = np.empty((len(self.points), 3))
+            # t = 0
+            # for t in range(0, len(self.points)):
+            #     self.pos[t] = (self.pts[t].getX(), self.pts[t].getY(), self.pts[t].getZ())
+
+
+            #i =0
+
+            if self.graphHandler:
+                #self.graphHandler.translatePoints(self.points)
+                print(str(self.pos))
+                self.graphHandler.translatePoints(self.pos)
             '''
             # only proceed if at least one contour was found
             if len(cnts) > 0:
@@ -413,6 +453,9 @@ class CVHandler(QtGui.QWidget):
 
             #After tracking is done, convert to RGB for PyQt
             #img = cv2.cvtColor(img, cv2.COLOR_HSV2RGB)
+
+
+
             img = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
 
             #convert the img data to a QImage Format
@@ -440,11 +483,14 @@ class CVHandler(QtGui.QWidget):
 
         #While we are running, we have frames to gather
         while (self.running):
-            frame = {}
+            self.frame = {}
 
             #The grab and retrive method is the same as a "capture.read()" Just grabs and retrive, Docs can explain it better
             capture.grab()
-            ret, img = capture.retrieve(0)
+            ret, self.img = capture.retrieve(0)
+
+            #flip the image
+            self.img = cv2.flip(self.img, 1)
 
             #If the captrue cannot retrive a frame from the camera, then ret will be false. so running = false now
             if(ret == False):
@@ -453,11 +499,11 @@ class CVHandler(QtGui.QWidget):
             #retval, img = capture.read()
 
             #add img to the key value of img, recall frame is a dictionary
-            frame["img"] = img
+            self.frame["img"] = self.img
 
             #If the queue is less than 10, add the frame to the queue, else, drop the frame into the void
             if self.queue.qsize() < 10:
-                self.queue.put(frame)
+                self.queue.put(self.frame)
                 #self.queue.put(img)
             else:
                 pass
@@ -483,6 +529,77 @@ class CVHandler(QtGui.QWidget):
         pass
         #connectToIPWindow = Ui_connectToIPBox(QtGui.QDialog)
         #print(connectToIPWindow)
+
+    def isRunning(self):
+        return self.running
+
+    def setPoints(self):
+        img = cv2.cvtColor(self.img, cv2.COLOR_BGR2GRAY)
+        blurred = cv2.GaussianBlur(img, (11, 11), 0)
+        threshed = cv2.threshold(blurred, self.lower, self.upper, cv2.THRESH_BINARY)[1]
+        threshed = cv2.erode(threshed, None, iterations=2)
+        threshed = cv2.dilate(threshed, None, iterations=4)
+
+        cnts = cv2.findContours(threshed.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[-2]
+        center = None
+
+        i = 0
+        self.points = []
+        print("Found "+str(len(cnts))+" points")
+        for (i, c) in enumerate(cnts):
+            # print("I is :" + str(i))
+            point = Point()
+            #self.points.append(point)
+
+            ((x, y), radius) = cv2.minEnclosingCircle(c)
+
+            point.setX(x)
+            point.setY(y)
+            point.setZ(0)
+            point.setRadius(radius)
+
+            M = cv2.moments(c)
+
+            # this is center of a circle
+            point.setCenter((int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"])))
+
+            # These 2 points are the center of the mask object found. This only works on Balls
+            xx = int(M['m10'] / M['m00'])
+            yy = int(M['m01'] / M['m00'])
+            point.setPosition(xx, yy, 0)
+
+            # self.openGLHandler.setPos(self.cx, self.cy)
+
+            # print("cx is: " + str(cx))
+            # print("cy is: " + str(cy))
+
+            # only proceed if the radius meets a minimum size
+            if point.getRadius() < self.radiusBound:
+                # draw the circle and centroid on the frame,
+                # then update the list of tracked points
+                #cv2.circle(img, (int(self.points[i].getX()), int(self.points[i].getY())),
+                #           int(self.points[i].getRadius()),
+                #           (0, 255, 255), 2)
+                self.points.append(point)
+                #point.printPosition()
+                print("There is only " + str(len(self.points)))
+                cv2.circle(img, point.getCenter(), 5, (0, 0, 255), -1)
+
+        cv2.imshow("test", img)
+
+        self.pos = np.empty((len(self.points), 3))
+        t = 0
+        for t in range(0, len(self.points)):
+            self.pos[t] = (self.points[t].getX(), self.points[t].getY(), self.points[t].getZ())
+
+        #print(str(self.pos))
+
+        #self.graphHandler.setPoints(self.points)
+        print(str(self.pos))
+        self.graphHandler.setPoints(self.pos)
+        #self.pts =self.points
+        #if self.graphHandler:
+            #self.graphHandler.addPoints(self.pts)
 
 
 #This class is for updating the QWidget with the video frame gotten from OpenCV, don't need to change it.

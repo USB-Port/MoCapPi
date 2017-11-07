@@ -242,7 +242,8 @@ class CaptureArea(QtGui.QWidget):
 
         #text = "http://"+ str(self.ip) +":9090/?action=stream?dummy=param.mjpg"
 
-        self.cvHandler2 = CVHandler(self.widgets[1], 0)
+        #self.cvHandler2 = CVHandler(self.widgets[1], 0, self.graphHandler)
+        self.cvHandler2 = CVHandler(self.widgets[1], "tcp://192.168.2.203:9092", self.graphHandler)
         self.cvHandler2.start_clicked()
 
         self.update()
@@ -252,6 +253,9 @@ class CaptureArea(QtGui.QWidget):
 
         #self.captureArea.setCurrentWidget(self.tabs[2])
         #self.capture_thread2.start()
+
+    def deleteThisLater(self):
+        self.graphHandler.testtest()
 
 
     def stop_playback(self):
@@ -269,6 +273,9 @@ class CaptureArea(QtGui.QWidget):
         lastWidget = len(self.widgets) - 1
         print(lastWidget)
         return self.widgets[1]
+
+    def getGraph(self):
+        return self.graphHandler
 
     def openVideoFile(self, fileName):
         pass
@@ -291,3 +298,12 @@ class CaptureArea(QtGui.QWidget):
         print("wht the fuck")
         self.window_width = self.captureArea.frameSize().width()
         self.window_height = self.captureArea.frameSize().height()
+
+    #this is going to check if the camera is recording, because there are 6 cam, we need an int
+    def isRunning(self, cam=0):
+        #self.cvHandler2[0].isRunning()
+        return self.cvHandler2.isRunning()
+
+    def updatePoints(self):
+        self.cvHandler2.setPoints()
+        print("test")

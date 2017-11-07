@@ -5,6 +5,8 @@
 class Point():
 
     def __init__(self):
+
+
         self.position = [0, 0, 0]
 
     def setPosition(self, x, y, z):
@@ -12,8 +14,8 @@ class Point():
 
     def printPosition(self):
         print("X: " + str(self.position[0]))
-        print("Y: " + str(self.position[0]))
-        print("Z: " + str(self.position[0]))
+        print("Y: " + str(self.position[1]))
+        print("Z: " + str(self.position[2]))
 
     #Returns a List of 3 points.
     def getPosition(self):
@@ -22,10 +24,10 @@ class Point():
         self.position[0] = x
 
     def setY(self, y):
-        self.position[0] = y
+        self.position[1] = y
 
     def setZ(self, z):
-        self.position[0] = z
+        self.position[2] = z
 
     def getX(self):
         return self.position[0]

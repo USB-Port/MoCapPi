@@ -86,8 +86,9 @@ class ConnectToStreamBox(QtGui.QWidget):
 
             #print(str(self.ipAddress))
             tab = self.captureArea.getWidget()
+            graph = self.captureArea.getGraph()
             #self.captureArea.newTab()
-            self.stream = CVHandler(tab, "tcp://192.168.2.203:9092")
+            self.stream = CVHandler(tab, "tcp://192.168.2.203:9092", graph)
             self.stream.start_clicked()
             #self.deleteLater()
             #text = "http://" + str(self.ipAddress) +":8081/?action=stream?dummy=param.mjpg"
