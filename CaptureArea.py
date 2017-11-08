@@ -248,8 +248,6 @@ class CaptureArea(QtGui.QWidget):
         self.cvHandler2 = CVHandler(self.widgets[1], "tcp://192.168.2.203:9092", self.graphHandler)
         self.cvHandler2.start_clicked()
 
-        self.cvHandler2 = CVHandler(self.widgets[2], "tcp://192.168.2.201:9092", self.graphHandler)
-        self.cvHandler2.start_clicked()
 
         self.update()
 
@@ -273,6 +271,7 @@ class CaptureArea(QtGui.QWidget):
 
     def playBackMotion(self):
         self.graphHandler.playbackMotion()
+
 
     def connectToIP(self, ipAddress, test):
         self.newTab()

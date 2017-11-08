@@ -327,8 +327,9 @@ class CVHandler(QtGui.QWidget):
                     for line in self.pos:
 
                         self.file.write("%s " % line)
-                    self.file.write("\n")
+                    #self.file.write("\n")
                 self.pos = np.asarray(self.posArray)
+                #print(str(self.pos))
                 self.graphHandler.setPoints(self.pos)
 
 
@@ -336,13 +337,10 @@ class CVHandler(QtGui.QWidget):
                 if (self.file is not None):
                     self.file.write("\ntranspoint\n")
                     for line in self.pos:
-                        linecpy = ''.join(str(line))
-                        linecpy.strip("[")
-                        linecpy.strip("]")
-                        self.file.write("%s " % linecpy)
-                    self.file.write("\n")
+                        self.file.write("%s " % line)
+                    #self.file.write("\n")
 
-                print(str(self.pos))
+                #print(str(self.pos))
                 self.pos = np.asarray(self.posArray)
                 self.graphHandler.translatePoints(self.pos)
 

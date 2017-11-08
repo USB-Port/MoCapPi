@@ -3,6 +3,8 @@ import pyqtgraph as pg
 import numpy as np
 import pyqtgraph.opengl as gl
 from numpy import *
+import threading
+from PyQt4 import QtCore, QtGui, QtOpenGL
 
 from time import sleep
 
@@ -11,6 +13,7 @@ from Point import *
 from time import sleep
 import types
 import re
+from time import sleep
 
 #pg.GraphicsLayoutWidget
 class GraphHandler(gl.GLViewWidget):
@@ -75,6 +78,13 @@ class GraphHandler(gl.GLViewWidget):
         self.zgrid.scale(100, 100, 100)
         #self.update()
 
+        self.timer = QtCore.QTimer(self)
+        self.timer.timeout.connect(self.play)
+        self.lineNumber = 0
+        self.lastCommand = None
+        self.playbackSpeed = 25
+        self.pointSize = 10.0
+
     def testtest(self):
         self.increment = self.increment + 100
         pos = np.empty((1, 3))
@@ -103,53 +113,89 @@ class GraphHandler(gl.GLViewWidget):
         color = np.empty((len(PosArray), 4))
 
         for i in range(0, len(PosArray)):
-            size[i] = 10.0
+            size[i] = self.pointSize
             color[i] = (1.0, 0.0, 0.0, 0.5)
 
         self.ppt = gl.GLScatterPlotItem(pos=PosArray, size=size, color=color, pxMode=False)
         self.addItem(self.ppt)
 
 
-    def addPoints(self, Point):
-
-
+    def deletePoints(self):
         for item in self.items:
             if isinstance(item, gl.GLScatterPlotItem):
                 self.removeItem(item)
 
-        if len(Point) > 0:
-            limit = 0
-            pts = []
-            i = 0
-            for point in Point:
-                pos = np.empty((53, 3))
-                size = np.empty((53))
-                color = np.empty((53, 4))
-                pos[0] = (point.getX(), point.getY(), point.getZ())
-                size[0] = 10.0
-                color[0] = (1.0, 0.0, 0.0, 0.5)
-                pts.append(gl.GLScatterPlotItem(pos=pos, size=size, color=color, pxMode=False))
-                self.addItem(pts[i])
-                limit = limit +1
-                i = i+1
+        #def playbackMotion(self, fileName = "motion.txt"):
+        #    t = threading.Thread(target=self.playbackMotionThread)
+        #    t.start()
 
-    def playbackMotion(self, fileName = "motion.txt"):
+    def play(self):
+        f = open("motion.txt", "r")
+        lines = f.readlines()
+
+        lines[self.lineNumber] = lines[self.lineNumber].strip("\n\r")
+        # print("line is "+ line)
+        self.pos = []
+        if lines[self.lineNumber] == "addpoint":
+
+            self.lastCommand = "addpoint"
+
+        elif lines[self.lineNumber] == "transpoint":
+
+            self.lastCommand = "transpoint"
+
+        else:
+            data = re.findall(r"[0-9]+", lines[self.lineNumber])
+            # print(str(data))
+            if len(data) != 0:
+                # line = line.strip("[")  # or some other preprocessing
+                self.pos.append([int(i) for i in data])  # storing everything in memory!
+
+                self.ppp = []
+
+                for num in self.pos:
+                    i = 0
+                    while i < len(num) - 3:
+                        self.ppp.append([num[i], num[i + 1], num[i + 2]])
+                        i = i + 3
+            if self.lastCommand == "addpoint":
+                self.posToPlot = np.asarray(self.ppp)
+                self.setPoints(self.posToPlot)
+            elif self.lastCommand == "transpoint":
+                self.posToPlot = np.asarray(self.ppp)
+                self.translatePoints(self.posToPlot)
+
+        self.lineNumber = self.lineNumber + 1
+
+        if self.lineNumber >= len(lines):
+            self.deletePoints()
+            self.timer.stop()
+            self.lineNumber = 0
+            print("Playback ended")
 
 
+    def playbackMotion(self):
+        print("playing back Motion")
+        self.timer.start(self.playbackSpeed)
+        '''
         #file = open(fileName, "r")
         lastCommand = None
-        with open(fileName) as file:
+        with open("motion.txt") as file:
             for line in file:
+                line = line.strip("\n\r")
+                #print("line is "+ line)
                 self.pos = []
                 if line == "addpoint":
+                    #print("set last commond as addpoint")
                     lastCommand = "addpoint"
 
                 elif line == "transpoint":
+                    #print("set last commond as trans")
                     lastCommand = "transpoint"
 
                 else:
                     data = re.findall(r"[0-9]+", line)
-                    print(str(data))
+                    #print(str(data))
                     if len(data) != 0:
                     #line = line.strip("[")  # or some other preprocessing
                         self.pos.append([int(i) for i in data])  # storing everything in memory!
@@ -158,5 +204,34 @@ class GraphHandler(gl.GLViewWidget):
                     #del innerList[-1]
                     #print("innerList is " +str(innerList))
                     #self.pos.append(innerList)
-                    print("pos is "+ str(self.pos))
-                   # print("pos sssss "+ str(self.pos[0][0]))
+                    #print("pos is "+ str(self.pos))
+
+                    self.ppp = []
+
+                    for num in self.pos:
+                        i = 0
+                        while  i < len(num) - 3:
+                            self.ppp.append([num[i], num[i+1], num[i+2]])
+                            #print(str(self.ppp))
+                            i = i+3
+                    #print("wtf")
+
+
+
+                    if lastCommand == "addpoint":
+                        #print("set the point")
+                        #print(str(self.posToPlot))
+                        self.posToPlot = np.asarray(self.ppp)
+                        self.setPoints(self.posToPlot)
+                    elif lastCommand == "transpoint":
+                        #print("trans the point")
+                        print(str(self.posToPlot))
+                        self.posToPlot = np.asarray(self.ppp)
+                        self.translatePoints(self.posToPlot)
+                        #sleep(1)
+
+        #self.deletePoints()
+                    #self.graphHandler.setPoints(self.pos)
+
+                    #print("pos sssss "+ str(self.ppp))
+        '''
