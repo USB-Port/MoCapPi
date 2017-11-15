@@ -133,7 +133,7 @@ class Ui_MainWindow(QtGui.QMainWindow):
         self.recordMotionAction = QtGui.QAction(QtGui.QIcon("./imgs/RecordButton.ico"), "Record New Motion Capture", MainWindow)
         self.recordMotionAction.triggered.connect(self.record_Motion)
 
-        self.testMotionAction = QtGui.QAction(QtGui.QIcon("./imgs/RecordButton.ico"), "Record New Motion Capture",MainWindow)
+        self.testMotionAction = QtGui.QAction(QtGui.QIcon("./imgs/RecordButton.ico"), "Playback motion",MainWindow)
         self.testMotionAction.triggered.connect(self.test_Motion)
 
         # Let me tell you all a story about a mouse named glory
