@@ -2,9 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="27984a16-d994-4d9f-9e43-4a2f28b26b1d" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/imgs/splashScreen.jpg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/piCamScript.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/CVHandler.py" afterPath="$PROJECT_DIR$/CVHandler.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/CaptureArea.py" afterPath="$PROJECT_DIR$/CaptureArea.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/GraphHandler.py" afterPath="$PROJECT_DIR$/GraphHandler.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.py" afterPath="$PROJECT_DIR$/main.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/motion.txt" afterPath="$PROJECT_DIR$/motion.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test.py" afterPath="$PROJECT_DIR$/test.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -16,11 +21,11 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="main.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="main.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17">
-              <caret line="131" column="0" lean-forward="false" selection-start-line="131" selection-start-column="0" selection-end-line="131" selection-end-column="0" />
+            <state relative-caret-position="102">
+              <caret line="35" column="10" lean-forward="true" selection-start-line="35" selection-start-column="10" selection-end-line="35" selection-end-column="10" />
               <folding>
                 <element signature="e#1151#1161#0" expanded="true" />
               </folding>
@@ -28,11 +33,21 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="ProjectViewer.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ProjectViewer.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1462">
+              <caret line="86" column="40" lean-forward="false" selection-start-line="86" selection-start-column="40" selection-end-line="86" selection-end-column="40" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="CaptureArea.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/CaptureArea.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4420">
-              <caret line="272" column="8" lean-forward="false" selection-start-line="272" selection-start-column="8" selection-end-line="272" selection-end-column="8" />
+            <state relative-caret-position="5440">
+              <caret line="333" column="0" lean-forward="false" selection-start-line="333" selection-start-column="0" selection-end-line="333" selection-end-column="0" />
               <folding>
                 <element signature="e#2811#2842#0" expanded="true" />
               </folding>
@@ -40,11 +55,23 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CVHandler.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="CVHandler.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/CVHandler.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="544">
-              <caret line="32" column="0" lean-forward="false" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="16" />
+            <state relative-caret-position="345">
+              <caret line="336" column="52" lean-forward="false" selection-start-line="336" selection-start-column="52" selection-end-line="336" selection-end-column="52" />
+              <folding>
+                <element signature="e#1610#1620#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="piCamScript.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/piCamScript.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="238">
+              <caret line="14" column="19" lean-forward="false" selection-start-line="14" selection-start-column="19" selection-end-line="14" selection-end-column="19" />
               <folding />
             </state>
           </provider>
@@ -53,20 +80,10 @@
       <file leaf-file-name="piStream.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/piStream.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="34">
-              <caret line="2" column="0" lean-forward="false" selection-start-line="2" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="GraphHandler.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/GraphHandler.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1088">
-              <caret line="79" column="0" lean-forward="false" selection-start-line="79" selection-start-column="0" selection-end-line="81" selection-end-column="45" />
+            <state relative-caret-position="170">
+              <caret line="12" column="40" lean-forward="false" selection-start-line="12" selection-start-column="40" selection-end-line="12" selection-end-column="40" />
               <folding>
-                <element signature="e#0#71#0" expanded="true" />
+                <element signature="e#0#35#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -75,10 +92,22 @@
       <file leaf-file-name="test.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="51">
-              <caret line="7" column="11" lean-forward="false" selection-start-line="7" selection-start-column="11" selection-end-line="7" selection-end-column="11" />
+            <state relative-caret-position="170">
+              <caret line="10" column="0" lean-forward="true" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
               <folding>
-                <element signature="e#0#22#0" expanded="true" />
+                <element signature="e#0#18#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="GraphHandler.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/GraphHandler.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="2618">
+              <caret line="170" column="41" lean-forward="false" selection-start-line="170" selection-start-column="41" selection-end-line="170" selection-end-column="41" />
+              <folding>
+                <element signature="e#0#71#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -87,41 +116,19 @@
       <file leaf-file-name="motion.txt" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/motion.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="68">
-              <caret line="4" column="10" lean-forward="false" selection-start-line="4" selection-start-column="10" selection-end-line="4" selection-end-column="10" />
+            <state relative-caret-position="306">
+              <caret line="21" column="0" lean-forward="false" selection-start-line="21" selection-start-column="0" selection-end-line="22" selection-end-column="10" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ConnectToStreamBox.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ConnectToStreamBox.py">
+      <file leaf-file-name="ConsoleOutput.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ConsoleOutput.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1496">
-              <caret line="90" column="41" lean-forward="false" selection-start-line="90" selection-start-column="41" selection-end-line="90" selection-end-column="67" />
+            <state relative-caret-position="663">
+              <caret line="39" column="56" lean-forward="false" selection-start-line="39" selection-start-column="45" selection-end-line="39" selection-end-column="56" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Point.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Point.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="850">
-              <caret line="50" column="26" lean-forward="false" selection-start-line="50" selection-start-column="26" selection-end-line="50" selection-end-column="26" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="OpenGLHandler.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/OpenGLHandler.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1122">
-              <caret line="73" column="9" lean-forward="false" selection-start-line="73" selection-start-column="9" selection-end-line="73" selection-end-column="28" />
-              <folding>
-                <element signature="e#830#840#0" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -146,6 +153,14 @@
       <find>open</find>
       <find>scat</find>
       <find>pain</find>
+      <find>self.consoleOutput.outputText</find>
+      <find>consoleOutput</find>
+      <find>camera tu</find>
+      <find>console</find>
+      <find>dockWi</find>
+      <find>QtGui.QDockWidget</find>
+      <find>QDockWidget</find>
+      <find>stopr</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -158,7 +173,6 @@
         <option value="$PROJECT_DIR$/ConnectToIPWindow.py" />
         <option value="$PROJECT_DIR$/bh.py" />
         <option value="$PROJECT_DIR$/OpenCVHandler.py" />
-        <option value="$PROJECT_DIR$/ConsoleOutput.py" />
         <option value="$PROJECT_DIR$/ProjectViewer.py" />
         <option value="$PROJECT_DIR$/SetUpWizard.py" />
         <option value="$PROJECT_DIR$/MaskingDebug.py" />
@@ -166,20 +180,22 @@
         <option value="$USER_HOME$/AppData/Local/Programs/Python/Python36-32/Lib/site-packages/pyqtgraph/opengl/items/GLScatterPlotItem.py" />
         <option value="$PROJECT_DIR$/ConnectToStreamBox.py" />
         <option value="$PROJECT_DIR$/piStream.py" />
-        <option value="$PROJECT_DIR$/test.py" />
         <option value="$PROJECT_DIR$/Point.py" />
-        <option value="$PROJECT_DIR$/CVHandler.py" />
-        <option value="$PROJECT_DIR$/CaptureArea.py" />
-        <option value="$PROJECT_DIR$/GraphHandler.py" />
         <option value="$PROJECT_DIR$/motion.txt" />
+        <option value="$PROJECT_DIR$/piCamScript.py" />
+        <option value="$PROJECT_DIR$/ConsoleOutput.py" />
+        <option value="$PROJECT_DIR$/CVHandler.py" />
+        <option value="$PROJECT_DIR$/GraphHandler.py" />
+        <option value="$PROJECT_DIR$/CaptureArea.py" />
         <option value="$PROJECT_DIR$/main.py" />
+        <option value="$PROJECT_DIR$/test.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
     <option name="x" value="-8" />
     <option name="y" value="-8" />
-    <option name="width" value="1924" />
+    <option name="width" value="1936" />
     <option name="height" value="1056" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -198,8 +214,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -212,8 +226,24 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MoCapPi" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MoCapPi" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="imgs" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -296,24 +326,6 @@
       <option name="EMULATE_TERMINAL" value="false" />
       <method />
     </configuration>
-    <configuration default="false" name="GraphHandler" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="MoCapPi" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/GraphHandler.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <method />
-    </configuration>
     <configuration default="false" name="Unittests in test.py" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -327,6 +339,24 @@
       <option name="_new_additionalArguments" value="&quot;&quot;" />
       <option name="_new_target" value="&quot;$PROJECT_DIR$/test.py&quot;" />
       <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method />
+    </configuration>
+    <configuration default="false" name="test (1)" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="MoCapPi" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
       <method />
     </configuration>
     <configuration default="true" type="PythonConfigurationType" factoryName="Python">
@@ -397,16 +427,16 @@
       <item index="0" class="java.lang.String" itemvalue="Python.main" />
       <item index="1" class="java.lang.String" itemvalue="Python.test" />
       <item index="2" class="java.lang.String" itemvalue="Python.piStream" />
-      <item index="3" class="java.lang.String" itemvalue="Python.GraphHandler" />
-      <item index="4" class="java.lang.String" itemvalue="Python tests.Unittests in test.py" />
+      <item index="3" class="java.lang.String" itemvalue="Python tests.Unittests in test.py" />
+      <item index="4" class="java.lang.String" itemvalue="Python.test (1)" />
     </list>
     <recent_temporary>
       <list size="5">
         <item index="0" class="java.lang.String" itemvalue="Python.main" />
-        <item index="1" class="java.lang.String" itemvalue="Python tests.Unittests in test.py" />
-        <item index="2" class="java.lang.String" itemvalue="Python.test" />
-        <item index="3" class="java.lang.String" itemvalue="Python.piStream" />
-        <item index="4" class="java.lang.String" itemvalue="Python.GraphHandler" />
+        <item index="1" class="java.lang.String" itemvalue="Python.test (1)" />
+        <item index="2" class="java.lang.String" itemvalue="Python tests.Unittests in test.py" />
+        <item index="3" class="java.lang.String" itemvalue="Python.test" />
+        <item index="4" class="java.lang.String" itemvalue="Python.piStream" />
       </list>
     </recent_temporary>
   </component>
@@ -442,16 +472,23 @@
     <history-entry file="Unittests_in_test_py - 2017.11.06 at 11h 47m 39s.xml">
       <configuration name="Unittests in test.py" configurationId="tests" />
     </history-entry>
+    <history-entry file="Unittests_in_test_py - 2017.12.06 at 15h 20m 05s.xml">
+      <configuration name="Unittests in test.py" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_in_test_py - 2017.12.06 at 15h 20m 18s.xml">
+      <configuration name="Unittests in test.py" configurationId="tests" />
+    </history-entry>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1924" height="1056" extended-state="0" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
+    <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.102725364" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1015625" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32980973" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24947146" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24947146" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -479,16 +516,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/CaptureArea.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="19" column="47" lean-forward="false" selection-start-line="19" selection-start-column="47" selection-end-line="19" selection-end-column="47" />
-          <folding>
-            <element signature="e#2811#2842#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ConsoleOutput.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="204">
@@ -728,13 +755,6 @@
     <entry file="file://$PROJECT_DIR$/ConnectToIPWindow.py" />
     <entry file="file://$PROJECT_DIR$/OpenCVHandler.py" />
     <entry file="file://$PROJECT_DIR$/OpenCVHandler.py" />
-    <entry file="file://$PROJECT_DIR$/ProjectViewer.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1462">
-          <caret line="86" column="40" lean-forward="false" selection-start-line="86" selection-start-column="40" selection-end-line="86" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/SetUpWizard.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1649">
@@ -746,13 +766,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="34">
           <caret line="2" column="0" lean-forward="false" selection-start-line="2" selection-start-column="0" selection-end-line="14" selection-end-column="68" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ConsoleOutput.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="493">
-          <caret line="29" column="21" lean-forward="false" selection-start-line="29" selection-start-column="21" selection-end-line="29" selection-end-column="21" />
         </state>
       </provider>
     </entry>
@@ -788,7 +801,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1496">
           <caret line="90" column="41" lean-forward="false" selection-start-line="90" selection-start-column="41" selection-end-line="90" selection-end-column="67" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -796,17 +808,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="850">
           <caret line="50" column="26" lean-forward="false" selection-start-line="50" selection-start-column="26" selection-end-line="50" selection-end-column="26" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="7" column="11" lean-forward="false" selection-start-line="7" selection-start-column="11" selection-end-line="7" selection-end-column="11" />
-          <folding>
-            <element signature="e#0#22#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -814,62 +815,97 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1122">
           <caret line="73" column="9" lean-forward="false" selection-start-line="73" selection-start-column="9" selection-end-line="73" selection-end-column="28" />
-          <folding>
-            <element signature="e#830#840#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/CaptureArea.py">
+    <entry file="file://$PROJECT_DIR$/piCamScript.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4420">
-          <caret line="272" column="8" lean-forward="false" selection-start-line="272" selection-start-column="8" selection-end-line="272" selection-end-column="8" />
-          <folding>
-            <element signature="e#2811#2842#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="238">
+          <caret line="14" column="19" lean-forward="false" selection-start-line="14" selection-start-column="19" selection-end-line="14" selection-end-column="19" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/CVHandler.py">
+    <entry file="file://$PROJECT_DIR$/ConsoleOutput.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="544">
-          <caret line="32" column="0" lean-forward="false" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="16" />
+        <state relative-caret-position="663">
+          <caret line="39" column="56" lean-forward="false" selection-start-line="39" selection-start-column="45" selection-end-line="39" selection-end-column="56" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ProjectViewer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1462">
+          <caret line="86" column="40" lean-forward="false" selection-start-line="86" selection-start-column="40" selection-end-line="86" selection-end-column="40" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/GraphHandler.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1088">
-          <caret line="79" column="0" lean-forward="false" selection-start-line="79" selection-start-column="0" selection-end-line="81" selection-end-column="45" />
+        <state relative-caret-position="2618">
+          <caret line="170" column="41" lean-forward="false" selection-start-line="170" selection-start-column="41" selection-end-line="170" selection-end-column="41" />
           <folding>
             <element signature="e#0#71#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/motion.txt">
+    <entry file="file://$PROJECT_DIR$/CaptureArea.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="10" lean-forward="false" selection-start-line="4" selection-start-column="10" selection-end-line="4" selection-end-column="10" />
-          <folding />
+        <state relative-caret-position="5440">
+          <caret line="333" column="0" lean-forward="false" selection-start-line="333" selection-start-column="0" selection-end-line="333" selection-end-column="0" />
+          <folding>
+            <element signature="e#2811#2842#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/piStream.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="0" lean-forward="false" selection-start-line="2" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
-          <folding />
+        <state relative-caret-position="170">
+          <caret line="12" column="40" lean-forward="false" selection-start-line="12" selection-start-column="40" selection-end-line="12" selection-end-column="40" />
+          <folding>
+            <element signature="e#0#35#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="10" column="0" lean-forward="true" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="131" column="0" lean-forward="false" selection-start-line="131" selection-start-column="0" selection-end-line="131" selection-end-column="0" />
+        <state relative-caret-position="102">
+          <caret line="35" column="10" lean-forward="true" selection-start-line="35" selection-start-column="10" selection-end-line="35" selection-end-column="10" />
           <folding>
             <element signature="e#1151#1161#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/motion.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="21" column="0" lean-forward="false" selection-start-line="21" selection-start-column="0" selection-end-line="22" selection-end-column="10" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CVHandler.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="345">
+          <caret line="336" column="52" lean-forward="false" selection-start-line="336" selection-start-column="52" selection-end-line="336" selection-end-column="52" />
+          <folding>
+            <element signature="e#1610#1620#0" expanded="true" />
           </folding>
         </state>
       </provider>

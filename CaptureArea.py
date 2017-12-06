@@ -53,6 +53,7 @@ from CVHandler import *
 from OpenGLHandler import *
 from MaskingDebug import  *
 from GraphHandler import *
+from ConsoleOutput import *
 import pyqtgraph.opengl as gl
 
 
@@ -73,11 +74,15 @@ p = Queue()
 #Every single class that makes something that goes on the Main App, has to inherent from QtGui.QWidget
 class CaptureArea(QtGui.QWidget):
 
+
     #This is how you pass a QWidget (MainWindow from main.py) to a class
-    def __init__(self, QWidget, parent=None):
+    def __init__(self, QWidget, consoleOutput, parent=None):
         QtGui.QWidget.__init__(self,parent)
         #Unlike better languages, you have to manually call the super constructor
         super(CaptureArea, self).__init__()
+
+        #this is just used to print to console output
+        self.consoleOut = consoleOutput
 
         #This is auto generated code. Notice the names
         self.gridLayout_2 = QtGui.QGridLayout(QWidget)
@@ -85,8 +90,10 @@ class CaptureArea(QtGui.QWidget):
         self.captureArea = QtGui.QTabWidget(QWidget)
         self.captureArea.setObjectName(_fromUtf8("captureArea"))
 
+        self.cvObjectLists = []
+
         #The graph handler object
-        self.graphHandler = GraphHandler(self)
+        self.graphHandler = GraphHandler(self, consoleOutput)
 
         #This line can make it where you cannot close the tabs
         #self.captureArea.setTabsClosable(False)
@@ -225,7 +232,8 @@ class CaptureArea(QtGui.QWidget):
         self.gridLayouts[len(self.gridLayouts) - 1].addWidget(self.widgets[len(self.widgets) - 1], 0, 0, 1, 1)
         self.captureArea.addTab(self.tabs[len(self.tabs) - 1], _fromUtf8(""))
 
-        self.captureArea.setCurrentWidget(self.tabs[(len(self.tabs) - 1)])
+        #this sets the last tab is the current tab
+        #self.captureArea.setCurrentWidget(self.tabs[(len(self.tabs) - 1)])
 
     def removeTab(self, index):
         widget = self.captureArea.widget(index)
@@ -236,26 +244,87 @@ class CaptureArea(QtGui.QWidget):
 
 
     def start_clicked(self):
-        #global running
-        #self.cvHandler = CVHandler(self.widget)
-        #self.cvHandler.start_clicked()
+        pass
+        # global running
+        # self.cvHandler = CVHandler(self.widget)
+        # self.cvHandler.start_clicked()
 
-        self.newTab()
-
-        #text = "http://"+ str(self.ip) +":9090/?action=stream?dummy=param.mjpg"
-
-        #self.cvHandler2 = CVHandler(self.widgets[1], 0, self.graphHandler)
-        self.cvHandler2 = CVHandler(self.widgets[1], "tcp://192.168.2.203:9092", self.graphHandler)
-        self.cvHandler2.start_clicked()
+        # text = "http://"+ str(self.ip) +":9090/?action=stream?dummy=param.mjpg"
+        lastWidget = self.getWidget()
+        self.cvHandler3 = CVHandler(self.widgets[lastWidget], "tcp://192.168.2.6:9092", self.graphHandler)
+        self.cvHandler3.start_clicked()
 
 
-        self.update()
+        # self.update()
 
-        #running = True
-        #self.capture_thread.start()
+        # running = True
+        # self.capture_thread.start()
 
-        #self.captureArea.setCurrentWidget(self.tabs[2])
-        #self.capture_thread2.start()
+        # self.captureArea.setCurrentWidget(self.tabs[2])
+        # self.capture_thread2.start()
+
+
+
+
+
+
+
+    def connectToCameras(self):
+        print("TEST")
+        self.captureArea.setCurrentWidget(self.tabs[0])
+
+        lastWidget = self.getWidget()
+
+        try:
+            cvHandler = CVHandler(self.widgets[lastWidget], "tcp://192.168.1.101:9092", self.graphHandler)
+            self.cvObjectLists.append(cvHandler)
+            self.newTab()
+            # self.cvHandler2 = CVHandler(self.widgets[1], "tcp://192.168.2.201:9092", self.graphHandler)
+            # self.cvHandler2.start_clicked()
+            # self.consoleOut.outputText("Playing video from webcam")
+        except:
+            self.consoleOut.outputText("Error has occurred while connecting to 192.168.1.101")
+
+        lastWidget = self.getWidget()
+
+        try:
+            cvHandler = CVHandler(self.widgets[lastWidget], "tcp://192.168.1.102:9092", self.graphHandler)
+            self.cvObjectLists.append(cvHandler)
+            self.newTab()
+            # self.cvHandler2 = CVHandler(self.widgets[1], "tcp://192.168.2.201:9092", self.graphHandler)
+            # self.cvHandler2.start_clicked()
+            # self.consoleOut.outputText("Playing video from webcam")
+        except:
+            self.consoleOut.outputText("Error has occurred while connecting to 192.168.1.102")
+
+        lastWidget = self.getWidget()
+
+        try:
+            cvHandler = CVHandler(self.widgets[lastWidget], "tcp://192.168.1.103:9092", self.graphHandler)
+            self.cvObjectLists.append(cvHandler)
+            self.newTab()
+            # self.cvHandler2 = CVHandler(self.widgets[1], "tcp://192.168.2.201:9092", self.graphHandler)
+            # self.cvHandler2.start_clicked()
+            # self.consoleOut.outputText("Playing video from webcam")
+        except:
+            self.consoleOut.outputText("Error has occurred while connecting to 192.168.1.103")
+
+        lastWidget = self.getWidget()
+
+        try:
+            cvHandler = CVHandler(self.widgets[lastWidget], "tcp://192.168.1.100:9092", self.graphHandler)
+            self.cvObjectLists.append(cvHandler)
+            self.newTab()
+            # self.cvHandler2 = CVHandler(self.widgets[1], "tcp://192.168.2.201:9092", self.graphHandler)
+            # self.cvHandler2.start_clicked()
+            # self.consoleOut.outputText("Playing video from webcam")
+        except:
+            self.consoleOut.outputText("Error has occurred while connecting to 192.168.1.104")
+
+        for cv in self.cvObjectLists:
+            cv.start_clicked()
+
+
 
     def deleteThisLater(self):
         self.graphHandler.testtest()
@@ -264,10 +333,16 @@ class CaptureArea(QtGui.QWidget):
         self.cvHandler2.recordMotion()
 
     def stopRecording(self):
-        self.cvHandler2.stopRecording()
+        for cv in self.cvObjectLists:
+            cv.stopRecording()
 
     def stop_playback(self):
-        self.cvHandler2.stop_playback()
+        try:
+            self.cvHandler2.stop_playback()
+            self.consoleOut.outputText("Video has stopped")
+        except:
+            self.consoleOut.outputText("No camera connected at this time")
+
 
     def playBackMotion(self):
         self.graphHandler.playbackMotion()
@@ -284,7 +359,7 @@ class CaptureArea(QtGui.QWidget):
         #lastTab = len(self.tabs) - 1
         lastWidget = len(self.widgets) - 1
         print(lastWidget)
-        return self.widgets[1]
+        return int(lastWidget)
 
     def getGraph(self):
         return self.graphHandler

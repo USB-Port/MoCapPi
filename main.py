@@ -32,6 +32,8 @@ from CaptureArea import *
 from ConsoleOutput import *
 from SetUpWizard import *
 from ConnectToStreamBox import *
+from pathlib import Path
+import sys
 
 #This two try except is used to support multiple languages. still need it to support English
 try:
@@ -54,6 +56,15 @@ except AttributeError:
 class Ui_MainWindow(QtGui.QMainWindow):
     def __init__(self, MainWindow, *args, **kwargs):
         super(Ui_MainWindow, self).__init__(*args, **kwargs)
+        #This is for the splash screen
+        showSplashScreen = True
+        if(showSplashScreen == True):
+            splashLogo = QtGui.QPixmap("./imgs/splashScreen.jpg")
+            splashScreen = QtGui.QSplashScreen(splashLogo, QtCore.Qt.WindowStaysOnTopHint)
+            splashScreen.setMask(splashLogo.mask())
+            splashScreen.show()
+            time.sleep(2.0)
+
         self.setupUi(MainWindow)
 
     def setupUi(self, MainWindow):
@@ -67,8 +78,11 @@ class Ui_MainWindow(QtGui.QMainWindow):
 
         self.init_tool_bar(MainWindow)
 
+        # initialize the Console Output
+        self.consoleOutput = ConsoleOutput(MainWindow)
+
         #initialize the Capture Area
-        self.captureArea = CaptureArea(self.centralwidget)
+        self.captureArea = CaptureArea(self.centralwidget, self.consoleOutput)
 
         MainWindow.setCentralWidget(self.centralwidget)
 
@@ -77,18 +91,17 @@ class Ui_MainWindow(QtGui.QMainWindow):
 
 
         #This may be the buttons but might remove in an update
-        self.dockWidgetControls = QtGui.QDockWidget(MainWindow)
-        self.dockWidgetControls.setObjectName(_fromUtf8("dockWidgetControls"))
+        #self.dockWidgetControls = QtGui.QDockWidget(MainWindow)
+        #self.dockWidgetControls.setObjectName(_fromUtf8("dockWidgetControls"))
         self.dockWidgetContents_8 = QtGui.QWidget()
         self.dockWidgetContents_8.setObjectName(_fromUtf8("dockWidgetContents_8"))
         self.pushButton = QtGui.QPushButton(self.dockWidgetContents_8)
         self.pushButton.setGeometry(QtCore.QRect(10, 10, 61, 51))
         self.pushButton.setObjectName(_fromUtf8("pushButton"))
-        self.dockWidgetControls.setWidget(self.dockWidgetContents_8)
-        MainWindow.addDockWidget(QtCore.Qt.DockWidgetArea(2), self.dockWidgetControls)
+        #elf.dockWidgetControls.setWidget(self.dockWidgetContents_8)
+        #MainWindow.addDockWidget(QtCore.Qt.DockWidgetArea(2), self.dockWidgetControls)
 
-        #initialize the Console Output
-        self.consoleOutput = ConsoleOutput(MainWindow)
+
 
         MainWindow.setCentralWidget(self.centralwidget)
 
@@ -133,8 +146,11 @@ class Ui_MainWindow(QtGui.QMainWindow):
         self.recordMotionAction = QtGui.QAction(QtGui.QIcon("./imgs/RecordButton.ico"), "Record New Motion Capture", MainWindow)
         self.recordMotionAction.triggered.connect(self.record_Motion)
 
-        self.testMotionAction = QtGui.QAction(QtGui.QIcon("./imgs/RecordButton.ico"), "Playback motion",MainWindow)
-        self.testMotionAction.triggered.connect(self.test_Motion)
+        self.testMotionAction = QtGui.QAction(QtGui.QIcon("./imgs/playbackmotion.ico"), "Playback motion",MainWindow)
+        self.testMotionAction.triggered.connect(self.playback_motion)
+
+        self.connectCamerasAction = QtGui.QAction(QtGui.QIcon("./imgs/connect.ico"), "Connect to Cameras", MainWindow)
+        self.connectCamerasAction.triggered.connect(self.connectCameras)
 
         # Let me tell you all a story about a mouse named glory
         #Here I create a tool bar and add it to the MainWindow.
@@ -145,10 +161,19 @@ class Ui_MainWindow(QtGui.QMainWindow):
         self.toolBar.addAction(self.stopMotionAction)
         self.toolBar.addAction(self.recordMotionAction)
         self.toolBar.addAction(self.testMotionAction)
+        self.toolBar.addAction(self.connectCamerasAction)
 
+    def connectCameras(self):
+        self.captureArea.connectToCameras()
 
-    def test_Motion(self):
-        self.captureArea.playBackMotion()
+    def playback_motion(self):
+        motion_file = Path("./motion.txt")
+        if motion_file.is_file():
+            self.captureArea.playBackMotion()
+            self.consoleOutput.outputText("Playing back recorded motion...")
+        else:
+            self.consoleOutput.outputText("A pre recorded motion file does not exist.")
+
 
     #Yoy need to link a button action to a method, so this method is called when the user clicks, "record motion" button
     def record_Motion(self):
@@ -162,20 +187,12 @@ class Ui_MainWindow(QtGui.QMainWindow):
 
     #same as above, this method is called wehn you click play motion button
     def play_motion(self):
-        self.consoleOutput.outputText("playing motion...")
         self.captureArea.start_clicked()
 
     #Same, this button does not work. To pause, need access to CVHandlerCLass which is not made in this class.
     def pause_motion(self):
-        self.consoleOutput.outputText("Motion Capture paused")
         self.captureArea.stopRecording()
 
-
-        #self.captureArea.openMaskingDebugWindow()
-        #self.playMotionAction.setEnabled(False)
-
-        #self.setUpWizard.setGeometry(QtCore.QRect(1000,500,100,30))
-        #self.setUpWizard.show()
 
     #same as above
     def stop_motion(self):
@@ -267,7 +284,7 @@ class Ui_MainWindow(QtGui.QMainWindow):
         #Open project Directory Action
         self.actionOpenProjectDirectory = QtGui.QAction(MainWindow)
         self.actionOpenProjectDirectory.setObjectName(_fromUtf8("actionOpen"))
-        self.actionOpenProjectDirectory.setShortcut("Ctrl+N")
+        self.actionOpenProjectDirectory.setShortcut("Ctrl+I")
         self.actionOpenProjectDirectory.setStatusTip("Open a Project Folder")
         self.actionOpenProjectDirectory.triggered.connect(self.open_project_directory)
 
@@ -387,7 +404,7 @@ class Ui_MainWindow(QtGui.QMainWindow):
 
     #This is used by the Quit button in the menu bar
     def close_application(self, MainWindow):
-        choice = QtGui.QMessageBox.question(MainWindow,'Extract!', "Quit the Application?",QtGui.QMessageBox.No | QtGui.QMessageBox.Yes)
+        choice = QtGui.QMessageBox.question(MainWindow,'Exit?', "Quit the Application?",QtGui.QMessageBox.No | QtGui.QMessageBox.Yes)
 
         if choice == QtGui.QMessageBox.Yes:
             sys.exit()
@@ -419,8 +436,9 @@ class Ui_MainWindow(QtGui.QMainWindow):
         event.ignore()
 
         if result == QtGui.QMessageBox.Yes:
-            self.captureArea.stop_playback()
+            #self.captureArea.stop_playback()
             event.accept()
+            sys.exit()
 
 
 #This class represents the whole window frame. This class is for handling OS Events. (X-out, keyboard, ect)
@@ -440,11 +458,9 @@ class MyWindow(QtGui.QMainWindow):
 
         #if the use clicks yes.
         if result == QtGui.QMessageBox.Yes:
-            #I'm not sure what this does but it quits the program as I should.
-            cam = cv2.VideoCapture(0)
-            cam.release
+            #self.captureArea.stop_playback()
             event.accept()
-            print("Camera turned off")
+            sys.exit()
 
     def resizeEvent(self, evt=None):
         pass

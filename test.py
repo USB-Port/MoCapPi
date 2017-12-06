@@ -1,60 +1,38 @@
-import pyqtgraph as pg
-import pyqtgraph.opengl as gl
+import numpy as np
+import cv2
+import glob
 
-### something to graph ######
-from numpy import *
-pi=3.1415
-X=linspace(-10,10,100)
-Y1=2+sin(X)
-Y2=-2+Y1*Y1
-Y3=cos(1*Y1)/(X+0.0131415)
-Y4=4+sin(X)*cos(2*X)
-Z=exp(-0.1*X*X)*cos(0.3*(X.reshape(100,1)**2+X.reshape(1,100)**2))
-#############################
-# you need this call ONCE 
-app=pg.QtGui.QApplication([])
-#############################
+# termination criteria
+criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
 
-##### plot 3D surface data  ####
-w = gl.GLViewWidget()
-## Saddle example with x and y specified
-p = gl.GLSurfacePlotItem(x=X, y=X, z=Z, shader='heightColor')
-w.addItem(p)
-# show
-w.show()
-pg.QtGui.QApplication.exec_()
+# prepare object points, like (0,0,0), (1,0,0), (2,0,0) ....,(6,5,0)
+objp = np.zeros((6*7,3), np.float32)
+objp[:,:2] = np.mgrid[0:7,0:6].T.reshape(-1,2)
 
-#==============================================
+# Arrays to store object points and image points from all the images.
+objpoints = [] # 3d point in real world space
+imgpoints = [] # 2d points in image plane.
 
-##### plot 3D line data  ####
-w = gl.GLViewWidget()
-# first line
-Z=zeros(size(X))
-p=array([X,Y2,Z])
-p=p.transpose() 
-C=pg.glColor('w')
-###### SCATTER ######
-plt = gl.GLScatterPlotItem(pos=p, color=C)
-w.addItem(plt)
-# second line
-Z=zeros(size(X))
-p=array([X,Z,Y3])
-p=p.transpose() 
-C=pg.glColor('b')
-######## LINE  ############
-plt = gl.GLLinePlotItem(pos=p, connected=False,width=20.5,color=C)
-w.addItem(plt)
-# third line
-Z=zeros(size(X))
-p=array([Z,Y1,X])
-p=p.transpose() 
-C=pg.glColor('g')
-########### SCATTER #############
-plt = gl.GLScatterPlotItem(pos=p, color=C, size=20)
-w.addItem(plt)
-############# GRID #################
-g=gl.GLGridItem()
-w.addItem(g)
-# show
-w.show()
-pg.QtGui.QApplication.exec_()
+images = glob.glob('*.jpg')
+
+for fname in images:
+    img = cv2.imread(fname)
+    gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+
+    # Find the chess board corners
+    ret, corners = cv2.findChessboardCorners(gray, (7,6),None)
+
+    # If found, add object points, image points (after refining them)
+    if ret == True:
+        objpoints.append(objp)
+
+        corners2 = cv2.cornerSubPix(gray,corners,(11,11),(-1,-1),criteria)
+        imgpoints.append(corners2)
+
+        # Draw and display the corners
+        img = cv2.drawChessboardCorners(img, (7,6), corners2,ret)
+        cv2.imshow('img',img)
+        cv2.waitKey(500)
+
+print("print")
+cv2.destroyAllWindows()

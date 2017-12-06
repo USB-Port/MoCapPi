@@ -330,6 +330,10 @@ class CVHandler(QtGui.QWidget):
                     #self.file.write("\n")
                 self.pos = np.asarray(self.posArray)
                 #print(str(self.pos))
+
+                ###############
+                # Instead of passing to graphHandler, Pass to a different class to handle all point data
+
                 self.graphHandler.setPoints(self.pos)
 
 
@@ -342,6 +346,10 @@ class CVHandler(QtGui.QWidget):
 
                 #print(str(self.pos))
                 self.pos = np.asarray(self.posArray)
+
+                ###############
+                #Instead of passing to graphHandler, Pass to a different class to handle all point data
+
                 self.graphHandler.translatePoints(self.pos)
 
             #clear out whole list

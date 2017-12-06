@@ -4,6 +4,7 @@ import numpy as np
 import pyqtgraph.opengl as gl
 from numpy import *
 import threading
+from ConsoleOutput import *
 from PyQt4 import QtCore, QtGui, QtOpenGL
 
 from time import sleep
@@ -18,10 +19,10 @@ from time import sleep
 #pg.GraphicsLayoutWidget
 class GraphHandler(gl.GLViewWidget):
     #This class takes a Capture Area Object so that it can pass a Widget to OpenCVHandler
-    def __init__(self, GraphHandler):
+    def __init__(self, GraphHandler, consoleOutput):
         gl.GLViewWidget.__init__(self)
         #pg.mkQApp()
-
+        self.consoleOut = consoleOutput
         ## make a widget for displaying 3D objects
 
         self.pts = []
@@ -171,67 +172,11 @@ class GraphHandler(gl.GLViewWidget):
             self.deletePoints()
             self.timer.stop()
             self.lineNumber = 0
-            print("Playback ended")
+            self.consoleOut.outputText("Playing back Ended")
 
 
     def playbackMotion(self):
-        print("playing back Motion")
+        #Play back needs to be in a separate thread, QT does threads in Timer
+
+        self.consoleOut.outputText("Playing back motion")
         self.timer.start(self.playbackSpeed)
-        '''
-        #file = open(fileName, "r")
-        lastCommand = None
-        with open("motion.txt") as file:
-            for line in file:
-                line = line.strip("\n\r")
-                #print("line is "+ line)
-                self.pos = []
-                if line == "addpoint":
-                    #print("set last commond as addpoint")
-                    lastCommand = "addpoint"
-
-                elif line == "transpoint":
-                    #print("set last commond as trans")
-                    lastCommand = "transpoint"
-
-                else:
-                    data = re.findall(r"[0-9]+", line)
-                    #print(str(data))
-                    if len(data) != 0:
-                    #line = line.strip("[")  # or some other preprocessing
-                        self.pos.append([int(i) for i in data])  # storing everything in memory!
-
-                    #innerList = line.split(',')
-                    #del innerList[-1]
-                    #print("innerList is " +str(innerList))
-                    #self.pos.append(innerList)
-                    #print("pos is "+ str(self.pos))
-
-                    self.ppp = []
-
-                    for num in self.pos:
-                        i = 0
-                        while  i < len(num) - 3:
-                            self.ppp.append([num[i], num[i+1], num[i+2]])
-                            #print(str(self.ppp))
-                            i = i+3
-                    #print("wtf")
-
-
-
-                    if lastCommand == "addpoint":
-                        #print("set the point")
-                        #print(str(self.posToPlot))
-                        self.posToPlot = np.asarray(self.ppp)
-                        self.setPoints(self.posToPlot)
-                    elif lastCommand == "transpoint":
-                        #print("trans the point")
-                        print(str(self.posToPlot))
-                        self.posToPlot = np.asarray(self.ppp)
-                        self.translatePoints(self.posToPlot)
-                        #sleep(1)
-
-        #self.deletePoints()
-                    #self.graphHandler.setPoints(self.pos)
-
-                    #print("pos sssss "+ str(self.ppp))
-        '''
