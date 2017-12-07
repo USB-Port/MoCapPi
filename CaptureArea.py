@@ -333,8 +333,18 @@ class CaptureArea(QtGui.QWidget):
         self.cvHandler2.recordMotion()
 
     def stopRecording(self):
-        for cv in self.cvObjectLists:
-            cv.stopRecording()
+        if (len(self.cvObjectLists) > 0):
+            for cv in self.cvObjectLists:
+                cv.stopRecording()
+        else:
+            self.consoleOut.outputText("No cameras connected")
+
+    def takeCalibrationPicture(self):
+        if(len(self.cvObjectLists) > 0):
+            for cv in self.cvObjectLists:
+                cv.takeCalibrationPic()
+        else:
+            self.consoleOut.outputText("No cameras connected")
 
     def stop_playback(self):
         try:

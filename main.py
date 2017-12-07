@@ -57,7 +57,7 @@ class Ui_MainWindow(QtGui.QMainWindow):
     def __init__(self, MainWindow, *args, **kwargs):
         super(Ui_MainWindow, self).__init__(*args, **kwargs)
         #This is for the splash screen
-        showSplashScreen = True
+        showSplashScreen = False
         if(showSplashScreen == True):
             splashLogo = QtGui.QPixmap("./imgs/splashScreen.jpg")
             splashScreen = QtGui.QSplashScreen(splashLogo, QtCore.Qt.WindowStaysOnTopHint)
@@ -152,6 +152,9 @@ class Ui_MainWindow(QtGui.QMainWindow):
         self.connectCamerasAction = QtGui.QAction(QtGui.QIcon("./imgs/connect.ico"), "Connect to Cameras", MainWindow)
         self.connectCamerasAction.triggered.connect(self.connectCameras)
 
+        self.takePictureAction = QtGui.QAction(QtGui.QIcon("./imgs/takepicture.ico"), "take Calibration picture", MainWindow)
+        self.takePictureAction.triggered.connect(self.takeCalibrationPicture)
+
         # Let me tell you all a story about a mouse named glory
         #Here I create a tool bar and add it to the MainWindow.
         self.toolBar = MainWindow.addToolBar("Test test")
@@ -162,6 +165,10 @@ class Ui_MainWindow(QtGui.QMainWindow):
         self.toolBar.addAction(self.recordMotionAction)
         self.toolBar.addAction(self.testMotionAction)
         self.toolBar.addAction(self.connectCamerasAction)
+        self.toolBar.addAction(self.takePictureAction)
+
+    def takeCalibrationPicture(self):
+        self.captureArea.takeCalibrationPicture()
 
     def connectCameras(self):
         self.captureArea.connectToCameras()

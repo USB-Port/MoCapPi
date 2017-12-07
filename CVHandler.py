@@ -95,6 +95,16 @@ class CVHandler(QtGui.QWidget):
         self.numLastFrameTrackPoints = 0
         self.file = None
 
+        self.calibrationMode = True
+        self.objp = np.zeros((6 * 7, 3), np.float32)
+        self.objp[:, :2] = np.mgrid[0:7, 0:6].T.reshape(-1, 2)
+        self.criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
+
+        # Arrays to store object points and image points from all the images.
+        self.objpoints = []  # 3d point in real world space
+        self.imgpoints = []  # 2d points in image plane.
+        self.takePicture = False
+
 
         self.graphHandler = GraphHandler
 
@@ -273,91 +283,107 @@ class CVHandler(QtGui.QWidget):
             if scale == 0:
                 scale = 1
 
-            img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-            blurred = cv2.GaussianBlur(img, (11,11), 0)
-            threshed = cv2.threshold(blurred, self.lower, self.upper, cv2.THRESH_BINARY)[1]
-            threshed = cv2.erode(threshed, None, iterations=2)
-            threshed = cv2.dilate(threshed, None, iterations=4)
+            ### Checker Board Calibration Code ###
+            if (self.calibrationMode == True and self.takePicture == True):
+
+                self.__takeCalibrationPhoto(img)
+                self.takePicture = False
 
 
-            cnts = cv2.findContours(threshed.copy(), cv2.RETR_EXTERNAL,
-                                    cv2.CHAIN_APPROX_SIMPLE)[-2]
 
 
-            i = 0
-
-            ###self.pos = np.empty((len(self.points), 3))
-
-            self.numCurrentTrackPoints = 0
-
-            for (i, c) in enumerate(cnts):
-
-                ((x, y), radius) = cv2.minEnclosingCircle(c)
+            ##End Checker Board Calibration code ###
 
 
-                M = cv2.moments(c)
+            ### STart of tracking code
+            if(self.calibrationMode == False):
 
-                # this is center of a circle
-                center = int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"])
-
-                # These 2 points are the center of the mask object found. This only works on Balls
-                xx = int(M['m10'] / M['m00'])
-                yy = int(M['m01'] / M['m00'])
-
-
-                ###self.pos[self.t] = (xx, yy, 0)
-                self.posArray.append([xx, yy, 0])
-                #print(str(self.posArray))
-                self.numCurrentTrackPoints = self.numCurrentTrackPoints + 1
-
-                # only proceed if the radius meets a minimum size
-                ###if radius < self.radiusBound:
-                    # draw the circle and centroid on the frame,
-                    # then update the list of tracked points
-                cv2.circle(img, (int(xx), int(yy)), int(radius),
-                               (0, 255, 255), 2)
-                cv2.circle(img, center, 5, (0, 0, 255), -1)
-
-            ###if self.pos.shape[0] != len(cnts):
-                ###self.graphHandler.setPoints(self.pos)
-
-            if self.numCurrentTrackPoints != self.numLastFrameTrackPoints:
-                if(self.file is not None):
-                    self.file.write("\naddpoint\n")
-                    for line in self.pos:
-
-                        self.file.write("%s " % line)
-                    #self.file.write("\n")
-                self.pos = np.asarray(self.posArray)
-                #print(str(self.pos))
-
-                ###############
-                # Instead of passing to graphHandler, Pass to a different class to handle all point data
-
-                self.graphHandler.setPoints(self.pos)
+                img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+                blurred = cv2.GaussianBlur(img, (11,11), 0)
+                threshed = cv2.threshold(blurred, self.lower, self.upper, cv2.THRESH_BINARY)[1]
+                threshed = cv2.erode(threshed, None, iterations=2)
+                threshed = cv2.dilate(threshed, None, iterations=4)
 
 
-            elif self.graphHandler:
-                if (self.file is not None):
-                    self.file.write("\ntranspoint\n")
-                    for line in self.pos:
-                        self.file.write("%s " % line)
-                    #self.file.write("\n")
+                cnts = cv2.findContours(threshed.copy(), cv2.RETR_EXTERNAL,
+                                        cv2.CHAIN_APPROX_SIMPLE)[-2]
 
-                #print(str(self.pos))
-                self.pos = np.asarray(self.posArray)
 
-                ###############
-                #Instead of passing to graphHandler, Pass to a different class to handle all point data
+                i = 0
 
-                self.graphHandler.translatePoints(self.pos)
+                ###self.pos = np.empty((len(self.points), 3))
 
-            #clear out whole list
-            del self.posArray[:]
+                self.numCurrentTrackPoints = 0
 
-            self.numLastFrameTrackPoints = self.numCurrentTrackPoints
+                for (i, c) in enumerate(cnts):
 
-            img = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
+                    ((x, y), radius) = cv2.minEnclosingCircle(c)
+
+
+                    M = cv2.moments(c)
+
+                    # this is center of a circle
+                    center = int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"])
+
+                    # These 2 points are the center of the mask object found. This only works on Balls
+                    xx = int(M['m10'] / M['m00'])
+                    yy = int(M['m01'] / M['m00'])
+
+
+                    ###self.pos[self.t] = (xx, yy, 0)
+                    self.posArray.append([xx, yy, 0])
+                    #print(str(self.posArray))
+                    self.numCurrentTrackPoints = self.numCurrentTrackPoints + 1
+
+                    # only proceed if the radius meets a minimum size
+                    ###if radius < self.radiusBound:
+                        # draw the circle and centroid on the frame,
+                        # then update the list of tracked points
+                    cv2.circle(img, (int(xx), int(yy)), int(radius),
+                                   (0, 255, 255), 2)
+                    cv2.circle(img, center, 5, (0, 0, 255), -1)
+
+                ###if self.pos.shape[0] != len(cnts):
+                    ###self.graphHandler.setPoints(self.pos)
+
+                if self.numCurrentTrackPoints != self.numLastFrameTrackPoints:
+                    if(self.file is not None):
+                        self.file.write("\naddpoint\n")
+                        for line in self.pos:
+
+                            self.file.write("%s " % line)
+                        #self.file.write("\n")
+                    self.pos = np.asarray(self.posArray)
+                    #print(str(self.pos))
+
+                    ###############
+                    # Instead of passing to graphHandler, Pass to a different class to handle all point data
+
+                    self.graphHandler.setPoints(self.pos)
+
+
+                elif self.graphHandler:
+                    if (self.file is not None):
+                        self.file.write("\ntranspoint\n")
+                        for line in self.pos:
+                            self.file.write("%s " % line)
+                        #self.file.write("\n")
+
+                    #print(str(self.pos))
+                    self.pos = np.asarray(self.posArray)
+
+                    ###############
+                    #Instead of passing to graphHandler, Pass to a different class to handle all point data
+
+                    #self.graphHandler.translatePoints(self.pos)
+
+                #clear out whole list
+                del self.posArray[:]
+
+                self.numLastFrameTrackPoints = self.numCurrentTrackPoints
+
+            ####### End of tracking code #######
+            #######img = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
 
             #convert the img data to a QImage Format
             image = QtGui.QImage(img.data, width, height, bpl, QtGui.QImage.Format_RGB888)
@@ -508,6 +534,38 @@ class CVHandler(QtGui.QWidget):
         #self.pts =self.points
         #if self.graphHandler:
             #self.graphHandler.addPoints(self.pts)
+
+    def takeCalibrationPic(self):
+        self.takePicture = True
+
+    def __takeCalibrationPhoto(self, image):
+        img = image
+        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+        # Find the chess board corners
+        ret, corners = cv2.findChessboardCorners(gray, (7, 9), None)
+
+        # If found, add object points, image points (after refining them)
+        if ret == True:
+            self.objpoints.append(self.objp)
+
+            corners2 = cv2.cornerSubPix(gray, corners, (11, 11), (-1, -1), self.criteria)
+            self.imgpoints.append(corners2)
+
+            # Draw and display the corners
+            img = cv2.drawChessboardCorners(img, (7, 6), corners2, ret)
+            cv2.imshow("img", img)
+
+        #ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(self.objpoints, self.imgpoints, gray.shape[::-1], None, None)
+        #print("ret " + str(ret))
+        #print("mtx " + str(mtx))
+        #print("dist " + str(dist))
+        #print("rvecs " + str(rvecs))
+        #print("tvecx " + str(tvecs))
+        #self.takePicture = False
+
+
+
 
 
 #This class is for updating the QWidget with the video frame gotten from OpenCV, don't need to change it.
