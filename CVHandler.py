@@ -44,6 +44,10 @@ import re
 import pyqtgraph.opengl as gl
 from PyQt4.QtCore import QObject, pyqtSignal
 from PyQt4 import QtCore, QtGui
+import json
+from pathlib import Path
+from io import open
+import yaml_1 as yaml
 
 
 try:
@@ -76,9 +80,62 @@ class CVHandler(QtGui.QWidget):
     # and each camera can update the OpenGLHandler, then the OpenGLHandler can concregate the point positions.
     #The QWidget is a tab that tells the class where to put the video feed. NOTE, Once we get everything all sorted,
     # we will not need to show the video feed unless we need to, so a default None could be used.
-    def __init__(self, QWidget, cam, GraphHandler=None):
+    def __init__(self, QWidget, cam, camNum, GraphHandler=None):
         super(CVHandler, self).__init__()
         #this just assigns the class veriable to what was passed in
+
+
+        if(camNum == 101):
+            calibrateFile = Path("./101.json")
+            if calibrateFile.is_file():
+                print("File found")
+
+                data = json.load(open('./101.json'))
+
+                self.mtx = data["mtx"]
+                self.dist = data["dist"]
+
+                #print("mtx " + str(self.mtx))
+                #print("dist " + str(self.dist))
+        if (camNum == 102):
+            calibrateFile = Path("./102.json")
+            if calibrateFile.is_file():
+                print("File found")
+
+                data = json.load(open('./102.json'))
+
+                self.mtx = data["mtx"]
+                self.dist = data["dist"]
+
+                #print("mtx " + str(self.mtx))
+                #print("dist " + str(self.dist))
+
+        if (camNum == 103):
+            calibrateFile = Path("./103.json")
+            if calibrateFile.is_file():
+                print("File found")
+
+                data = json.load(open('./103.json'))
+
+                self.mtx = data["mtx"]
+                self.dist = data["dist"]
+
+                print("mtx " + str(self.mtx))
+                print("dist " + str(self.dist))
+
+        if (camNum == 100):
+            calibrateFile = Path("./100.json")
+            if calibrateFile.is_file():
+                print("File found")
+
+                data = json.load(open('./100.json'))
+
+                self.mtx = data["mtx"]
+                self.dist = data["dist"]
+
+                print("mtx " + str(self.mtx))
+                print("dist " + str(self.dist))
+
 
         self.image = None
         self.running = False
@@ -95,15 +152,18 @@ class CVHandler(QtGui.QWidget):
         self.numLastFrameTrackPoints = 0
         self.file = None
 
-        self.calibrationMode = True
-        self.objp = np.zeros((6 * 7, 3), np.float32)
-        self.objp[:, :2] = np.mgrid[0:7, 0:6].T.reshape(-1, 2)
+        self.calibrationMode = False
+        self.objp = np.zeros((9 * 7, 3), np.float32)
+        self.objp[:, :2] = np.mgrid[0:7, 0:9].T.reshape(-1, 2)
+        #self.objp = self.objp.reshape(-1, 1, 3)
         self.criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
 
         # Arrays to store object points and image points from all the images.
         self.objpoints = []  # 3d point in real world space
         self.imgpoints = []  # 2d points in image plane.
         self.takePicture = False
+
+        self.count = 0
 
 
         self.graphHandler = GraphHandler
@@ -285,9 +345,9 @@ class CVHandler(QtGui.QWidget):
 
             ### Checker Board Calibration Code ###
             if (self.calibrationMode == True and self.takePicture == True):
-
-                self.__takeCalibrationPhoto(img)
                 self.takePicture = False
+                self.__takeCalibrationPhoto(img)
+
 
 
 
@@ -297,8 +357,12 @@ class CVHandler(QtGui.QWidget):
 
             ### STart of tracking code
             if(self.calibrationMode == False):
-
                 img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+                newcameramtx, roi = cv2.getOptimalNewCameraMatrix(np.asarray(self.mtx), np.asarray(self.dist), (width, height), 1, (width, height))
+                img = cv2.undistort(img, np.asarray(self.mtx), np.asarray(self.dist), None, newcameramtx)
+
+
                 blurred = cv2.GaussianBlur(img, (11,11), 0)
                 threshed = cv2.threshold(blurred, self.lower, self.upper, cv2.THRESH_BINARY)[1]
                 threshed = cv2.erode(threshed, None, iterations=2)
@@ -375,7 +439,7 @@ class CVHandler(QtGui.QWidget):
                     ###############
                     #Instead of passing to graphHandler, Pass to a different class to handle all point data
 
-                    #self.graphHandler.translatePoints(self.pos)
+                    self.graphHandler.translatePoints(self.pos)
 
                 #clear out whole list
                 del self.posArray[:]
@@ -383,7 +447,7 @@ class CVHandler(QtGui.QWidget):
                 self.numLastFrameTrackPoints = self.numCurrentTrackPoints
 
             ####### End of tracking code #######
-            #######img = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
+                img = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
 
             #convert the img data to a QImage Format
             image = QtGui.QImage(img.data, width, height, bpl, QtGui.QImage.Format_RGB888)
@@ -553,16 +617,27 @@ class CVHandler(QtGui.QWidget):
             self.imgpoints.append(corners2)
 
             # Draw and display the corners
-            img = cv2.drawChessboardCorners(img, (7, 6), corners2, ret)
-            cv2.imshow("img", img)
+            img = cv2.drawChessboardCorners(img, (7, 9), corners2, ret)
+            #cv2.imshow("img", img)
+            self.count = self.count + 1
+            if(self.count == 50):
+                ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(self.objpoints, self.imgpoints, gray.shape[::-1], None, None)
+                # print("ret " + str(ret))
+                # print("mtx " + str(mtx))
+                # print("dist " + str(dist))
+                # print("rvecs " + str(rvecs))
+                # print("tvecx " + str(tvecs))
 
-        #ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(self.objpoints, self.imgpoints, gray.shape[::-1], None, None)
-        #print("ret " + str(ret))
-        #print("mtx " + str(mtx))
-        #print("dist " + str(dist))
-        #print("rvecs " + str(rvecs))
-        #print("tvecx " + str(tvecs))
-        #self.takePicture = False
+                mtx = mtx.tolist()
+                dist = dist.tolist()
+
+                data = {"mtx": mtx, "dist": dist}
+                fname = "103.json"
+
+                with open(fname, "w") as f:
+                    json.dump(data, f)
+
+
 
 
 

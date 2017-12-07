@@ -276,8 +276,8 @@ class CaptureArea(QtGui.QWidget):
         lastWidget = self.getWidget()
 
         try:
-            cvHandler = CVHandler(self.widgets[lastWidget], "tcp://192.168.1.101:9092", self.graphHandler)
-            self.cvObjectLists.append(cvHandler)
+            cvHandler = CVHandler(self.widgets[lastWidget], "tcp://192.168.1.101:9092", 101, self.graphHandler)
+            #self.cvObjectLists.append(cvHandler)
             self.newTab()
             # self.cvHandler2 = CVHandler(self.widgets[1], "tcp://192.168.2.201:9092", self.graphHandler)
             # self.cvHandler2.start_clicked()
@@ -288,8 +288,8 @@ class CaptureArea(QtGui.QWidget):
         lastWidget = self.getWidget()
 
         try:
-            cvHandler = CVHandler(self.widgets[lastWidget], "tcp://192.168.1.102:9092", self.graphHandler)
-            self.cvObjectLists.append(cvHandler)
+            cvHandler = CVHandler(self.widgets[lastWidget], "tcp://192.168.1.102:9092", 102, self.graphHandler)
+            #self.cvObjectLists.append(cvHandler)
             self.newTab()
             # self.cvHandler2 = CVHandler(self.widgets[1], "tcp://192.168.2.201:9092", self.graphHandler)
             # self.cvHandler2.start_clicked()
@@ -300,7 +300,7 @@ class CaptureArea(QtGui.QWidget):
         lastWidget = self.getWidget()
 
         try:
-            cvHandler = CVHandler(self.widgets[lastWidget], "tcp://192.168.1.103:9092", self.graphHandler)
+            cvHandler = CVHandler(self.widgets[lastWidget], "tcp://192.168.1.103:9092",103, self.graphHandler)
             self.cvObjectLists.append(cvHandler)
             self.newTab()
             # self.cvHandler2 = CVHandler(self.widgets[1], "tcp://192.168.2.201:9092", self.graphHandler)
@@ -312,8 +312,8 @@ class CaptureArea(QtGui.QWidget):
         lastWidget = self.getWidget()
 
         try:
-            cvHandler = CVHandler(self.widgets[lastWidget], "tcp://192.168.1.100:9092", self.graphHandler)
-            self.cvObjectLists.append(cvHandler)
+            cvHandler = CVHandler(self.widgets[lastWidget], "tcp://192.168.1.100:9092",100, self.graphHandler)
+            #self.cvObjectLists.append(cvHandler)
             self.newTab()
             # self.cvHandler2 = CVHandler(self.widgets[1], "tcp://192.168.2.201:9092", self.graphHandler)
             # self.cvHandler2.start_clicked()
@@ -342,6 +342,7 @@ class CaptureArea(QtGui.QWidget):
     def takeCalibrationPicture(self):
         if(len(self.cvObjectLists) > 0):
             for cv in self.cvObjectLists:
+                self.consoleOut.outputText("Taking Pictures")
                 cv.takeCalibrationPic()
         else:
             self.consoleOut.outputText("No cameras connected")
@@ -368,7 +369,6 @@ class CaptureArea(QtGui.QWidget):
         #CaptureArea.newTab()
         #lastTab = len(self.tabs) - 1
         lastWidget = len(self.widgets) - 1
-        print(lastWidget)
         return int(lastWidget)
 
     def getGraph(self):
