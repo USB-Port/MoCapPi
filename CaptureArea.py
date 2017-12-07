@@ -90,6 +90,7 @@ class CaptureArea(QtGui.QWidget):
         self.captureArea = QtGui.QTabWidget(QWidget)
         self.captureArea.setObjectName(_fromUtf8("captureArea"))
 
+        #Stores the 4 camera threads
         self.cvObjectLists = []
 
         #The graph handler object
@@ -276,8 +277,18 @@ class CaptureArea(QtGui.QWidget):
         lastWidget = self.getWidget()
 
         try:
+            cvHandler = CVHandler(self.widgets[lastWidget], "tcp://192.168.1.100:9092",100, self.graphHandler)
+            self.cvObjectLists.append(cvHandler)
+            self.newTab()
+            # self.cvHandler2 = CVHandler(self.widgets[1], "tcp://192.168.2.201:9092", self.graphHandler)
+            # self.cvHandler2.start_clicked()
+            # self.consoleOut.outputText("Playing video from webcam")
+        except:
+            self.consoleOut.outputText("Error has occurred while connecting to 192.168.1.100")
+
+        try:
             cvHandler = CVHandler(self.widgets[lastWidget], "tcp://192.168.1.101:9092", 101, self.graphHandler)
-            #self.cvObjectLists.append(cvHandler)
+            self.cvObjectLists.append(cvHandler)
             self.newTab()
             # self.cvHandler2 = CVHandler(self.widgets[1], "tcp://192.168.2.201:9092", self.graphHandler)
             # self.cvHandler2.start_clicked()
@@ -289,7 +300,7 @@ class CaptureArea(QtGui.QWidget):
 
         try:
             cvHandler = CVHandler(self.widgets[lastWidget], "tcp://192.168.1.102:9092", 102, self.graphHandler)
-            #self.cvObjectLists.append(cvHandler)
+            self.cvObjectLists.append(cvHandler)
             self.newTab()
             # self.cvHandler2 = CVHandler(self.widgets[1], "tcp://192.168.2.201:9092", self.graphHandler)
             # self.cvHandler2.start_clicked()
@@ -310,16 +321,6 @@ class CaptureArea(QtGui.QWidget):
             self.consoleOut.outputText("Error has occurred while connecting to 192.168.1.103")
 
         lastWidget = self.getWidget()
-
-        try:
-            cvHandler = CVHandler(self.widgets[lastWidget], "tcp://192.168.1.100:9092",100, self.graphHandler)
-            #self.cvObjectLists.append(cvHandler)
-            self.newTab()
-            # self.cvHandler2 = CVHandler(self.widgets[1], "tcp://192.168.2.201:9092", self.graphHandler)
-            # self.cvHandler2.start_clicked()
-            # self.consoleOut.outputText("Playing video from webcam")
-        except:
-            self.consoleOut.outputText("Error has occurred while connecting to 192.168.1.104")
 
         for cv in self.cvObjectLists:
             cv.start_clicked()
@@ -392,7 +393,7 @@ class CaptureArea(QtGui.QWidget):
 
 
     def updateWindowSize(self):
-        print("wht the fuck")
+        #print("wht the fuck")
         self.window_width = self.captureArea.frameSize().width()
         self.window_height = self.captureArea.frameSize().height()
 
@@ -404,3 +405,5 @@ class CaptureArea(QtGui.QWidget):
     def updatePoints(self):
         self.cvHandler2.setPoints()
         print("test")
+
+    def epipolar(self):

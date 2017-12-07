@@ -83,7 +83,7 @@ class CVHandler(QtGui.QWidget):
     def __init__(self, QWidget, cam, camNum, GraphHandler=None):
         super(CVHandler, self).__init__()
         #this just assigns the class veriable to what was passed in
-
+        self.camNum = camNum
 
         if(camNum == 101):
             calibrateFile = Path("./101.json")
@@ -329,9 +329,9 @@ class CVHandler(QtGui.QWidget):
             frame = self.queue.get()
 
             #frame is a dictionry, so this will give us the data accotiated with the key value "img"
-            img = frame["img"]
+            self.img = frame["img"]
 
-            height, width, bpc = img.shape
+            height, width, bpc = self.img.shape
             bpl = bpc * width
 
             #These 3 lines are to keep the correct aspect ratio. This might not be needed.
@@ -346,7 +346,7 @@ class CVHandler(QtGui.QWidget):
             ### Checker Board Calibration Code ###
             if (self.calibrationMode == True and self.takePicture == True):
                 self.takePicture = False
-                self.__takeCalibrationPhoto(img)
+                self.__takeCalibrationPhoto(self.img)
 
 
 
@@ -357,13 +357,13 @@ class CVHandler(QtGui.QWidget):
 
             ### STart of tracking code
             if(self.calibrationMode == False):
-                img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+                self.img = cv2.cvtColor(self.img, cv2.COLOR_BGR2GRAY)
 
                 newcameramtx, roi = cv2.getOptimalNewCameraMatrix(np.asarray(self.mtx), np.asarray(self.dist), (width, height), 1, (width, height))
-                img = cv2.undistort(img, np.asarray(self.mtx), np.asarray(self.dist), None, newcameramtx)
+                self.img = cv2.undistort(self.img, np.asarray(self.mtx), np.asarray(self.dist), None, newcameramtx)
 
 
-                blurred = cv2.GaussianBlur(img, (11,11), 0)
+                blurred = cv2.GaussianBlur(self.img, (11,11), 0)
                 threshed = cv2.threshold(blurred, self.lower, self.upper, cv2.THRESH_BINARY)[1]
                 threshed = cv2.erode(threshed, None, iterations=2)
                 threshed = cv2.dilate(threshed, None, iterations=4)
@@ -403,9 +403,9 @@ class CVHandler(QtGui.QWidget):
                     ###if radius < self.radiusBound:
                         # draw the circle and centroid on the frame,
                         # then update the list of tracked points
-                    cv2.circle(img, (int(xx), int(yy)), int(radius),
+                    cv2.circle(self.img, (int(xx), int(yy)), int(radius),
                                    (0, 255, 255), 2)
-                    cv2.circle(img, center, 5, (0, 0, 255), -1)
+                    cv2.circle(self.img, center, 5, (0, 0, 255), -1)
 
                 ###if self.pos.shape[0] != len(cnts):
                     ###self.graphHandler.setPoints(self.pos)
@@ -447,10 +447,10 @@ class CVHandler(QtGui.QWidget):
                 self.numLastFrameTrackPoints = self.numCurrentTrackPoints
 
             ####### End of tracking code #######
-                img = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
+                self.img = cv2.cvtColor(self.img, cv2.COLOR_GRAY2RGB)
 
             #convert the img data to a QImage Format
-            image = QtGui.QImage(img.data, width, height, bpl, QtGui.QImage.Format_RGB888)
+            image = QtGui.QImage(self.img.data, width, height, bpl, QtGui.QImage.Format_RGB888)
 
             #pass that image to get updated
             self.ImgWidget.setImage(image)
