@@ -94,9 +94,10 @@ class CVHandler(QtGui.QWidget):
 
                 self.mtx = data["mtx"]
                 self.dist = data["dist"]
+                self.rvecs = data["rvecs"]
+                self.tvecs = data["tvecs"]
 
-                #print("mtx " + str(self.mtx))
-                #print("dist " + str(self.dist))
+
         if (camNum == 102):
             calibrateFile = Path("./102.json")
             if calibrateFile.is_file():
@@ -106,9 +107,10 @@ class CVHandler(QtGui.QWidget):
 
                 self.mtx = data["mtx"]
                 self.dist = data["dist"]
+                self.rvecs = data["rvecs"]
+                self.tvecs = data["tvecs"]
 
-                #print("mtx " + str(self.mtx))
-                #print("dist " + str(self.dist))
+
 
         if (camNum == 103):
             calibrateFile = Path("./103.json")
@@ -119,9 +121,10 @@ class CVHandler(QtGui.QWidget):
 
                 self.mtx = data["mtx"]
                 self.dist = data["dist"]
+                self.rvecs = data["rvecs"]
+                self.tvecs = data["tvecs"]
 
-                print("mtx " + str(self.mtx))
-                print("dist " + str(self.dist))
+
 
         if (camNum == 100):
             calibrateFile = Path("./100.json")
@@ -132,9 +135,10 @@ class CVHandler(QtGui.QWidget):
 
                 self.mtx = data["mtx"]
                 self.dist = data["dist"]
+                self.rvecs = data["rvecs"]
+                self.tvecs = data["tvecs"]
 
-                print("mtx " + str(self.mtx))
-                print("dist " + str(self.dist))
+
 
 
         self.image = None
@@ -151,6 +155,8 @@ class CVHandler(QtGui.QWidget):
         self.numCurrentTrackPoints = 0
         self.numLastFrameTrackPoints = 0
         self.file = None
+        self.file = open("motion.txt", "a")
+        self.file.write("addpoint\n")
 
         self.calibrationMode = False
         self.objp = np.zeros((9 * 7, 3), np.float32)
@@ -161,7 +167,7 @@ class CVHandler(QtGui.QWidget):
         # Arrays to store object points and image points from all the images.
         self.objpoints = []  # 3d point in real world space
         self.imgpoints = []  # 2d points in image plane.
-        self.takePicture = False
+        self.takePicture = True
 
         self.count = 0
 
@@ -329,9 +335,9 @@ class CVHandler(QtGui.QWidget):
             frame = self.queue.get()
 
             #frame is a dictionry, so this will give us the data accotiated with the key value "img"
-            self.img = frame["img"]
+            img = frame["img"]
 
-            height, width, bpc = self.img.shape
+            height, width, bpc = img.shape
             bpl = bpc * width
 
             #These 3 lines are to keep the correct aspect ratio. This might not be needed.
@@ -346,7 +352,7 @@ class CVHandler(QtGui.QWidget):
             ### Checker Board Calibration Code ###
             if (self.calibrationMode == True and self.takePicture == True):
                 self.takePicture = False
-                self.__takeCalibrationPhoto(self.img)
+                self.__takeCalibrationPhoto(img)
 
 
 
@@ -357,13 +363,14 @@ class CVHandler(QtGui.QWidget):
 
             ### STart of tracking code
             if(self.calibrationMode == False):
-                self.img = cv2.cvtColor(self.img, cv2.COLOR_BGR2GRAY)
+                img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
 
                 newcameramtx, roi = cv2.getOptimalNewCameraMatrix(np.asarray(self.mtx), np.asarray(self.dist), (width, height), 1, (width, height))
-                self.img = cv2.undistort(self.img, np.asarray(self.mtx), np.asarray(self.dist), None, newcameramtx)
+                img = cv2.undistort(img, np.asarray(self.mtx), np.asarray(self.dist), None, newcameramtx)
 
 
-                blurred = cv2.GaussianBlur(self.img, (11,11), 0)
+                blurred = cv2.GaussianBlur(img, (11,11), 0)
                 threshed = cv2.threshold(blurred, self.lower, self.upper, cv2.THRESH_BINARY)[1]
                 threshed = cv2.erode(threshed, None, iterations=2)
                 threshed = cv2.dilate(threshed, None, iterations=4)
@@ -403,20 +410,20 @@ class CVHandler(QtGui.QWidget):
                     ###if radius < self.radiusBound:
                         # draw the circle and centroid on the frame,
                         # then update the list of tracked points
-                    cv2.circle(self.img, (int(xx), int(yy)), int(radius),
+                    cv2.circle(img, (int(xx), int(yy)), int(radius),
                                    (0, 255, 255), 2)
-                    cv2.circle(self.img, center, 5, (0, 0, 255), -1)
+                    cv2.circle(img, center, 5, (0, 0, 255), -1)
 
                 ###if self.pos.shape[0] != len(cnts):
                     ###self.graphHandler.setPoints(self.pos)
 
                 if self.numCurrentTrackPoints != self.numLastFrameTrackPoints:
                     if(self.file is not None):
-                        self.file.write("\naddpoint\n")
                         for line in self.pos:
 
                             self.file.write("%s " % line)
                         #self.file.write("\n")
+                        self.file.write("\naddpoint\n")
                     self.pos = np.asarray(self.posArray)
                     #print(str(self.pos))
 
@@ -428,10 +435,11 @@ class CVHandler(QtGui.QWidget):
 
                 elif self.graphHandler:
                     if (self.file is not None):
-                        self.file.write("\ntranspoint\n")
+
                         for line in self.pos:
                             self.file.write("%s " % line)
                         #self.file.write("\n")
+                        self.file.write("\ntranspoint\n")
 
                     #print(str(self.pos))
                     self.pos = np.asarray(self.posArray)
@@ -447,10 +455,10 @@ class CVHandler(QtGui.QWidget):
                 self.numLastFrameTrackPoints = self.numCurrentTrackPoints
 
             ####### End of tracking code #######
-                self.img = cv2.cvtColor(self.img, cv2.COLOR_GRAY2RGB)
+                img = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
 
             #convert the img data to a QImage Format
-            image = QtGui.QImage(self.img.data, width, height, bpl, QtGui.QImage.Format_RGB888)
+            image = QtGui.QImage(img.data, width, height, bpl, QtGui.QImage.Format_RGB888)
 
             #pass that image to get updated
             self.ImgWidget.setImage(image)
@@ -478,10 +486,10 @@ class CVHandler(QtGui.QWidget):
 
             #The grab and retrive method is the same as a "capture.read()" Just grabs and retrive, Docs can explain it better
             capture.grab()
-            ret, self.img = capture.retrieve(0)
+            ret, img = capture.retrieve(0)
 
             #flip the image
-            self.img = cv2.flip(self.img, 1)
+            img = cv2.flip(img, 1)
 
             #If the captrue cannot retrive a frame from the camera, then ret will be false. so running = false now
             if(ret == False):
@@ -490,7 +498,7 @@ class CVHandler(QtGui.QWidget):
             #retval, img = capture.read()
 
             #add img to the key value of img, recall frame is a dictionary
-            self.frame["img"] = self.img
+            self.frame["img"] = img
 
             #If the queue is less than 10, add the frame to the queue, else, drop the frame into the void
             if self.queue.qsize() < 10:
@@ -532,7 +540,7 @@ class CVHandler(QtGui.QWidget):
         self.file = None
 
     def setPoints(self):
-        img = cv2.cvtColor(self.img, cv2.COLOR_BGR2GRAY)
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         blurred = cv2.GaussianBlur(img, (11, 11), 0)
         threshed = cv2.threshold(blurred, self.lower, self.upper, cv2.THRESH_BINARY)[1]
         threshed = cv2.erode(threshed, None, iterations=2)
@@ -628,11 +636,14 @@ class CVHandler(QtGui.QWidget):
                 # print("rvecs " + str(rvecs))
                 # print("tvecx " + str(tvecs))
 
+
                 mtx = mtx.tolist()
                 dist = dist.tolist()
+                rvecs = np.asarray(rvecs).tolist()
+                tvecs = np.asarray(tvecs).tolist()
 
-                data = {"mtx": mtx, "dist": dist}
-                fname = "103.json"
+                data = {"mtx": mtx, "dist": dist, "rvecs": rvecs, "tvecs": tvecs}
+                fname = "102.json"
 
                 with open(fname, "w") as f:
                     json.dump(data, f)

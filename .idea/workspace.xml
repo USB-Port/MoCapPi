@@ -2,9 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="27984a16-d994-4d9f-9e43-4a2f28b26b1d" name="Default" comment="">
+      <change type="DELETED" beforePath="$PROJECT_DIR$/100.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/101.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/102.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/103.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/motion.txt" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/CVHandler.py" afterPath="$PROJECT_DIR$/CVHandler.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/CaptureArea.py" afterPath="$PROJECT_DIR$/CaptureArea.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/GraphHandler.py" afterPath="$PROJECT_DIR$/GraphHandler.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.py" afterPath="$PROJECT_DIR$/main.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -19,8 +26,8 @@
       <file leaf-file-name="main.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="192">
-              <caret line="173" column="43" lean-forward="false" selection-start-line="173" selection-start-column="43" selection-end-line="173" selection-end-column="43" />
+            <state relative-caret-position="476">
+              <caret line="188" column="0" lean-forward="true" selection-start-line="188" selection-start-column="0" selection-end-line="188" selection-end-column="0" />
               <folding>
                 <element signature="e#1151#1161#0" expanded="true" />
               </folding>
@@ -28,11 +35,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CaptureArea.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="CaptureArea.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/CaptureArea.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="763">
-              <caret line="409" column="0" lean-forward="false" selection-start-line="409" selection-start-column="0" selection-end-line="409" selection-end-column="0" />
+            <state relative-caret-position="476">
+              <caret line="406" column="35" lean-forward="true" selection-start-line="406" selection-start-column="35" selection-end-line="406" selection-end-column="35" />
               <folding>
                 <element signature="e#2811#2842#0" expanded="true" />
               </folding>
@@ -40,11 +47,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CVHandler.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="CVHandler.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/CVHandler.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="311">
-              <caret line="580" column="34" lean-forward="false" selection-start-line="580" selection-start-column="28" selection-end-line="580" selection-end-column="34" />
+            <state relative-caret-position="-134">
+              <caret line="419" column="34" lean-forward="false" selection-start-line="419" selection-start-column="34" selection-end-line="419" selection-end-column="34" />
               <folding>
                 <element signature="e#1610#1620#0" expanded="true" />
               </folding>
@@ -52,10 +59,20 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="motion.txt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/motion.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="5" lean-forward="true" selection-start-line="0" selection-start-column="5" selection-end-line="0" selection-end-column="5" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="ProjectViewer.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ProjectViewer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="197">
+            <state relative-caret-position="622">
               <caret line="86" column="40" lean-forward="false" selection-start-line="86" selection-start-column="40" selection-end-line="86" selection-end-column="40" />
               <folding />
             </state>
@@ -65,7 +82,7 @@
       <file leaf-file-name="test.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
+            <state relative-caret-position="221">
               <caret line="15" column="27" lean-forward="false" selection-start-line="15" selection-start-column="27" selection-end-line="15" selection-end-column="27" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
@@ -77,7 +94,7 @@
       <file leaf-file-name="piCamScript.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/piCamScript.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-5423">
+            <state relative-caret-position="238">
               <caret line="14" column="19" lean-forward="false" selection-start-line="14" selection-start-column="19" selection-end-line="14" selection-end-column="19" />
               <folding />
             </state>
@@ -99,21 +116,11 @@
       <file leaf-file-name="GraphHandler.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/GraphHandler.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2618">
-              <caret line="170" column="41" lean-forward="false" selection-start-line="170" selection-start-column="41" selection-end-line="170" selection-end-column="41" />
+            <state relative-caret-position="180">
+              <caret line="66" column="32" lean-forward="true" selection-start-line="66" selection-start-column="32" selection-end-line="66" selection-end-column="32" />
               <folding>
                 <element signature="e#0#71#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="motion.txt" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/motion.txt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="357">
-              <caret line="21" column="0" lean-forward="false" selection-start-line="21" selection-start-column="0" selection-end-line="22" selection-end-column="10" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -129,16 +136,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>connectTi</find>
-      <find>setupw</find>
-      <find>inrag</find>
-      <find>object</find>
-      <find>open</find>
-      <find>scat</find>
-      <find>pain</find>
-      <find>self.consoleOutput.outputText</find>
-      <find>consoleOutput</find>
-      <find>camera tu</find>
       <find>console</find>
       <find>dockWi</find>
       <find>QtGui.QDockWidget</find>
@@ -150,7 +147,6 @@
       <find>save</find>
       <find>101</find>
       <find>####</find>
-      <find>calibration</find>
       <find>image</find>
       <find>frame</find>
       <find>img</find>
@@ -158,7 +154,18 @@
       <find>camnum</find>
       <find>connectCamera</find>
       <find>fundamental</find>
+      <find>self.img</find>
+      <find>calibrationMode</find>
+      <find>2</find>
+      <find>103</find>
+      <find>100</find>
+      <find>102</find>
+      <find>rvecs</find>
+      <find>calibration</find>
+      <find>composeRT</find>
       <find>append</find>
+      <find>calibrate</find>
+      <find>calibrationmode</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -179,14 +186,14 @@
         <option value="$PROJECT_DIR$/ConnectToStreamBox.py" />
         <option value="$PROJECT_DIR$/piStream.py" />
         <option value="$PROJECT_DIR$/Point.py" />
-        <option value="$PROJECT_DIR$/motion.txt" />
         <option value="$PROJECT_DIR$/piCamScript.py" />
         <option value="$PROJECT_DIR$/ConsoleOutput.py" />
-        <option value="$PROJECT_DIR$/GraphHandler.py" />
         <option value="$PROJECT_DIR$/test.py" />
-        <option value="$PROJECT_DIR$/CVHandler.py" />
-        <option value="$PROJECT_DIR$/main.py" />
         <option value="$PROJECT_DIR$/CaptureArea.py" />
+        <option value="$PROJECT_DIR$/main.py" />
+        <option value="$PROJECT_DIR$/CVHandler.py" />
+        <option value="$PROJECT_DIR$/motion.txt" />
+        <option value="$PROJECT_DIR$/GraphHandler.py" />
       </list>
     </option>
   </component>
@@ -212,8 +219,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="Scratches" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -465,17 +472,18 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.10104167" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24947146" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32980973" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24947146" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.21881607" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.21881607" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -794,10 +802,28 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/motion.txt">
+    <entry file="file://$PROJECT_DIR$/101.json" />
+    <entry file="file://$PROJECT_DIR$/100.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="21" column="0" lean-forward="false" selection-start-line="21" selection-start-column="0" selection-end-line="22" selection-end-column="10" />
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="66" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="15" column="27" lean-forward="false" selection-start-line="15" selection-start-column="27" selection-end-line="15" selection-end-column="27" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/piCamScript.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="14" column="19" lean-forward="false" selection-start-line="14" selection-start-column="19" selection-end-line="14" selection-end-column="19" />
           <folding />
         </state>
       </provider>
@@ -812,46 +838,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/101.json" />
-    <entry file="file://$PROJECT_DIR$/GraphHandler.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2618">
-          <caret line="170" column="41" lean-forward="false" selection-start-line="170" selection-start-column="41" selection-end-line="170" selection-end-column="41" />
-          <folding>
-            <element signature="e#0#71#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/100.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="66" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="15" column="27" lean-forward="false" selection-start-line="15" selection-start-column="27" selection-end-line="15" selection-end-column="27" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/piCamScript.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-5423">
-          <caret line="14" column="19" lean-forward="false" selection-start-line="14" selection-start-column="19" selection-end-line="14" selection-end-column="19" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ProjectViewer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="197">
+        <state relative-caret-position="622">
           <caret line="86" column="40" lean-forward="false" selection-start-line="86" selection-start-column="40" selection-end-line="86" selection-end-column="40" />
           <folding />
         </state>
@@ -859,30 +848,48 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="192">
-          <caret line="173" column="43" lean-forward="false" selection-start-line="173" selection-start-column="43" selection-end-line="173" selection-end-column="43" />
+        <state relative-caret-position="476">
+          <caret line="188" column="0" lean-forward="true" selection-start-line="188" selection-start-column="0" selection-end-line="188" selection-end-column="0" />
           <folding>
             <element signature="e#1151#1161#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/CVHandler.py">
+    <entry file="file://$PROJECT_DIR$/CaptureArea.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="311">
-          <caret line="580" column="34" lean-forward="false" selection-start-line="580" selection-start-column="28" selection-end-line="580" selection-end-column="34" />
+        <state relative-caret-position="476">
+          <caret line="406" column="35" lean-forward="true" selection-start-line="406" selection-start-column="35" selection-end-line="406" selection-end-column="35" />
           <folding>
-            <element signature="e#1610#1620#0" expanded="true" />
+            <element signature="e#2811#2842#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/CaptureArea.py">
+    <entry file="file://$PROJECT_DIR$/GraphHandler.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="763">
-          <caret line="409" column="0" lean-forward="false" selection-start-line="409" selection-start-column="0" selection-end-line="409" selection-end-column="0" />
+        <state relative-caret-position="180">
+          <caret line="66" column="32" lean-forward="true" selection-start-line="66" selection-start-column="32" selection-end-line="66" selection-end-column="32" />
           <folding>
-            <element signature="e#2811#2842#0" expanded="true" />
+            <element signature="e#0#71#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/motion.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="5" lean-forward="true" selection-start-line="0" selection-start-column="5" selection-end-line="0" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CVHandler.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-134">
+          <caret line="419" column="34" lean-forward="false" selection-start-line="419" selection-start-column="34" selection-end-line="419" selection-end-column="34" />
+          <folding>
+            <element signature="e#1610#1620#0" expanded="true" />
           </folding>
         </state>
       </provider>

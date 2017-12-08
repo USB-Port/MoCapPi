@@ -83,8 +83,8 @@ class GraphHandler(gl.GLViewWidget):
         self.timer.timeout.connect(self.play)
         self.lineNumber = 0
         self.lastCommand = None
-        self.playbackSpeed = 25
-        self.pointSize = 10.0
+        self.playbackSpeed = 20
+        self.pointSize = 80.0
 
     def testtest(self):
         self.increment = self.increment + 100

@@ -266,10 +266,6 @@ class CaptureArea(QtGui.QWidget):
 
 
 
-
-
-
-
     def connectToCameras(self):
         print("TEST")
         self.captureArea.setCurrentWidget(self.tabs[0])
@@ -287,8 +283,8 @@ class CaptureArea(QtGui.QWidget):
             self.consoleOut.outputText("Error has occurred while connecting to 192.168.1.100")
 
         try:
-            cvHandler = CVHandler(self.widgets[lastWidget], "tcp://192.168.1.101:9092", 101, self.graphHandler)
-            self.cvObjectLists.append(cvHandler)
+            #cvHandler = CVHandler(self.widgets[lastWidget], "tcp://192.168.1.101:9092", 101, self.graphHandler)
+            #self.cvObjectLists.append(cvHandler)
             self.newTab()
             # self.cvHandler2 = CVHandler(self.widgets[1], "tcp://192.168.2.201:9092", self.graphHandler)
             # self.cvHandler2.start_clicked()
@@ -299,8 +295,8 @@ class CaptureArea(QtGui.QWidget):
         lastWidget = self.getWidget()
 
         try:
-            cvHandler = CVHandler(self.widgets[lastWidget], "tcp://192.168.1.102:9092", 102, self.graphHandler)
-            self.cvObjectLists.append(cvHandler)
+            #cvHandler = CVHandler(self.widgets[lastWidget], "tcp://192.168.1.102:9092", 102, self.graphHandler)
+            #self.cvObjectLists.append(cvHandler)
             self.newTab()
             # self.cvHandler2 = CVHandler(self.widgets[1], "tcp://192.168.2.201:9092", self.graphHandler)
             # self.cvHandler2.start_clicked()
@@ -311,8 +307,8 @@ class CaptureArea(QtGui.QWidget):
         lastWidget = self.getWidget()
 
         try:
-            cvHandler = CVHandler(self.widgets[lastWidget], "tcp://192.168.1.103:9092",103, self.graphHandler)
-            self.cvObjectLists.append(cvHandler)
+            #cvHandler = CVHandler(self.widgets[lastWidget], "tcp://192.168.1.103:9092",103, self.graphHandler)
+            #self.cvObjectLists.append(cvHandler)
             self.newTab()
             # self.cvHandler2 = CVHandler(self.widgets[1], "tcp://192.168.2.201:9092", self.graphHandler)
             # self.cvHandler2.start_clicked()
@@ -331,7 +327,12 @@ class CaptureArea(QtGui.QWidget):
         self.graphHandler.testtest()
 
     def recordMotion(self):
-        self.cvHandler2.recordMotion()
+        #self.cvHandler2.recordMotion()
+        if (len(self.cvObjectLists) > 0):
+            for cv in self.cvObjectLists:
+                cv.recordMotion()
+        else:
+            self.consoleOut.outputText("No cameras connected")
 
     def stopRecording(self):
         if (len(self.cvObjectLists) > 0):
@@ -405,5 +406,28 @@ class CaptureArea(QtGui.QWidget):
     def updatePoints(self):
         self.cvHandler2.setPoints()
         print("test")
+    '''
+    def rectify(self):
+        cv2.stereoCalibrate()
 
-    def epipolar(self):
+        rvec1 = np.array(self.cvObjectLists[0].rvecs).transpose()
+        tvec1 = np.array(self.cvObjectLists[0].tvecs).transpose()
+        mtx1 = np.array(self.cvObjectLists[0].mtx)
+        dist1 = np.array(self.cvObjectLists[0].dist)
+
+        rvec2 = np.array(self.cvObjectLists[1].rvecs).transpose()
+        tvec2 = np.array(self.cvObjectLists[1].tvecs)
+        mtx2 = np.array(self.cvObjectLists[1].mtx)
+        dist2 = np.array(self.cvObjectLists[1].dist)
+
+        rvecout = np.matmul(np.linalg.inv(rvec2),rvec1)
+        tvecout = np.matmul(np.linalg.inv(tvec2)*tvec1)
+        #rvecout, tvecout =cv2.composeRT(rvec1,tvec1,rvec2,tvec2)
+
+        r1, r2, p1, p2, Q = cv2.stereoRectify(mtx1, mtx2, dist1, dist2, (1280,720),rvecout,tvecout)
+        print(r1)
+        print(r2)
+        print(p1)
+        print(p2)
+        print(Q)
+    '''

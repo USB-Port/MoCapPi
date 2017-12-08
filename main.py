@@ -172,6 +172,7 @@ class Ui_MainWindow(QtGui.QMainWindow):
 
     def connectCameras(self):
         self.captureArea.connectToCameras()
+        #self.captureArea.rectify()
 
     def playback_motion(self):
         motion_file = Path("./motion.txt")
@@ -186,10 +187,8 @@ class Ui_MainWindow(QtGui.QMainWindow):
     def record_Motion(self):
         #this line just prints the string to the output console in the program
 
-        print(str(self.captureArea.isRunning()))
-        if self.captureArea.isRunning() == True:
-            self.consoleOutput.outputText("Captured points..")
-            self.captureArea.recordMotion()
+
+        self.captureArea.recordMotion()
         # you could just do "print("test stuff")" to print to IDE consoles
 
     #same as above, this method is called wehn you click play motion button
