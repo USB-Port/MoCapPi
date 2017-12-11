@@ -1,21 +1,12 @@
 ###############################################################################
 #Name:
 #   ConnectToStreamBox.py
-
+#Author:
+#   USB-Port
 #What is this Class for:
 #   This is a simple class that just pops up box. the User can type in an IP address in this form, "tcp://192.168.2.9:9092"
 #   The that IP address gets passed to OpenCV. BUT, keep in mind that OpenCVHandler NEEDS a widget to get passed in as well.
 #   To Get the stream to play, we must get a widget from Capture Area, that is why this class takes in a Capture Area Object
-#
-#What Can I do here:
-#   Change UI. Use this code as an example for "How to open a Stream"
-#
-#
-#What needs to be done in this class:
-#   Make it robust, sometimes it still crashes.
-#   It only works if the user is not on the same tab as the tab that gets returned from the Capture Area "get Widget" method.
-#
-#
 ################################################################################
 
 

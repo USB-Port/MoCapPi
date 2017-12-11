@@ -1,23 +1,15 @@
 ###############################################################################
 #Name:
 #   ProjectViewer.py
-
+#Author:
+#   USB-Port
 #What is this Class for:
 #   This class handles all things related to the left side of the application, The Project Viewer. This class was implemented
 #   So that the user can open and manage several different motion recordings at one time. Once the files are recorded,
 #   The user will be able to play back this motion recorcing in OpenGL. (Not in OpenCV becuase we are not recording the
 #   6 videos, but We could record the videos if we should). So this class will ack like any other Project viewer you have
 #   used in any IDE.
-#
-#What Can I do here:
-#   Open Files. Selected files. Filter files that you can open.
-#
-#What needs to be done in this class:
-#   I'm generally satisfied with the functionality of this class. But if you see something you would like to add, go
-#   ahead and add it
-#
-#
-################################################################################
+#########################################################################
 from PyQt4 import QtCore, QtGui
 
 try:

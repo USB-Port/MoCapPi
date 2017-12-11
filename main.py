@@ -1,31 +1,15 @@
 ###############################################################################
 #Name:
 #   main.py
-
+#Author:
+#   USB-Port
 #What is this Class for:
 #   This file is for the over all application of the program.
 #   This class stores the UI layout of the different parts of the app, This also stores the
 #   QMainWindow class which handles OS events. The class also manages the tool bar and the menu bar.
 #   Most of the classes are instatiated in this class. This is the base of the app.
-#
-#What Can I do here:
-#   Add Menu Items, Add Tool Bar Items, Backend Design of classes, App Event handling,
-#   Modify Over all UI design, change Dockable widgets, change Window Title, Create a software DRM activation key.
-#   make a trial version of the software, anything that deals with the whole application
-#
-#What needs to be done in this class:
-#   -Improved Class architecture - Fixing bad design starts here with the instatiation of the classes
-#   -Improve UI
-#   -anything that you want to see in the over all application window.
-#   Yea, not much as most bugs are in the other classes
-#
 ################################################################################
 
-
-
-
-
-import sys
 from PyQt4 import QtCore, QtGui
 from ProjectViewer import *
 from CaptureArea import *

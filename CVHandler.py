@@ -1,28 +1,12 @@
 ###############################################################################
 #Name:
 #   CVHandler.py
-
+#Author:
+#   USB-Port
 #What is this Class for:
 #   This class handles all things related to OpenCV and video processing, this includes everything that OpenCV can do.
 #   Open VIdeo files, Grabs frames from them, opens a stream, process the frame, convert it to a frame PYQT can read.
 #   Track objects in frames, apply an mask to a frame. If it does anything with OpenCV, it goes here, in this class.
-#
-#What if my name is Justin and I don't want to use classes.
-#   Like in pretty much every GUI program, you should not make threads in the Main thread. Because OpenCV grabs frames from
-#   a camera, it should go in a thread. Aside from the fact that we are grabbing frames from 6 cameras, we need six thread.
-#   Therefore we need to have classes to even make OpenCV work properly with 6 cameras. Not sure If I explained it right.
-#   Basically, the PYQT QApplication makes a thread, and OpenCV makes a thread. so if we don't put the OpenCV grab in a
-#   seperate thread, then PyQT will say, "Can't create threads in main thread" or something
-#
-#What Can I do here:
-#   Motion Capture. Open a camera, grab frames, process them, track object, convert to a image PYQT can read. This is the
-#   most important class in our application.
-#
-#
-#What needs to be done in this class:
-#   Tracking, we need to be able to track IR Markers, and update the coordinates in OpenGL. I will explain how this is
-#   done in the line by line comment below.
-#
 ################################################################################
 
 
@@ -47,7 +31,7 @@ from PyQt4 import QtCore, QtGui
 import json
 from pathlib import Path
 from io import open
-import yaml_1 as yaml
+
 
 
 try:
@@ -138,9 +122,6 @@ class CVHandler(QtGui.QWidget):
                 self.rvecs = data["rvecs"]
                 self.tvecs = data["tvecs"]
 
-
-
-
         self.image = None
         self.running = False
         self.capture_thread = None
@@ -189,11 +170,7 @@ class CVHandler(QtGui.QWidget):
         self.timer.timeout.connect(self.update_frame)
         self.timer.start(1)
 
-        #New Stuff for Tracking
-        #These 2 lines set the mask, the value are in HSV format. idk why it's not RGB, right now the color is masked for red
         sensitivity = 15
-        #self.lower = (0, 100, 100)
-        #self.upper = (20, 255, 255)
 
         self.lower = 200
         self.upper = 255
@@ -353,10 +330,6 @@ class CVHandler(QtGui.QWidget):
             if (self.calibrationMode == True and self.takePicture == True):
                 self.takePicture = False
                 self.__takeCalibrationPhoto(img)
-
-
-
-
 
             ##End Checker Board Calibration code ###
 
@@ -630,12 +603,6 @@ class CVHandler(QtGui.QWidget):
             self.count = self.count + 1
             if(self.count == 50):
                 ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(self.objpoints, self.imgpoints, gray.shape[::-1], None, None)
-                # print("ret " + str(ret))
-                # print("mtx " + str(mtx))
-                # print("dist " + str(dist))
-                # print("rvecs " + str(rvecs))
-                # print("tvecx " + str(tvecs))
-
 
                 mtx = mtx.tolist()
                 dist = dist.tolist()
